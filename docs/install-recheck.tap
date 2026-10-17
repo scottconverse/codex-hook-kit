@@ -1,0 +1,70 @@
+TAP version 13
+# Subtest: install: a fresh install creates settings with the kit hooks and copies the files
+ok 1 - install: a fresh install creates settings with the kit hooks and copies the files
+  ---
+  duration_ms: 69.9463
+  type: 'test'
+  ...
+# Subtest: install: keeps an unrelated hook and unrelated settings
+ok 2 - install: keeps an unrelated hook and unrelated settings
+  ---
+  duration_ms: 68.7099
+  type: 'test'
+  ...
+# Subtest: install: running twice does not add duplicates
+ok 3 - install: running twice does not add duplicates
+  ---
+  duration_ms: 128.1775
+  type: 'test'
+  ...
+# Subtest: install: replaces the old local clone path without duplicating
+ok 4 - install: replaces the old local clone path without duplicating
+  ---
+  duration_ms: 67.2194
+  type: 'test'
+  ...
+# Subtest: install: writes a backup with the timestamped name
+ok 5 - install: writes a backup with the timestamped name
+  ---
+  duration_ms: 69.404
+  type: 'test'
+  ...
+# Subtest: install: two runs in the same second do not clobber one backup
+ok 6 - install: two runs in the same second do not clobber one backup
+  ---
+  duration_ms: 127.1517
+  type: 'test'
+  ...
+# Subtest: install: --dry-run writes nothing
+ok 7 - install: --dry-run writes nothing
+  ---
+  duration_ms: 54.0786
+  type: 'test'
+  ...
+# Subtest: uninstall: removes only kit entries, keeps the rest, and backs up
+ok 8 - uninstall: removes only kit entries, keeps the rest, and backs up
+  ---
+  duration_ms: 187.502
+  type: 'test'
+  ...
+# Subtest: init-project: writes the config and refuses to overwrite
+ok 9 - init-project: writes the config and refuses to overwrite
+  ---
+  duration_ms: 216.3851
+  type: 'test'
+  ...
+# Subtest: snippet: the committed snippet matches the shared source
+ok 10 - snippet: the committed snippet matches the shared source
+  ---
+  duration_ms: 59.0319
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1108.186

@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-16T17:35:05.572Z",
+  "runtime": "codex-cli 0.162.0-alpha.2",
+  "model": "deterministic loopback fixture; no provider call",
+  "desktopUIVerified": false,
+  "nativePatchVerified": false,
+  "hookOutput": "JSON deny with exit 0; exit 2 alone did not block in this build",
+  "results": [
+    {
+      "kind": "shell",
+      "ledgerValid": false,
+      "markerExists": false,
+      "blockObserved": true,
+      "exitCode": 0,
+      "pid": 38852,
+      "processExited": true
+    },
+    {
+      "kind": "shell",
+      "ledgerValid": true,
+      "markerExists": true,
+      "blockObserved": false,
+      "exitCode": 0,
+      "pid": 39456,
+      "processExited": true
+    }
+  ]
+}

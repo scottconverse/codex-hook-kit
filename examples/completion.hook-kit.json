@@ -1,0 +1,11 @@
+{
+  "completion-gate": {
+    "enabled": false,
+    "taskId": "replace-with-authorized-task-id",
+    "inputs": ["src", "checks/acceptance.mjs", "package.json", "package-lock.json"],
+    "check": { "command": "node", "args": ["checks/acceptance.mjs"], "timeoutMs": 30000 },
+    "maxFailures": 3,
+    "maxMinutes": 60,
+    "reuse": []
+  }
+}

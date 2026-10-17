@@ -1,0 +1,11 @@
+{
+  "name": "codex-hook-kit",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "description": "Project-scoped Codex hook port with native JSON gates and delayed worker reports",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"tests/**/*.test.mjs\""
+  }
+}

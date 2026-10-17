@@ -1,0 +1,152 @@
+
+> codex-hook-kit@1.0.0 test
+> node --test "tests/**/*.test.mjs"
+
+✔ Codex: installed --codex mode emits explicit denial JSON and Stop continuation JSON (241.4604ms)
+✔ Codex: missing ledger blocks a multi-file patch even after an exempt doc (96.2309ms)
+✔ Codex: checked ledger admits the same patch; wrong line count denies it (183.7765ms)
+✔ Codex: deletion and move into a code path are gated, paths with spaces retained (193.4672ms)
+✔ Codex: raw patch string and cmd shell argument replay are normalized (331.1525ms)
+✔ Codex: patch brief checks added text, not deleted text; full additions require sections (233.9957ms)
+✔ Codex: turn IDs reset measurement count but Stop continuation IDs do not (301.8294ms)
+✔ Codex: double-check counts Codex transcript calls since the latest user message (192.8216ms)
+✔ Codex: generated registration matches source and uses async, never asyncRewake (1.5541ms)
+✔ Codex: install honors CODEX_HOME and preserves config.toml and unrelated hooks (74.6837ms)
+✔ db-write-guard ownerName: "Scott" puts Scott's name in the go line (79.0143ms)
+✔ db-write-guard ownerName: a missing key says "the owner" and no name (159.5035ms)
+✔ db-write-guard ownerName: an empty value falls back to "the owner" (93.075ms)
+✔ double-check: the first stop of a turn is blocked with the checklist (81.7683ms)
+✔ double-check: the second stop (stop_hook_active) is let through, so it never loops (147.5575ms)
+✔ double-check: a custom checklist replaces the default (89.3553ms)
+✔ double-check: minToolCalls skips a turn with fewer tool calls, and asks after a busy one (278.7034ms)
+✔ double-check: off when its section is missing or enabled is false (259.8664ms)
+✔ relative paths in a config resolve against the project folder that holds .codex/ (88.8506ms)
+✔ install: a fresh install creates settings with the kit hooks and copies the files (105.605ms)
+✔ install: keeps an unrelated hook and unrelated settings (144.9607ms)
+✔ install: running twice does not add duplicates (264.0799ms)
+✔ install: replaces the old local clone path without duplicating (116.0755ms)
+✔ install: writes a backup with the timestamped name (108.7262ms)
+✔ install: two runs in the same second do not clobber one backup (220.5947ms)
+✔ install: --dry-run writes nothing (81.2548ms)
+✔ uninstall: removes only kit entries, keeps the rest, and backs up (284.8274ms)
+✔ init-project: writes the config and refuses to overwrite (261.1424ms)
+✔ snippet: the committed snippet matches the shared source (63.5894ms)
+✔ measure-gate: code newer than the newest receipt blocks the stop, with the command (110.5983ms)
+✔ measure-gate: a receipt newer than every code file lets the turn end (104.3046ms)
+✔ measure-gate: no receipt at all blocks; a receipt of the wrong name does not count (141.6485ms)
+✔ measure-gate: requireMatch checks the receipt's content (117.5662ms)
+✔ measure-gate: ignored folders (node_modules, vendor, .git) do not count as code (124.4775ms)
+✔ measure-gate: gives up after maxBlocks in the same turn and lets the turn end with a note (386.7357ms)
+✔ measure-gate: off with no receipt location, no code, a missing section, or enabled false (408.494ms)
+✔ db-write-guard parity: SELECT on the live port is allowed (121.8279ms)
+✔ db-write-guard parity: \d on the live port is allowed (210.1181ms)
+✔ db-write-guard parity: INSERT on the live port is blocked (108.9247ms)
+✔ db-write-guard parity: UPDATE on the live port is blocked (113.4074ms)
+✔ db-write-guard parity: DROP via a URL is blocked (102.801ms)
+✔ db-write-guard parity: pg_restore onto the live port is blocked (95.3952ms)
+✔ db-write-guard parity: dropdb on the live port is blocked (107.3701ms)
+✔ db-write-guard parity: INSERT is allowed with a fresh ok file (91.1099ms)
+✔ db-write-guard parity: INSERT is blocked when the ok file is stale (99.5864ms)
+✔ db-write-guard parity: write to a test database on the same port is allowed (93.1634ms)
+✔ db-write-guard parity: a different port is not ours (89.9467ms)
+✔ db-write-guard parity: a note that embeds psql -c is blocked by both (107.0727ms)
+✔ db-write-guard parity: writing a note that mentions psql without -c is allowed (77.7605ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-pQh5Tn/repo
+ * [new branch]      main       -> main
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-NrfwID/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a non-deploy command is ignored (1138.1106ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-UAw7JV/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a rollback is not a deploy (761.5157ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-PQwZig/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a note that mentions the deploy script is ignored (596.7266ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-iKgyTd/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a deploy with no gate file is blocked (704.623ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-bJaLm6/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a deploy whose gate file is not JSON is blocked (712.219ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-i6tOlb/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a complete gate with a passing walk report is allowed (720.0167ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-ZCrZVy/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a gate whose Test server ran a different build is blocked (713.681ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-I88SrW/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a gate with ci not PASS is blocked (745.073ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-EHgGnZ/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a walk report without PUBLISH-WALK: PASS is blocked (749.7881ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-63JLF5/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: an OPEN finding blocks the deploy (720.2379ms)
+warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-6TpdKs/repo
+ * [new branch]      main       -> main
+✔ deploy-gate parity: a FIXED finding does not block the deploy (706.391ms)
+✔ deploy-gate parity: a text-only push with a clean diff is allowed (827.2869ms)
+✔ inject-rules parity: UserPromptSubmit injects the rules (166.4349ms)
+✔ inject-rules parity: SessionStart carries its own event name (143.4486ms)
+✔ inject-rules parity: empty stdin still injects with the default event name (105.8982ms)
+✔ inject-rules parity: missing rules file injects nothing (128.2861ms)
+✔ no-idle parity: a finished worker with no handled.txt blocks (153.1166ms)
+✔ no-idle parity: a finished worker with handled.txt is fine (163.016ms)
+✔ no-idle parity: finished.txt makes a worker finished even with a quiet log (117.9832ms)
+✔ no-idle parity: a stalled worker blocks (105.68ms)
+✔ no-idle parity: a running worker with a dead waiter blocks (115.1284ms)
+✔ no-idle parity: a running worker with a live waiter and a fresh log is fine (99.5923ms)
+✔ no-idle parity: an empty runs folder is fine (94.8945ms)
+✔ no-idle parity: a worker whose log is older than the lookback is ignored (90.7244ms)
+✔ no-idle parity: a worker with only stream.jsonl is invisible to both (93.9239ms)
+✔ no-idle parity: two finished workers are both named (91.7572ms)
+✔ wake parity: a finished worker is reported as FINISHED-NOT-HANDLED (2263.1058ms)
+✔ wake parity: a stalled worker is reported as STALLED (2153.4848ms)
+✔ wake parity: a running worker is reported as RUNNING (2165.9643ms)
+✔ wake parity: no workers reports nothing to do (2161.5539ms)
+✔ wake parity: a handled worker is left out (2162.3931ms)
+✔ wake parity: stream.jsonl is read when run.jsonl is absent (2148.2184ms)
+✔ wake: a live sleeper's lock stops a second sleeper (57.7604ms)
+✔ wake: the sleeper removes its lock when it wakes (1085.4666ms)
+✔ walk-brief-guard parity: Write of a complete walk brief is allowed (113.8024ms)
+✔ walk-brief-guard parity: Write with no EVERY DOOR line is blocked (148.2614ms)
+✔ walk-brief-guard parity: Write with no PUBLISH-WALK line is blocked (106.773ms)
+✔ walk-brief-guard parity: a brief that bans publishing is blocked (120.0894ms)
+✔ walk-brief-guard parity: an Edit of a walk brief body is blocked (no full body to check) (109.449ms)
+✔ walk-brief-guard parity: a shell heredoc write of a good brief is allowed (100.4527ms)
+✔ walk-brief-guard parity: a shell heredoc write with no EVERY DOOR is blocked (104.4243ms)
+✔ walk-brief-guard parity: a file that is not a walk brief is ignored (95.3319ms)
+✔ walk-brief-guard parity: a path that is not under briefs is ignored (97.3174ms)
+✔ read-ledger-gate: a code write with no ledger is blocked (99.7973ms)
+✔ read-ledger-gate: a complete, true ledger lets code through (321.6207ms)
+✔ read-ledger-gate: a wrong line count is caught (91.7382ms)
+✔ read-ledger-gate: a made-up file is caught (93.4481ms)
+✔ read-ledger-gate: minEntries, minLines and mustMention (184.3238ms)
+✔ read-ledger-gate: docs, config, the ledger itself and non-write shell commands are never gated (599.5958ms)
+✔ read-ledger-gate: off when its section is missing or enabled is false (183.1575ms)
+✔ scope: with no config, every hook exits 0 and prints nothing (845.6201ms)
+✔ scope: a config with enabled false switches the whole kit off (635.8524ms)
+✔ scope: a missing section switches only that hook off (174.2883ms)
+✔ scope: the nearest config up the tree wins (63.5316ms)
+✔ scope: cwd comes from the hook event, not the process (54.6959ms)
+ℹ tests 104
+ℹ suites 0
+ℹ pass 104
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14374.041

@@ -1,0 +1,194 @@
+{
+  "source": "https://github.com/scottconverse/claude-hook-kit",
+  "localSource": "C:\\Users\\scott\\Desktop\\Code\\claude-hook-kit",
+  "revision": "5371320e12ffc74c99640077ea1400fd8d86f1e8",
+  "remoteStatus": "local main was one commit ahead of origin/main",
+  "license": "MIT, Copyright 2026 Scott Converse",
+  "retrieved": "2026-10-16",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "37743e0b1d1a732483a5886367d191d96829c026c2e2ca27265d04d4d71c9ba2"
+    },
+    {
+      "path": "init-project.mjs",
+      "sha256": "de52a99b8ba3e76431f4688f22ca453eb2cdc2a83e7700fa85d4668d8ad2983b"
+    },
+    {
+      "path": "install.mjs",
+      "sha256": "5b2854ba8236c23eab60e1a0dccf395d7bcb8bfb396ba5b8b45ecb3cfdb37568"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "9ee256ef67945f8380492e847e5079768e345b815a081061698460e1e6bedce2"
+    },
+    {
+      "path": "package.json",
+      "sha256": "f894ec406af620fbf74003e5aafbce871872af1a8c1e732afe6dce2d713a2642"
+    },
+    {
+      "path": "README.md",
+      "sha256": "4b1813935dd5afa606c92cf8237dd95588afc58d55972e6c2bb977ff4877519b"
+    },
+    {
+      "path": "uninstall.mjs",
+      "sha256": "75acb1fc8742acafbe9a8a8c7db8da02ff8f3e53ee5d69b4271fed231757a337"
+    },
+    {
+      "path": "docs/index.html",
+      "sha256": "b3ff79d7d149cb87f6aeef6445a8fd0cbbfce7330adf7dde6389a1e4b9ed2068"
+    },
+    {
+      "path": "docs/MANUAL.md",
+      "sha256": "1342541bc16af535925bb20bb98296045c783261d0520362bb41409fe27873d7"
+    },
+    {
+      "path": "examples/agent-build.hook-kit.json",
+      "sha256": "cca01d42d6234cf6d3c1fad1aa075f4a50d4e636d79ec64ff01f87b3b99baa12"
+    },
+    {
+      "path": "examples/minimal.hook-kit.json",
+      "sha256": "76d766ec755e1df3ddb356a03d9660576676d98ce8753c4a1b9065c0e696a367"
+    },
+    {
+      "path": "examples/townreporter.hook-kit.json",
+      "sha256": "2a61f8cdadd9a9aff13c35ef7b1eaa2324d5f936560098c26296b66986f8d135"
+    },
+    {
+      "path": "hooks/db-write-guard.mjs",
+      "sha256": "2c4c0e00be40ca4cfec4e8ca840d5b9e4cce94c612494b81ae78e625486992f1"
+    },
+    {
+      "path": "hooks/deploy-gate.mjs",
+      "sha256": "2610330c2405fabd23f39024301d766ad0bdebe9f1242fc7060d489e6e74c4a6"
+    },
+    {
+      "path": "hooks/double-check.mjs",
+      "sha256": "9388707b4cd91952a3ee9c4201f631dae82fd1769b74ca60f223a11cc97e8fcd"
+    },
+    {
+      "path": "hooks/inject-rules.mjs",
+      "sha256": "f1eff8a83797ce0340350fafc6fef6085859d3edf8204ce7d71d4a2245c27cb0"
+    },
+    {
+      "path": "hooks/measure-gate.mjs",
+      "sha256": "1f2466bd6b61e2b55cb415cae428d7859c66c7a4665d8a583563d79aa9690800"
+    },
+    {
+      "path": "hooks/no-idle.mjs",
+      "sha256": "1f23d0db8e81e549562e5640c74ed04aa401b3ed572189526b84d15842a223f1"
+    },
+    {
+      "path": "hooks/read-ledger-gate.mjs",
+      "sha256": "a0a8891dcfad5c70bf23f577946e7567589c7d8c26841d78d5c22a2905c61e17"
+    },
+    {
+      "path": "hooks/wake.mjs",
+      "sha256": "f597fb96935c006df8d34b4835ca1ecf7e0fe0ace8b1c5cbfc5e952ca09d109b"
+    },
+    {
+      "path": "hooks/walk-brief-guard.mjs",
+      "sha256": "57c52bfb29c0268e9b6e2befbf7b98b18be403df04f697a50d6b7cdb795f2af9"
+    },
+    {
+      "path": "install/settings-snippet.json",
+      "sha256": "a9d52221b6f9e4818a79c21f7ead509b2a907e9314e84b23d17233601924ade8"
+    },
+    {
+      "path": "lib/config.mjs",
+      "sha256": "6923c0335309b19f0a3883e69f14237c06f0dee1958c5b8f56f23c3712ec12aa"
+    },
+    {
+      "path": "lib/hook-entries.mjs",
+      "sha256": "0c715614cfe2ed03f326e53fff8b25585599ae90f3a6640fb76a054d2326d361"
+    },
+    {
+      "path": "lib/settings.mjs",
+      "sha256": "be445c6be170345929a04ba44722e206d68e9387a96112c70743a61f611a9392"
+    },
+    {
+      "path": "reference/tr-gate-deploy.mjs",
+      "sha256": "1f75736bd355c15742131a2f5cc3237ab221cd1cd41dcd810b5615bbf102b93e"
+    },
+    {
+      "path": "reference/tr-guard-live-db.mjs",
+      "sha256": "b8e3f1746a37b21d7a2a5d7f5a35cfc786fca9ee745e31968ddc610674ed2f87"
+    },
+    {
+      "path": "reference/tr-guard-walk-briefs.mjs",
+      "sha256": "540d31ed46a9ba2b56fab7c6cfe22eb7b4161bd0f6bb0db7b0c6dd6ae0ec1696"
+    },
+    {
+      "path": "reference/tr-inject-rules.mjs",
+      "sha256": "f394b877eaaad684fcca1e439342fa36f557a9ed7327da36390451b1f6ad40a6"
+    },
+    {
+      "path": "reference/tr-no-idle.mjs",
+      "sha256": "dce8be263f4896107f734d4239ee608b6e4cbd280b5c440d84496f5f74948096"
+    },
+    {
+      "path": "reference/tr-wake-20.mjs",
+      "sha256": "7450ca5529c4f1a961ab58bd315c1e8622426e794e8b0d60643b2747772c2938"
+    },
+    {
+      "path": "tests/db-write-guard-owner-name.test.mjs",
+      "sha256": "84211778550d283a95ffb461106a69061242c6f2c19204b1b2c9cb86ef5eadc1"
+    },
+    {
+      "path": "tests/double-check.test.mjs",
+      "sha256": "b2ea8b4ff5c4c5a3c97afe19df42ab3b3331cdd12818982d2215c8e5bb70ceaa"
+    },
+    {
+      "path": "tests/helpers.mjs",
+      "sha256": "5b770cbecfe2ee1a77f98492b08f1bf67d4373efbfbb6a02e8b8276dad13061b"
+    },
+    {
+      "path": "tests/install.test.mjs",
+      "sha256": "322b3a4807ad789819fcdfdcb26f03620d72ff916c194cea7e14dd84cab61035"
+    },
+    {
+      "path": "tests/measure-gate.test.mjs",
+      "sha256": "7de812aa280a9da6ccd006479be781bef14b20e11ee1a33068422b7e15102d00"
+    },
+    {
+      "path": "tests/parity-db-write-guard.test.mjs",
+      "sha256": "99b6c5c7c956b295ec3425e5a5d9fa522f1c91f009d708df3507aa45beb7bcd4"
+    },
+    {
+      "path": "tests/parity-deploy-gate.test.mjs",
+      "sha256": "1e2e6222a5a9cf74baa9ed8030f89a1e7fdbac9b2c4fd528d1cdb0503efbe184"
+    },
+    {
+      "path": "tests/parity-inject-rules.test.mjs",
+      "sha256": "9f6bfafb63c88a6a1ca6372d8e1002428ea0e87263c5530a5df19e23bc48ec63"
+    },
+    {
+      "path": "tests/parity-no-idle.test.mjs",
+      "sha256": "8436d3d29d01e2c079222c91d90dd304f3c0ff77c828ad5b8a6d670003e5299d"
+    },
+    {
+      "path": "tests/parity-wake.test.mjs",
+      "sha256": "dc1e2b4640cbf17c14c06c4b72f5dcaa6f4c12a707934c7cf96452a877ee66c5"
+    },
+    {
+      "path": "tests/parity-walk-brief-guard.test.mjs",
+      "sha256": "73cc109426ea542326e3c2a7c061e3a05c133e8a6abcfcab87f63d4e70691de9"
+    },
+    {
+      "path": "tests/read-ledger-gate.test.mjs",
+      "sha256": "a24259d164a7558771e5adc6d67adb5a1b066ae8c78fbffa851d1c2f3c24c453"
+    },
+    {
+      "path": "tests/scope.test.mjs",
+      "sha256": "270a9e0a573e48892c935bdf429aaa1148955cd78f995358c6606fada490e537"
+    },
+    {
+      "path": "tools/write-snippet.mjs",
+      "sha256": "3149b1dd961f0eefdcfe3bda19a6ca6c6664a0d873017e6c932d2f4cbf080f5e"
+    }
+  ]
+}

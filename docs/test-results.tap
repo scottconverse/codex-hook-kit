@@ -1,0 +1,721 @@
+TAP version 13
+# Subtest: Codex: installed --codex mode emits explicit denial JSON and Stop continuation JSON
+ok 1 - Codex: installed --codex mode emits explicit denial JSON and Stop continuation JSON
+  ---
+  duration_ms: 208.3315
+  type: 'test'
+  ...
+# Subtest: Codex: missing ledger blocks a multi-file patch even after an exempt doc
+ok 2 - Codex: missing ledger blocks a multi-file patch even after an exempt doc
+  ---
+  duration_ms: 99.2442
+  type: 'test'
+  ...
+# Subtest: Codex: checked ledger admits the same patch; wrong line count denies it
+ok 3 - Codex: checked ledger admits the same patch; wrong line count denies it
+  ---
+  duration_ms: 177.8715
+  type: 'test'
+  ...
+# Subtest: Codex: deletion and move into a code path are gated, paths with spaces retained
+ok 4 - Codex: deletion and move into a code path are gated, paths with spaces retained
+  ---
+  duration_ms: 175.2262
+  type: 'test'
+  ...
+# Subtest: Codex: raw patch string and cmd shell argument replay are normalized
+ok 5 - Codex: raw patch string and cmd shell argument replay are normalized
+  ---
+  duration_ms: 350.626
+  type: 'test'
+  ...
+# Subtest: Codex: patch brief checks added text, not deleted text; full additions require sections
+ok 6 - Codex: patch brief checks added text, not deleted text; full additions require sections
+  ---
+  duration_ms: 252.3148
+  type: 'test'
+  ...
+# Subtest: Codex: turn IDs reset measurement count but Stop continuation IDs do not
+ok 7 - Codex: turn IDs reset measurement count but Stop continuation IDs do not
+  ---
+  duration_ms: 299.7176
+  type: 'test'
+  ...
+# Subtest: Codex: double-check counts Codex transcript calls since the latest user message
+ok 8 - Codex: double-check counts Codex transcript calls since the latest user message
+  ---
+  duration_ms: 200.756
+  type: 'test'
+  ...
+# Subtest: Codex: generated registration matches source and uses async, never asyncRewake
+ok 9 - Codex: generated registration matches source and uses async, never asyncRewake
+  ---
+  duration_ms: 1.4872
+  type: 'test'
+  ...
+# Subtest: Codex: install honors CODEX_HOME and preserves config.toml and unrelated hooks
+ok 10 - Codex: install honors CODEX_HOME and preserves config.toml and unrelated hooks
+  ---
+  duration_ms: 77.6339
+  type: 'test'
+  ...
+# Subtest: db-write-guard ownerName: "Scott" puts Scott's name in the go line
+ok 11 - db-write-guard ownerName: "Scott" puts Scott's name in the go line
+  ---
+  duration_ms: 123.9821
+  type: 'test'
+  ...
+# Subtest: db-write-guard ownerName: a missing key says "the owner" and no name
+ok 12 - db-write-guard ownerName: a missing key says "the owner" and no name
+  ---
+  duration_ms: 117.2431
+  type: 'test'
+  ...
+# Subtest: db-write-guard ownerName: an empty value falls back to "the owner"
+ok 13 - db-write-guard ownerName: an empty value falls back to "the owner"
+  ---
+  duration_ms: 113.2857
+  type: 'test'
+  ...
+# Subtest: double-check: the first stop of a turn is blocked with the checklist
+ok 14 - double-check: the first stop of a turn is blocked with the checklist
+  ---
+  duration_ms: 119.4979
+  type: 'test'
+  ...
+# Subtest: double-check: the second stop (stop_hook_active) is let through, so it never loops
+ok 15 - double-check: the second stop (stop_hook_active) is let through, so it never loops
+  ---
+  duration_ms: 127.1005
+  type: 'test'
+  ...
+# Subtest: double-check: a custom checklist replaces the default
+ok 16 - double-check: a custom checklist replaces the default
+  ---
+  duration_ms: 104.51
+  type: 'test'
+  ...
+# Subtest: double-check: minToolCalls skips a turn with fewer tool calls, and asks after a busy one
+ok 17 - double-check: minToolCalls skips a turn with fewer tool calls, and asks after a busy one
+  ---
+  duration_ms: 249.136
+  type: 'test'
+  ...
+# Subtest: double-check: off when its section is missing or enabled is false
+ok 18 - double-check: off when its section is missing or enabled is false
+  ---
+  duration_ms: 278.613
+  type: 'test'
+  ...
+# Subtest: relative paths in a config resolve against the project folder that holds .codex/
+ok 19 - relative paths in a config resolve against the project folder that holds .codex/
+  ---
+  duration_ms: 111.4924
+  type: 'test'
+  ...
+# Subtest: install: a fresh install creates settings with the kit hooks and copies the files
+ok 20 - install: a fresh install creates settings with the kit hooks and copies the files
+  ---
+  duration_ms: 144.1571
+  type: 'test'
+  ...
+# Subtest: install: keeps an unrelated hook and unrelated settings
+ok 21 - install: keeps an unrelated hook and unrelated settings
+  ---
+  duration_ms: 133.1286
+  type: 'test'
+  ...
+# Subtest: install: running twice does not add duplicates
+ok 22 - install: running twice does not add duplicates
+  ---
+  duration_ms: 215.9441
+  type: 'test'
+  ...
+# Subtest: install: replaces the old local clone path without duplicating
+ok 23 - install: replaces the old local clone path without duplicating
+  ---
+  duration_ms: 108.3489
+  type: 'test'
+  ...
+# Subtest: install: writes a backup with the timestamped name
+not ok 24 - install: writes a backup with the timestamped name
+  ---
+  duration_ms: 119.4537
+  type: 'test'
+  location: 'C:\\Users\\scott\\Desktop\\Code\\codex-hook-kit\\tests\\install.test.mjs:151:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    one timestamped backup, got: codex-hook-kit, hooks.json, hooks.json.bak-hookkit-20261016-113959
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/scott/Desktop/Code/codex-hook-kit/tests/install.test.mjs:159:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: install: two runs in the same second do not clobber one backup
+not ok 25 - install: two runs in the same second do not clobber one backup
+  ---
+  duration_ms: 218.5914
+  type: 'test'
+  location: 'C:\\Users\\scott\\Desktop\\Code\\codex-hook-kit\\tests\\install.test.mjs:166:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    two runs left two backups, got: 
+    
+    0 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/scott/Desktop/Code/codex-hook-kit/tests/install.test.mjs:178:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: install: --dry-run writes nothing
+ok 26 - install: --dry-run writes nothing
+  ---
+  duration_ms: 92.2822
+  type: 'test'
+  ...
+# Subtest: uninstall: removes only kit entries, keeps the rest, and backs up
+not ok 27 - uninstall: removes only kit entries, keeps the rest, and backs up
+  ---
+  duration_ms: 185.5273
+  type: 'test'
+  location: 'C:\\Users\\scott\\Desktop\\Code\\codex-hook-kit\\tests\\install.test.mjs:199:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    install backed up, then uninstall backed up the file it was about to change
+    
+    0 !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/Users/scott/Desktop/Code/codex-hook-kit/tests/install.test.mjs:213:12)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: init-project: writes the config and refuses to overwrite
+ok 28 - init-project: writes the config and refuses to overwrite
+  ---
+  duration_ms: 290.4404
+  type: 'test'
+  ...
+# Subtest: snippet: the committed snippet matches the shared source
+ok 29 - snippet: the committed snippet matches the shared source
+  ---
+  duration_ms: 65.1171
+  type: 'test'
+  ...
+# Subtest: measure-gate: code newer than the newest receipt blocks the stop, with the command
+ok 30 - measure-gate: code newer than the newest receipt blocks the stop, with the command
+  ---
+  duration_ms: 150.9357
+  type: 'test'
+  ...
+# Subtest: measure-gate: a receipt newer than every code file lets the turn end
+ok 31 - measure-gate: a receipt newer than every code file lets the turn end
+  ---
+  duration_ms: 122.9214
+  type: 'test'
+  ...
+# Subtest: measure-gate: no receipt at all blocks; a receipt of the wrong name does not count
+ok 32 - measure-gate: no receipt at all blocks; a receipt of the wrong name does not count
+  ---
+  duration_ms: 101.2398
+  type: 'test'
+  ...
+# Subtest: measure-gate: requireMatch checks the receipt's content
+ok 33 - measure-gate: requireMatch checks the receipt's content
+  ---
+  duration_ms: 91.1548
+  type: 'test'
+  ...
+# Subtest: measure-gate: ignored folders (node_modules, vendor, .git) do not count as code
+ok 34 - measure-gate: ignored folders (node_modules, vendor, .git) do not count as code
+  ---
+  duration_ms: 94.1307
+  type: 'test'
+  ...
+# Subtest: measure-gate: gives up after maxBlocks in the same turn and lets the turn end with a note
+ok 35 - measure-gate: gives up after maxBlocks in the same turn and lets the turn end with a note
+  ---
+  duration_ms: 409.0521
+  type: 'test'
+  ...
+# Subtest: measure-gate: off with no receipt location, no code, a missing section, or enabled false
+ok 36 - measure-gate: off with no receipt location, no code, a missing section, or enabled false
+  ---
+  duration_ms: 400.6345
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: SELECT on the live port is allowed
+ok 37 - db-write-guard parity: SELECT on the live port is allowed
+  ---
+  duration_ms: 165.4788
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: \\d on the live port is allowed
+ok 38 - db-write-guard parity: \\d on the live port is allowed
+  ---
+  duration_ms: 103.2174
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: INSERT on the live port is blocked
+ok 39 - db-write-guard parity: INSERT on the live port is blocked
+  ---
+  duration_ms: 108.7411
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: UPDATE on the live port is blocked
+ok 40 - db-write-guard parity: UPDATE on the live port is blocked
+  ---
+  duration_ms: 97.4795
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: DROP via a URL is blocked
+ok 41 - db-write-guard parity: DROP via a URL is blocked
+  ---
+  duration_ms: 94.8129
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: pg_restore onto the live port is blocked
+ok 42 - db-write-guard parity: pg_restore onto the live port is blocked
+  ---
+  duration_ms: 97.9675
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: dropdb on the live port is blocked
+ok 43 - db-write-guard parity: dropdb on the live port is blocked
+  ---
+  duration_ms: 101.8507
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: INSERT is allowed with a fresh ok file
+ok 44 - db-write-guard parity: INSERT is allowed with a fresh ok file
+  ---
+  duration_ms: 94.8894
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: INSERT is blocked when the ok file is stale
+ok 45 - db-write-guard parity: INSERT is blocked when the ok file is stale
+  ---
+  duration_ms: 102.7014
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: write to a test database on the same port is allowed
+ok 46 - db-write-guard parity: write to a test database on the same port is allowed
+  ---
+  duration_ms: 99.8061
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: a different port is not ours
+ok 47 - db-write-guard parity: a different port is not ours
+  ---
+  duration_ms: 91.7874
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: a note that embeds psql -c is blocked by both
+ok 48 - db-write-guard parity: a note that embeds psql -c is blocked by both
+  ---
+  duration_ms: 81.9764
+  type: 'test'
+  ...
+# Subtest: db-write-guard parity: writing a note that mentions psql without -c is allowed
+ok 49 - db-write-guard parity: writing a note that mentions psql without -c is allowed
+  ---
+  duration_ms: 91.5059
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-fM5CS7/repo
+#  * [new branch]      main       -> main
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-EjJjkp/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a non-deploy command is ignored
+ok 50 - deploy-gate parity: a non-deploy command is ignored
+  ---
+  duration_ms: 1297.3896
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-g57PDh/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a rollback is not a deploy
+ok 51 - deploy-gate parity: a rollback is not a deploy
+  ---
+  duration_ms: 688.5285
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-NZz7Fo/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a note that mentions the deploy script is ignored
+ok 52 - deploy-gate parity: a note that mentions the deploy script is ignored
+  ---
+  duration_ms: 584.3557
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-7mshg6/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a deploy with no gate file is blocked
+ok 53 - deploy-gate parity: a deploy with no gate file is blocked
+  ---
+  duration_ms: 767.005
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-QmSHwP/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a deploy whose gate file is not JSON is blocked
+ok 54 - deploy-gate parity: a deploy whose gate file is not JSON is blocked
+  ---
+  duration_ms: 809.1083
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-7ClcCd/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a complete gate with a passing walk report is allowed
+ok 55 - deploy-gate parity: a complete gate with a passing walk report is allowed
+  ---
+  duration_ms: 713.5444
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-WrSI8U/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a gate whose Test server ran a different build is blocked
+ok 56 - deploy-gate parity: a gate whose Test server ran a different build is blocked
+  ---
+  duration_ms: 776.2582
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-qpeR1J/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a gate with ci not PASS is blocked
+ok 57 - deploy-gate parity: a gate with ci not PASS is blocked
+  ---
+  duration_ms: 802.9173
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-5kwcpF/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a walk report without PUBLISH-WALK: PASS is blocked
+ok 58 - deploy-gate parity: a walk report without PUBLISH-WALK: PASS is blocked
+  ---
+  duration_ms: 751.6489
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-L4azk5/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: an OPEN finding blocks the deploy
+ok 59 - deploy-gate parity: an OPEN finding blocks the deploy
+  ---
+  duration_ms: 720.1694
+  type: 'test'
+  ...
+# warning: in the working copy of 'page.html', LF will be replaced by CRLF the next time Git touches it
+# From C:/Users/scott/AppData/Local/Temp/hook-kit-deploy-7w3IKl/repo
+#  * [new branch]      main       -> main
+# Subtest: deploy-gate parity: a FIXED finding does not block the deploy
+ok 60 - deploy-gate parity: a FIXED finding does not block the deploy
+  ---
+  duration_ms: 759.053
+  type: 'test'
+  ...
+# Subtest: deploy-gate parity: a text-only push with a clean diff is allowed
+ok 61 - deploy-gate parity: a text-only push with a clean diff is allowed
+  ---
+  duration_ms: 829.4595
+  type: 'test'
+  ...
+# Subtest: inject-rules parity: UserPromptSubmit injects the rules
+ok 62 - inject-rules parity: UserPromptSubmit injects the rules
+  ---
+  duration_ms: 165.0549
+  type: 'test'
+  ...
+# Subtest: inject-rules parity: SessionStart carries its own event name
+ok 63 - inject-rules parity: SessionStart carries its own event name
+  ---
+  duration_ms: 109.5349
+  type: 'test'
+  ...
+# Subtest: inject-rules parity: empty stdin still injects with the default event name
+ok 64 - inject-rules parity: empty stdin still injects with the default event name
+  ---
+  duration_ms: 116.2752
+  type: 'test'
+  ...
+# Subtest: inject-rules parity: missing rules file injects nothing
+ok 65 - inject-rules parity: missing rules file injects nothing
+  ---
+  duration_ms: 98.4429
+  type: 'test'
+  ...
+# Subtest: no-idle parity: a finished worker with no handled.txt blocks
+ok 66 - no-idle parity: a finished worker with no handled.txt blocks
+  ---
+  duration_ms: 142.0091
+  type: 'test'
+  ...
+# Subtest: no-idle parity: a finished worker with handled.txt is fine
+ok 67 - no-idle parity: a finished worker with handled.txt is fine
+  ---
+  duration_ms: 129.3217
+  type: 'test'
+  ...
+# Subtest: no-idle parity: finished.txt makes a worker finished even with a quiet log
+ok 68 - no-idle parity: finished.txt makes a worker finished even with a quiet log
+  ---
+  duration_ms: 100.4112
+  type: 'test'
+  ...
+# Subtest: no-idle parity: a stalled worker blocks
+ok 69 - no-idle parity: a stalled worker blocks
+  ---
+  duration_ms: 104.1065
+  type: 'test'
+  ...
+# Subtest: no-idle parity: a running worker with a dead waiter blocks
+ok 70 - no-idle parity: a running worker with a dead waiter blocks
+  ---
+  duration_ms: 110.4697
+  type: 'test'
+  ...
+# Subtest: no-idle parity: a running worker with a live waiter and a fresh log is fine
+ok 71 - no-idle parity: a running worker with a live waiter and a fresh log is fine
+  ---
+  duration_ms: 104.6346
+  type: 'test'
+  ...
+# Subtest: no-idle parity: an empty runs folder is fine
+ok 72 - no-idle parity: an empty runs folder is fine
+  ---
+  duration_ms: 107.2013
+  type: 'test'
+  ...
+# Subtest: no-idle parity: a worker whose log is older than the lookback is ignored
+ok 73 - no-idle parity: a worker whose log is older than the lookback is ignored
+  ---
+  duration_ms: 103.5741
+  type: 'test'
+  ...
+# Subtest: no-idle parity: a worker with only stream.jsonl is invisible to both
+ok 74 - no-idle parity: a worker with only stream.jsonl is invisible to both
+  ---
+  duration_ms: 110.1603
+  type: 'test'
+  ...
+# Subtest: no-idle parity: two finished workers are both named
+ok 75 - no-idle parity: two finished workers are both named
+  ---
+  duration_ms: 93.5936
+  type: 'test'
+  ...
+# Subtest: wake parity: a finished worker is reported as FINISHED-NOT-HANDLED
+ok 76 - wake parity: a finished worker is reported as FINISHED-NOT-HANDLED
+  ---
+  duration_ms: 2269.1049
+  type: 'test'
+  ...
+# Subtest: wake parity: a stalled worker is reported as STALLED
+ok 77 - wake parity: a stalled worker is reported as STALLED
+  ---
+  duration_ms: 2167.9195
+  type: 'test'
+  ...
+# Subtest: wake parity: a running worker is reported as RUNNING
+ok 78 - wake parity: a running worker is reported as RUNNING
+  ---
+  duration_ms: 2159.6199
+  type: 'test'
+  ...
+# Subtest: wake parity: no workers reports nothing to do
+ok 79 - wake parity: no workers reports nothing to do
+  ---
+  duration_ms: 2150.0932
+  type: 'test'
+  ...
+# Subtest: wake parity: a handled worker is left out
+ok 80 - wake parity: a handled worker is left out
+  ---
+  duration_ms: 2170.3704
+  type: 'test'
+  ...
+# Subtest: wake parity: stream.jsonl is read when run.jsonl is absent
+ok 81 - wake parity: stream.jsonl is read when run.jsonl is absent
+  ---
+  duration_ms: 2160.2745
+  type: 'test'
+  ...
+# Subtest: wake: a live sleeper's lock stops a second sleeper
+ok 82 - wake: a live sleeper's lock stops a second sleeper
+  ---
+  duration_ms: 55.0431
+  type: 'test'
+  ...
+# Subtest: wake: the sleeper removes its lock when it wakes
+ok 83 - wake: the sleeper removes its lock when it wakes
+  ---
+  duration_ms: 1074.8104
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: Write of a complete walk brief is allowed
+ok 84 - walk-brief-guard parity: Write of a complete walk brief is allowed
+  ---
+  duration_ms: 158.098
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: Write with no EVERY DOOR line is blocked
+ok 85 - walk-brief-guard parity: Write with no EVERY DOOR line is blocked
+  ---
+  duration_ms: 102.7862
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: Write with no PUBLISH-WALK line is blocked
+ok 86 - walk-brief-guard parity: Write with no PUBLISH-WALK line is blocked
+  ---
+  duration_ms: 99.9306
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: a brief that bans publishing is blocked
+ok 87 - walk-brief-guard parity: a brief that bans publishing is blocked
+  ---
+  duration_ms: 97.9969
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: an Edit of a walk brief body is blocked (no full body to check)
+ok 88 - walk-brief-guard parity: an Edit of a walk brief body is blocked (no full body to check)
+  ---
+  duration_ms: 107.8477
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: a shell heredoc write of a good brief is allowed
+ok 89 - walk-brief-guard parity: a shell heredoc write of a good brief is allowed
+  ---
+  duration_ms: 106.5407
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: a shell heredoc write with no EVERY DOOR is blocked
+ok 90 - walk-brief-guard parity: a shell heredoc write with no EVERY DOOR is blocked
+  ---
+  duration_ms: 107.6156
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: a file that is not a walk brief is ignored
+ok 91 - walk-brief-guard parity: a file that is not a walk brief is ignored
+  ---
+  duration_ms: 101.5428
+  type: 'test'
+  ...
+# Subtest: walk-brief-guard parity: a path that is not under briefs is ignored
+ok 92 - walk-brief-guard parity: a path that is not under briefs is ignored
+  ---
+  duration_ms: 105.8295
+  type: 'test'
+  ...
+# Subtest: read-ledger-gate: a code write with no ledger is blocked
+ok 93 - read-ledger-gate: a code write with no ledger is blocked
+  ---
+  duration_ms: 118.1355
+  type: 'test'
+  ...
+# Subtest: read-ledger-gate: a complete, true ledger lets code through
+ok 94 - read-ledger-gate: a complete, true ledger lets code through
+  ---
+  duration_ms: 276.7718
+  type: 'test'
+  ...
+# Subtest: read-ledger-gate: a wrong line count is caught
+ok 95 - read-ledger-gate: a wrong line count is caught
+  ---
+  duration_ms: 96.1049
+  type: 'test'
+  ...
+# Subtest: read-ledger-gate: a made-up file is caught
+ok 96 - read-ledger-gate: a made-up file is caught
+  ---
+  duration_ms: 97.1743
+  type: 'test'
+  ...
+# Subtest: read-ledger-gate: minEntries, minLines and mustMention
+ok 97 - read-ledger-gate: minEntries, minLines and mustMention
+  ---
+  duration_ms: 183.7217
+  type: 'test'
+  ...
+# Subtest: read-ledger-gate: docs, config, the ledger itself and non-write shell commands are never gated
+ok 98 - read-ledger-gate: docs, config, the ledger itself and non-write shell commands are never gated
+  ---
+  duration_ms: 599.163
+  type: 'test'
+  ...
+# Subtest: read-ledger-gate: off when its section is missing or enabled is false
+ok 99 - read-ledger-gate: off when its section is missing or enabled is false
+  ---
+  duration_ms: 198.6245
+  type: 'test'
+  ...
+# Subtest: scope: with no config, every hook exits 0 and prints nothing
+ok 100 - scope: with no config, every hook exits 0 and prints nothing
+  ---
+  duration_ms: 856.3563
+  type: 'test'
+  ...
+# Subtest: scope: a config with enabled false switches the whole kit off
+ok 101 - scope: a config with enabled false switches the whole kit off
+  ---
+  duration_ms: 651.195
+  type: 'test'
+  ...
+# Subtest: scope: a missing section switches only that hook off
+ok 102 - scope: a missing section switches only that hook off
+  ---
+  duration_ms: 179.8177
+  type: 'test'
+  ...
+# Subtest: scope: the nearest config up the tree wins
+ok 103 - scope: the nearest config up the tree wins
+  ---
+  duration_ms: 59.4043
+  type: 'test'
+  ...
+# Subtest: scope: cwd comes from the hook event, not the process
+ok 104 - scope: cwd comes from the hook event, not the process
+  ---
+  duration_ms: 58.4216
+  type: 'test'
+  ...
+1..104
+# tests 104
+# suites 0
+# pass 101
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 14403.4259

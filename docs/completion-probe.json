@@ -1,0 +1,28 @@
+{
+  "checkedAt": "2026-10-16T21:22:51.179Z",
+  "runtime": "codex-cli 0.162.0-alpha.2",
+  "model": "deterministic loopback fixture; no provider call",
+  "desktopUIVerified": false,
+  "nativePatchVerified": false,
+  "hookOutput": "Stop JSON block continues; continue:false ends at the shared task limit",
+  "results": [
+    {
+      "kind": "completion",
+      "repaired": false,
+      "continued": true,
+      "checks": 1,
+      "modelRequests": 3,
+      "pid": 45612,
+      "processExited": true
+    },
+    {
+      "kind": "completion",
+      "repaired": true,
+      "continued": true,
+      "checks": 2,
+      "modelRequests": 3,
+      "pid": 45944,
+      "processExited": true
+    }
+  ]
+}
