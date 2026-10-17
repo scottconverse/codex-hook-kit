@@ -2,7 +2,7 @@
 
 Project-scoped hooks for local Codex sessions, ported from Scott Converse's [claude-hook-kit](https://github.com/scottconverse/claude-hook-kit). This is a code port, not a new implementation of its policy checks.
 
-[Manual](docs/MANUAL.md) · [Landing page](docs/index.html) · [Configuration keys](docs/CONFIG-REFERENCE.md) · [Compatibility and verification](docs/COMPATIBILITY.md) · [Suggested additions](docs/ADDITIONS.md)
+[Manual](docs/MANUAL.md) · [Handoff: finish on the real runtime](docs/HANDOFF-CODEX.md) · [Landing page](docs/index.html) · [Configuration keys](docs/CONFIG-REFERENCE.md) · [Compatibility and verification](docs/COMPATIBILITY.md) · [Suggested additions](docs/ADDITIONS.md)
 
 ## What is preserved
 
