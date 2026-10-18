@@ -1,4 +1,4 @@
-# Codex Hook Kit 1.1.0 — implemented improvements and remaining limits
+# Codex Hook Kit 1.1.0 â€” implemented improvements and remaining limits
 
 This page replaces the original port's forward-looking suggestions. It records
 current distinctions; it does not authorize extra work or new gates.
