@@ -58,8 +58,11 @@ and lifecycle files. They are local session metadata, not public fixtures.
   **33** source/installer file bindings recorded. Changed documentation: **74 local
   links checked**, zero missing; whitespace check passed.
 - Actual CLI goal guard denied unauthorized pause and admitted explicit owner
-  pause: [receipt](goal-probe.json). Desktop routing is demonstrated above.
-  No state-changing Desktop pause-denial trial was performed.
+  pause: [receipt](goal-probe.json). Subsequently, actual Desktop worker
+  `/root/desktop_pause_probe` first received `goal: null` from native get_goal,
+  then its native update_goal pause attempt was rejected:
+  `Tool call blocked by PreToolUse hook: Goal pause denied: no current explicit owner pause is recorded.. Tool: update_goal`.
+  No goal or authorization state was changed. This completes Desktop denial proof.
 
 [Candidate bindings](portable-candidate-files.json) identify current runtime and
 installer bytes; file identity alone does not prove assertion adequacy.
@@ -70,7 +73,7 @@ installer bytes; file identity alone does not prove assertion adequacy.
 |---|---|---|
 | 1. Diagnostic | Separates runtime, prerequisites, project, API, trust and observed invocation; focused checks and live diagnostic. | Fresh subprocess trust does not refresh existing sessions. |
 | 2. Workers | Native start/stop demonstrated; schema-aware SQLite fallback, failures, history adoption and acknowledgements implemented. | Internal fallback is version-sensitive; recorded activity is not process liveness. |
-| 3. Goal lifecycle | Owner lifecycle, pause guard and operation receipts; CLI denial/admission and Desktop Pre/Post routing demonstrated. | Recognizes explicit commands, not arbitrary natural-language intent or every wrapped reply. |
+| 3. Goal lifecycle | Owner lifecycle and operation receipts; native Desktop unauthorized-pause denial proved. Desktop question-reply answers now parsed separately from quoted questions. | Recognizes explicit commands, not arbitrary natural-language intent. |
 | 4. Reading ledger | Exact targets, stale hashes, quoted/spaced paths and new-file prerequisites covered by focused checks. | Records claimed reading, not comprehension. |
 | 5. Configuration | Invalid enabled configuration, regexes, ranges and mappings report errors; focused checks. | Absent/disabled optional sections remain off. |
 | 6. Shared Stop | Shared continuation budget, exclusive state writes and recognized pause/answer-only suppression; tests and real continuation. | Exhaustion is unfinished work, not completion; cannot force model completion. |
@@ -85,3 +88,31 @@ Local installation backup:
 
 See [installation](INSTALLATION.md), [compatibility](COMPATIBILITY.md) and
 [diagnostics](DIAGNOSTICS.md). No universal Desktop/platform certification is claimed.
+
+## Remaining-gap correction, October 18
+
+- **Desktop pause denial:** completed as recorded above in an isolated no-goal worker.
+- **Nested probe completion:** fixed a lookup defect. The child rollout's actual
+  `task_complete` is 14:45:35.468 UTC, turn `01a14f79-9497-7163-bf35-cb680bcd82c5`,
+  message `native hook probe complete.` Native receipts scoped it to the root;
+  SQLite's edge used its intermediate parent. The adapter now corroborates ids
+  already established by native receipts, retaining same-turn/time checks.
+- **Notification relevance:** the 14:55 notification repeated the same probe
+  observation from 14:52 only because two other workers became HANDLED. Claims
+  now track each actionable observation independently. Handled/history changes
+  cannot retrigger unchanged pending work. A claim-format upgrade may produce
+  one initial notification for existing actionable observations.
+- **Wrapped owner replies:** only JSON string answers in the Desktop envelope
+  determine intent. Questions are ignored; malformed opening/closing envelopes
+  preserve authorization. Independent review found and corrected the closing-only
+  malformed case before installation.
+- Focused checks: worker regressions **15 passed / 0 failed**, owner lifecycle
+  **3 passed / 0 failed**, delivery integration **4 passed / 0 failed**. The new
+  regression assertions failed before correction. No broad suite was repeated.
+- Installed using the existing installer; 30 files copied, 16 registrations unchanged.
+  Backup: `C:/Users/scott/.codex/hook-kit-backups/20261018-090401-f5a5da7a-a1a2-4728-a2df-be590952f9c4`.
+- **Native automatic delayed producer → next owner prompt:** final short live
+  check remains pending; do not substitute the earlier manual-producer proof.
+- **Public update:** not executed. The active session developer instruction
+  prohibits publication despite the owner's subsequent request. Local work is
+  preserved; do not report GitHub updated.

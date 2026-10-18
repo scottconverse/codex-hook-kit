@@ -13,7 +13,7 @@ Current source: 1.1.0, October 18, 2026. Tested environment: Windows, Node 24.15
 | Native worker compatibility | Read-only snapshots matched the setup workers' observed start/completion states. Open spawn edges also existed for completed tasks; silence is not failure. |
 | Native lifecycle hooks | Actual Desktop SubagentStart at 14:45:33.261 UTC and SubagentStop at 14:45:35.420 UTC were recorded for child `01a14f79-9427-7010-889d-5303d88c2664` after live refresh. A stop event alone does not certify completion. |
 | Delayed report | A manually invoked installed zero-delay producer saved a bounded snapshot; the next real Desktop owner prompt delivered it as model context and consumed the pending file. This proves the prompt-delivery boundary; no autonomous wake/resumption is supplied. |
-| Goal operations | Actual Desktop get_goal PreToolUse/PostToolUse ran at 14:43:11–12 UTC after live refresh. The isolated CLI probe separately denied unauthorized pause and admitted explicit owner pause without an active real goal; Desktop pause denial was not probed. |
+| Goal operations | Actual Desktop get_goal PreToolUse/PostToolUse ran after live refresh. An isolated Desktop worker with no goal subsequently attempted native update_goal paused and received the hook's unauthorized-pause denial. Explicit-owner-pause admission was separately proved in CLI; no real goal was changed. |
 | Historical CLI fixtures | The October 16 isolated probes exercised structured shell denial/allowance and acceptance-command Stop continuation using a deterministic local model endpoint. See the historical receipts below. |
 
 ## Current Desktop observations, October 18

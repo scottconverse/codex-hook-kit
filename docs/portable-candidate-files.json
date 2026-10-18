@@ -81,7 +81,7 @@
   },
   {
     "path": "lib/desktop-workers.mjs",
-    "sha256": "edbbf540dc72bde7e495b1b07b3d24bd1c29e1831275f1ece3a2f91ffa317163"
+    "sha256": "c147b418ffab727d1993d71da60e8b4025eb94be787424fd2e3c94040231b488"
   },
   {
     "path": "lib/diagnostics.mjs",
@@ -109,7 +109,7 @@
   },
   {
     "path": "lib/stop-policy.mjs",
-    "sha256": "306b2eb17d78b05998c2c8eeecdbe27c855b3da384be07132aca65089d04b689"
+    "sha256": "a20281acfc48d2621fc91fc999bb2a6fea6ac15574bab4a48ad1d7f7a50ce658"
   },
   {
     "path": "lib/tool-input.mjs",

@@ -62,7 +62,7 @@ The prompt lifecycle handler recognizes narrow explicit pause/resume forms and a
 
 Actual Desktop worker start/stop and get_goal tool hooks ran after live configuration refresh. A subsequent real owner prompt invoked owner-lifecycle recording. Consult doctor's summaries and [current verification](CURRENT-VERIFICATION.md). The assistant must follow the owner's instructions regardless of hook coverage.
 
-Optional goal-tool guarding denies a recognized `update_goal` pause without recorded owner pause. A current isolated native CLI probe exercised denial and explicit-owner-pause admission without an active real goal. Actual Desktop get_goal PreToolUse/PostToolUse were also observed; a Desktop pause was not used as a probe. A PostToolUse record is an observation; consult the authoritative goal-tool result for success.
+Optional goal-tool guarding denies a recognized `update_goal` pause without recorded owner pause. An isolated Desktop worker with no goal received the hook's denial on an actual native pause attempt. Explicit-owner-pause admission was separately exercised in CLI. No real goal was changed. A PostToolUse record is an observation; consult the authoritative goal-tool result for success.
 
 ## Delayed reports and diagnostics
 

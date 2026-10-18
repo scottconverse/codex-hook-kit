@@ -13,6 +13,10 @@ goal complete. Legacy direct invocation without `--codex` retains exit-code beha
 that prompt. Resume forms such as `resume work from handoff` and `resume work on
 the current task` also clear the recorded pause. Other natural-language authorization remains an interpretation for
 the assistant and owner; this parser is deliberately not a semantic classifier.
+Desktop `send_user_message_question_reply` envelopes are parsed as JSON answers:
+only each string `answer` supplies intent; quoted questions do not. The latest
+explicit pause/resume answer wins; an answer-only request in any answer suppresses
+Stop work. Malformed envelopes do not change authorization.
 Hook-generated continuation prompts do not replenish the budget. Without prompt
 events, the fallback budget is finite for the session rather than replenished on
 every Stop event. Pauses suppress Stop checks before acceptance commands run.
@@ -25,7 +29,7 @@ pause. PostToolUse records the observed operation, not an invented authoritative
 goal state. These hooks do not call goal tools, change goals themselves, or certify
 completion. The underlying tool result remains authoritative.
 
-**Coverage depends on the runtime delivering those tool events.** The installed Desktop route has observed get_goal PreToolUse/PostToolUse. Pause denial/admission was separately exercised in isolated CLI threads; no real Desktop goal was changed as a probe. A runtime omitting goal events cannot enforce this guard. Reminders and operation receipts alone do not certify goal state or completion.
+**Coverage depends on the runtime delivering those tool events.** The installed Desktop route has observed get_goal PreToolUse/PostToolUse and rejected an unauthorized pause through native update_goal in an isolated Desktop worker. The worker first confirmed it had no goal; no real goal was changed. Explicit-owner-pause admission was separately exercised in CLI. A runtime omitting goal events cannot enforce this guard. Reminders and operation receipts alone do not certify goal state or completion.
 
 State is project-local under `.codex/hook-lifecycle`, keyed by session. No prompt
 text, tool result content, or credentials are retained. This is cooperative agent

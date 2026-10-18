@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import { desktopSnapshot } from '../lib/desktop-workers.mjs';
+import { desktopSnapshot, recordWorkerLifecycle, claimDesktopNotice } from '../lib/desktop-workers.mjs';
 import { load } from '../lib/config.mjs';
 import { HOOKS, makeProject, rimraf, runHook, writeJson, writeText } from './helpers.mjs';
 
@@ -167,5 +167,36 @@ test('report emission receipt is metadata and does not claim delivery', async ()
   const dir=path.join(p.root,'.codex','hook-observations');
   const receipts=fs.readdirSync(dir).map(name=>JSON.parse(fs.readFileSync(path.join(dir,name),'utf8')));
   const receipt=receipts.find(r=>r.hook==='delayed-report-emitted');assert.ok(receipt);assert.match(receipt.delivery,/not established/);
+ } finally {rimraf(p.root);}
+});
+
+test('native nested worker stop is corroborated by its own same-turn terminal evidence', async () => {
+ const p=fixture(); try {
+  const db=new DatabaseSync(path.join(p.root,'home','state_5.sqlite'));
+  db.prepare('UPDATE thread_spawn_edges SET parent_thread_id=? WHERE child_thread_id=?').run('intermediate','child');db.close();
+  const {section}=load('no-idle',{cwd:p.cwd});
+  recordWorkerLifecycle(section,{session_id:'parent',agent_id:'child',turn_id:'nested',hook_event_name:'SubagentStop'});
+  p.append('task_complete','older',{},new Date(Date.now()+1000).toISOString());
+  assert.equal((await desktopSnapshot(section,{session_id:'parent'})).workers[0].state,'STOP-OBSERVED');
+  p.append('task_complete','nested',{},new Date(Date.now()-1000).toISOString());
+  assert.equal((await desktopSnapshot(section,{session_id:'parent'})).workers[0].state,'STOP-OBSERVED');
+  p.append('task_complete','nested',{},new Date(Date.now()+1000).toISOString());
+  const worker=(await desktopSnapshot(section,{session_id:'parent'})).workers[0];
+  assert.equal(worker.state,'FINISHED-NOT-HANDLED');
+  assert.equal(worker.source,'native-hooks+sqlite-state-5');
+ } finally {rimraf(p.root);}
+});
+
+test('notice claims ignore handled and adopted history changes around an unchanged pending worker', () => {
+ const p=fixture(); try {
+  const {section}=load('no-idle',{cwd:p.cwd});
+  const pending={id:'pending',state:'STOP-OBSERVED',revision:'pending-one'};
+  const reviewed={id:'reviewed',state:'FINISHED-NOT-HANDLED',revision:'reviewed-one'};
+  const snapshot=workers=>({parent:'parent',workers,notices:[]});
+  assert.equal(claimDesktopNotice(section,snapshot([pending,reviewed])),true);
+  // Reviewing another result must not prompt again about unchanged evidence.
+  assert.equal(claimDesktopNotice(section,snapshot([pending,{...reviewed,state:'HANDLED'}])),false);
+  assert.equal(claimDesktopNotice(section,snapshot([pending,{id:'history',state:'ADOPTED-HISTORY',revision:'history-one'}])),false);
+  assert.equal(claimDesktopNotice(section,snapshot([{...pending,revision:'pending-two'}])),true);
  } finally {rimraf(p.root);}
 });
