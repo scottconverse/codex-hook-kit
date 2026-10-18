@@ -1,145 +1,76 @@
 # Codex hook-kit manual
 
-## 1. Purpose and source
+## Purpose and requirements
 
-This kit brings the Claude kit's nine policy concepts to local Codex. The policy engines are reused; platform adapters handle Codex input, output, configuration and turn identity. Source provenance is in [PORT.md](PORT.md) and [SOURCE.json](../reference/SOURCE.json).
+The kit applies explicit project workflow checks to supported local Codex operations. It adapts the original Claude policy engines and adds native worker evidence, evidence-bound reporting and shared Stop limits. [PORT.md](PORT.md) records provenance.
 
-Hooks constrain supported operations. They cannot prove understanding, stop every alternate write path, or make an agent's evidence truthful.
+Use Node 22.13 or newer, Git where deployment checks require it, and a Codex runtime supporting the registered command hooks. Current source verification uses Windows and Node 24.15.0; Desktop runtime 0.160.0 is the target observed installation. Linux/macOS and other runtime combinations are not yet tested. Hook definitions must be enabled and trusted in the target client. No npm dependencies are required.
 
-## 2. Requirements
-
-- Node 18+ available on the hook shell's PATH. Tested with Node 24.21.0 on Windows.
-- Codex with command hooks, JSON PreToolUse denial, Stop continuation, and async informational hooks.
-- Hooks enabled by runtime policy; trusted definitions; a local session.
-- Git for deploy-gate; a working configured repository when that hook is enabled.
-- No npm dependency installation.
-
-This is not a guarantee for older Codex releases, cloud-orchestrated chats, Linux or macOS. Consult [verification](COMPATIBILITY.md) before activation.
-
-## 3. Installation
-
-Run from the kit directory:
+## Installation and first project
 
 ```powershell
 node install.mjs --dry-run
 node install.mjs
-```
-
-The selected Codex home is --config-dir, CODEX_HOME, or the user's .codex folder, in that order. The installer copies hooks/ and lib/ into codex-hook-kit/ within that home. It merges the registrations into hooks.json, retaining unrelated entries and top-level fields.
-
-Existing hooks.json is copied to a uniquely named hooks.json.bak-hookkit-TIMESTAMP before registration is written. Invalid JSON is an error rather than an overwrite. Reinstall replaces owned registrations instead of duplicating them. It does not edit config.toml or carry out trust approval.
-
-Codex may merge hook sources from multiple config layers. This installer manages its selected hooks.json only: unrelated inline TOML or plugin hooks remain active.
-
-## 4. Trust and first project
-
-Review and trust the installed definitions through Codex's hook interface; /hooks is documented for the CLI. New or changed definitions can require review again. Start a new local Codex session after installation. Hooks can be disabled by features.hooks=false or admin policy.
-
-Initialize a project:
-
-```powershell
 node init-project.mjs C:/dev/my-project --example agent-build
 ```
 
-The initializer writes .codex/hook-kit.json. It refuses to overwrite unless --force is given. The source examples are minimal, townreporter and agent-build. Paths in townreporter are retained as owner-specific examples; do not use them unchanged on another machine.
+The selected home is `--config-dir`, `CODEX_HOME`, or the user's `.codex`, in that order. Runtime files go into its `codex-hook-kit` directory and registrations into `hooks.json`. Installation pins the executing Node binary, preserves unrelated registrations and creates transaction backups covering prior scripts and kit registrations. It does not grant trust. See [INSTALLATION.md](INSTALLATION.md) for transaction and rollback details.
 
-For one review hook only, the project file can be:
+Review the actual definitions in Codex; `/hooks` is the documented CLI interface. A running Desktop session can retain earlier registrations/trust. The verified live refresh is to open the local project, then toggle an existing kit Hook off/on in Settings and restore its original value. “Reload hooks” refreshes the listing only. See [INSTALLATION.md](INSTALLATION.md). Verify a denied scratch operation and an allowed operation before relying on a guard. A direct child-process test is not Desktop activation proof.
 
-```json
-{ "enabled": true, "double-check": { "label": "my project" } }
-```
+The initializer refuses to overwrite project policy without `--force`; forced replacement creates a backup. Available examples are `minimal`, `townreporter`, `agent-build`, `completion` and `desktop`; adjust paths to the project. The completion example is disabled until configured.
 
-Before trusting deployment or write protection, run an actual disposable denied operation from the intended Codex client. A direct script test is not proof of Desktop integration.
+## Project lookup, mapping and configuration errors
 
-## 5. Project lookup and opt-out
+Each hook uses event `cwd`, falling back to its process directory, then finds the nearest `.codex/hook-kit.json`. Relative paths resolve against that project's root. An explicit absolute `projectConfig` mapping delegates to another policy and its root; broken mappings and cycles are errors. See [ledger-mapping.md](ledger-mapping.md).
 
-Every hook reads JSON stdin, uses cwd from the event, and walks upward to the nearest .codex/hook-kit.json. Relative policy paths resolve from the directory containing .codex, not the shell's current subfolder.
+No project file, absent sections and explicit `enabled:false` disable the corresponding policy. A closer disabled project overrides a parent. Existing malformed JSON, invalid section shapes, invalid enabled flags and configured bad regexes fail visibly. A configuration error is not equivalent to a disabled policy.
 
-No config, missing hook section, or enabled:false means exit 0 and silence. A closer disabled config overrides a parent enabled config. Malformed JSON currently switches the nearest config off; invalid regexes can disable checks. These behaviors are inherited and are called out because they weaken enforcement.
+## Protocol and tool coverage
 
-## 6. Protocol and tool coverage
+Installed commands include `--codex`. PreToolUse denial uses structured `hookSpecificOutput.permissionDecision: "deny"`; Stop continuation uses `decision: "block"`. A historical native CLI probe found exit code 2 alone insufficient for tool denial. Use generated registrations.
 
-Registered commands include --codex. In that mode a policy block returns exit 0 with:
+| Path | What is checked | Limit |
+|---|---|---|
+| `Bash` command | Recognized shell command and write syntax | Not arbitrary script effects |
+| Named shell aliases | Registered/normalized alias input | Runtime routing must be verified |
+| `apply_patch` | All Add/Update/Delete/Move targets and available changed text | Update fragments are not complete file bodies |
+| `write_stdin` | No new PreToolUse for an existing process | Sent commands are outside this coverage |
+| Arbitrary MCP, hosted or opaque tool | Only explicitly registered, understood paths | No complete write boundary |
 
-```json
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PreToolUse",
-    "permissionDecision": "deny",
-    "permissionDecisionReason": "The required ledger is missing."
-  }
-}
-```
+Patch deletion is not treated as adding forbidden text. Full-body-only brief requirements apply to additions or recognized full-body shell writes. Shell recognition remains heuristic; PostToolUse cannot undo an already completed write.
 
-Stop blocks return {"decision":"block","reason":"..."}. Without --codex, scripts keep the original exit-2/stderr convention for parity testing. The installed native CLI probe showed exit 2 alone was insufficient for tool denial, so use generated registrations.
+## Policy behavior
 
-Codex shell events normally arrive as Bash with tool_input.command. Replay adapters also accept exec_command/cmd and shell aliases. Codex apply_patch uses tool_input.command; the adapter also accepts freeform strings and patch/input fields for fixture replay.
+**Rules and briefs.** `inject-rules` adds configured text at session start or user prompts as Desktop `additionalContext`. Mandatory framing treats owner-maintained project text as overridable defaults: current or later explicit owner instructions supersede conflicting project text, while genuine system/developer platform constraints still apply. The configured heading and unchanged file body are JSON-encoded separately from that framing. This does not change the API message role, erase earlier injected instructions, or prove model obedience. `walk-brief-guard` checks recognized targets for required/banned text.
 
-Patch headers identify every Add, Update, Delete and Move target. Added files supply a full body. Updates supply added/context lines only, so full-body-only brief checks are not imposed on fragments. Rename targets receive the same changed text.
+**Reading coverage.** `read-ledger-gate` checks configured upstream rows and, when enabled, exact target coverage and SHA256 freshness. A matching row proves neither reading nor comprehension. See [ledger-mapping.md](ledger-mapping.md) for spaced paths and task prerequisites.
 
-Arbitrary MCP tools, hosted tools, interactive write_stdin input, concealed script writes and alternate code runners are not fully covered by these matchers or regexes. A PostToolUse check cannot undo a write. Do not present this kit as an access-control sandbox.
+**Publication and database scope.** `deploy-gate` checks configured commit evidence and publication authorization. `db-write-guard` distinguishes configured hosts/databases and fresh approval markers. These are command-text policies, not independent authentication. See [release-database.md](release-database.md).
 
-## 7. Hook behavior
+**Workers.** `no-idle` retains the configured folder/log mode. The optional `codex-desktop` backend prefers supported native lifecycle receipts and can use the observed read-only SQLite fallback. It separates pre-adoption history from newly unhandled results. Silence alone is not failure. See [desktop-workers.md](desktop-workers.md).
 
-### inject-rules
+**Review and measurement.** `double-check` requests the configured checklist once subject to shared limits; it cannot prove a review happened. `measure-gate` retains timestamp/receipt checks and also supports `mode: "evidence"`. Fresh timestamps do not prove measurement truth.
 
-SessionStart and UserPromptSubmit read rulesFile and inject heading plus content. Missing rules means no context. This is a reminder; it does not enforce the meaning of the rules. SessionStart can also run on resume/compaction in supporting Codex runtimes.
+**Completion.** `completion-gate` either runs one authorized existing acceptance command, with input-bound caching and optional exact retained-code checks, or checks existing evidence without commands. See [COMPLETION.md](COMPLETION.md) and [evidence-mode.md](evidence-mode.md). No hook makes an inadequate acceptance check meaningful.
 
-### deploy-gate
+## Shared Stop and owner lifecycle state
 
-A shell command matching commandPattern and no skipPatterns requires a gate named <commit>.json under gatesDir. shaFrom defaults to origin/main and performs git fetch; use HEAD for local-only operation. requiredKeys, mustEqual, reportKey/reportMustContain and findingsFile/openPattern validate the gate and report. The original textOnly branch is preserved.
+`stop-policy.maxContinuations` defaults to two and accepts integers 0–10. Stop hooks share this project/session counter. Exhaustion reports incomplete work instead of forcing another continuation. Existing per-hook failure/cache limits still apply. This is not an active-time, no-progress or global cross-project budget.
 
-A configured skip regex, incomplete requiredKeys list, or owner-writable gate can weaken the check. The hook is a release workflow check, not proof of authorization or of the tests represented by a receipt.
+The prompt lifecycle handler recognizes narrow explicit pause/resume forms and answer-only wording. Pause/answer-only state suppresses Stop checks and delayed reporting. A recognized owner prompt starts a new continuation epoch; recorded resume clears pause. This text matcher is not semantic authority proof, and its state is editable.
 
-### walk-brief-guard
+Actual Desktop worker start/stop and get_goal tool hooks ran after live configuration refresh. A subsequent real owner prompt invoked owner-lifecycle recording. Consult doctor's summaries and [current verification](CURRENT-VERIFICATION.md). The assistant must follow the owner's instructions regardless of hook coverage.
 
-Checks pathPattern against write/edit/patch targets or shell command text. bannedPatterns reject text; requiredLines and requiredSections require matching content. onlyFullBody constraints apply to whole-file additions or configured heredocs, not partial updates. Deleting forbidden text does not count as adding it.
+Optional goal-tool guarding denies a recognized `update_goal` pause without recorded owner pause. An isolated Desktop worker with no goal received the hook's denial on an actual native pause attempt. Explicit-owner-pause admission was separately exercised in CLI. No real goal was changed. A PostToolUse record is an observation; consult the authoritative goal-tool result for success.
 
-### read-ledger-gate
+## Delayed reports and diagnostics
 
-Recognized code writes require ledgerFile (default .codex/READ-LEDGER.md). Example row:
+`delayed-report` is canonical; `wake` remains an alias. If both sections exist, canonical configuration wins, including an explicit disable. Native delays are 0–25 minutes and are checked for pause before and after waiting. Filesystem mode keeps its configured delay override and lock format. Quiet workers require investigation, not automatic relaunch.
 
-```text
-- upstream/project-a/src/parser.ts - 312 lines
-```
+The delayed reporter saves a bounded pending worker snapshot. The next owner UserPromptSubmit consumes it as model context; it cannot wake an idle chat or start work. The complete Desktop path was observed: native Stop launched the installed reporter with a three-second probe delay, and the next real owner prompt received and consumed its report. The normal 20-minute delay was restored. Async Stop systemMessage output alone is a client warning, not model context. With diagnostics.enabled:true, metadata receipts identify invocation/emission; receipts alone do not prove delivery. See [DIAGNOSTICS.md](DIAGNOSTICS.md), [desktop-workers.md](desktop-workers.md) and [lifecycle.md](lifecycle.md).
 
-The original table and comma forms also work. upstreamRoots resolve relative paths; requireExisting and verifyLines default true. minEntries, minLines and mustMention impose count and coverage requirements. codePattern, exemptPattern, shellWritePattern and rowPattern are configurable.
-
-The gate verifies line counts against files on disk. It does not observe actual reading, enforce reuse, reject every duplicate row or guarantee every row lies beneath an upstream root. Default exemptions include documentation and configuration files. These inherited limitations are material; see recommended improvements.
-
-### db-write-guard
-
-Checks configured clientPattern, port and database names. Recognized SQL writes, files and restores require okFile newer than okMinutes. Read-like statements pass. clientPattern must be configured; the supplied examples do so. This regex policy cannot parse all SQL, functions, scripts or quoting combinations. A fresh marker is workflow evidence, not independent owner authentication.
-
-### no-idle
-
-Scans runsDir for recent worker folders using configured logNames. A finished worker without handledFile, a quiet running worker, or a running worker without a configured live waiter blocks Stop. waiterHeartbeat or waiterCheck establishes waiter liveness. This scans explicitly configured logs, not arbitrary Codex Desktop threads.
-
-Unlike measure-gate, the inherited no-idle hook has no retry cap. Keep it disabled unless its worker lifecycle and handling markers are reliable.
-
-### double-check
-
-The first Stop requests the configured checklist; stop_hook_active=true passes. The source checklist is preserved, including the requested reply prefix. minToolCalls optionally uses best-effort transcript counting. Codex response_item function/custom tool calls and the original transcript format are supported. Transcript formats are unstable; an unreadable transcript requests the check rather than treating it as proof that no tools ran.
-
-This requests a review; it cannot prove the review happened. A stop already continued by another hook also passes the stop_hook_active guard.
-
-### measure-gate
-
-Compares the newest matching receipt with the newest code file under codeDirs. receiptFile or receiptDir/receiptPattern selects the receipt. requireMatch optionally checks its text. codePattern, ignorePattern and maxDepth scope the scan.
-
-The counter is isolated by project and session. Native turn_id resets it on a new non-continuation turn; stop_hook_active continuations retain the budget. Without native IDs, transcript position is a best-effort fallback.
-
-After maxBlocks, it returns JSON with continue:false, stopReason and systemMessage identifying the stale result. This prevents further Stop continuation from this gate and takes precedence over other continuation requests. The warning does not rewrite an already generated final answer.
-
-A file's mtime and matching text do not prove measurement correctness. The separate opt-in [completion gate](COMPLETION.md) executes an agreed command and caches its result against input content, instead of trusting an agent-written receipt.
-
-### wake
-
-Runs asynchronously, waits minutes (or seconds from minutesFile), and reports worker status through JSON systemMessage. A lock avoids duplicate sleepers. Worker classification remains comparable to the source hook.
-
-**Codex does not implement asyncRewake.** Background completion does not start a user turn. Information is delivered at the next safe point or next user turn; ending a session can cancel pending hooks. The 1800-second registration timeout remains, so configure a delay below it. Automated wake-ups would require a separately authorized scheduler.
-
-## 8. Uninstall and recovery
+## Removal and troubleshooting
 
 ```powershell
 node uninstall.mjs --dry-run
@@ -147,31 +78,15 @@ node uninstall.mjs
 node uninstall.mjs --remove-files
 ```
 
-Only owned Codex registrations are removed. Other hook kits and settings remain. Project policy is not removed. --remove-files deletes the selected home's codex-hook-kit runtime directory.
-
-Restore the backup printed by the installer to roll back registrations. This does not restore overwritten runtime script versions. Keep an earlier kit copy if code rollback is needed.
-
-## 9. Testing
-
-npm test runs inherited parity and scope tests plus Codex protocol tests. All policy fixtures and installer homes are disposable. Reference hooks remain unmodified; copied reference fixtures substitute temporary paths.
-
-tools/probe-codex.mjs runs native shell deny/allow cases through a deterministic local Responses endpoint. It uses an isolated Codex home and only that subprocess's trust bypass. It never calls a real model or installs live hooks. CODEX_BIN can select a specific native executable.
-
-Native patch execution and Desktop UI activation remain unverified. They are not converted into passing claims by direct adapter tests.
-
-## 10. Troubleshooting
+Project policy remains. A plain registration backup restores registrations only; the installer's transaction backups cover earlier kit script bytes and kit registrations. Use the printed transaction folder and documented rollback command in [INSTALLATION.md](INSTALLATION.md).
 
 | Symptom | Check |
 |---|---|
-| Nothing happens | Correct local cwd, nearest project config, enabled section, features.hooks, trusted definitions, new session. |
-| Hook script blocks but tool still writes | Registered command must include --codex; use native-probe evidence for this runtime. |
-| Cannot find node | Ensure the hook shell can resolve Node; the kit does not install Node. |
-| No delayed wake | Expected: wake only reports when Codex next processes background output. |
-| Repeated Stop continuations | Inspect no-idle markers; measure-gate has its own bounded counter. |
-| Ledger passes but no reuse occurred | Expected limitation: file counts do not enforce reuse or comprehension. |
-| Unknown runtime behavior | Run a disposable real-client probe; do not infer enforcement from configuration alone. |
+| No visible effect | Nearest policy/mapping, enabled section, runtime support, trust and intended session |
+| Script denies but tool acts | Actual registered command, structured protocol, tool coverage and client probe |
+| Node unavailable | Installer-pinned executable and its actual runtime version |
+| Worker is `UNKNOWN` | Explicit capability/tail/receipt notice; do not infer health |
+| Repeated Stop requests | Shared budget, native snapshot claims and per-hook counters |
+| Receipt exists but report unseen | Emission is not delivery; verify the target Desktop build |
 
-## 11. Complete configuration keys
-
-See [CONFIG-REFERENCE.md](CONFIG-REFERENCE.md), adapted from the original manual's key table. These keys are preserved rather than replaced with a different policy format.
-
+Run focused tests for changed behavior. Current outcomes and the consolidated 156-test pass are in [CURRENT-VERIFICATION.md](CURRENT-VERIFICATION.md). Historical probes/counts are in [VERIFICATION.md](VERIFICATION.md); current runtime limits are in [COMPATIBILITY.md](COMPATIBILITY.md). Complete legacy keys and new option links are in [CONFIG-REFERENCE.md](CONFIG-REFERENCE.md).

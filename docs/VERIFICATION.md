@@ -1,4 +1,11 @@
-# Verification — 2026-10-16
+# Historical verification — 2026-10-16
+
+This document preserves the original port's results and environment. Counts, paths,
+runtime versions and unverified claims below describe that historical candidate,
+not version 1.1.0. For current source behavior and evidence boundaries, use
+[CURRENT-VERIFICATION.md](CURRENT-VERIFICATION.md), [COMPATIBILITY.md](COMPATIBILITY.md), [INSTALLATION.md](INSTALLATION.md) and
+[DIAGNOSTICS.md](DIAGNOSTICS.md). Historical CLI receipts do not prove current
+Desktop activation or async delivery.
 
 ## Follow-up: nine-hook check and completion gate, 21:15–21:24 UTC
 

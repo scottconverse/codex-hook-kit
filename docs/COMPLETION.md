@@ -25,7 +25,13 @@ A zero exit permits stopping. A nonzero exit, timeout, missing input or reuse mi
 
 The default is one failure plus two opportunities to correct it. The count survives new Codex sessions and edits under the same `taskId`. Unchanged failures consume a continuation opportunity without rerunning the command. After three failures, or the elapsed window, `continue:false` ends the loop with an INCOMPLETE reason. The wall-clock window starts at the first Stop evaluation, **not the beginning of project work**. It is not an active-time or no-progress meter. Passed unchanged work stays passed after the window expires. Only a newly authorized task should get a new ID; do not reset state to evade an exhausted limit.
 
-For a lean project, enable this gate alone rather than stacking `double-check`, `measure-gate`, `no-idle` and `wake`. The older hooks remain available unchanged for projects that need their specific behaviors.
+For a lean project, enable only the checks required by its acceptance contract. `double-check`, `measure-gate`, `no-idle` and `delayed-report` remain available for their specific behaviors; `wake` is a legacy alias. Installed Stop requests also share `stop-policy.maxContinuations`, default two, and explicit pause/answer-only state suppresses checks. The acceptance command's task failure limit is separate from this shared continuation budget.
+
+## Existing-evidence mode
+
+Set `mode: "evidence"` to inspect an existing structured report without executing tests or builds. Configure `evidenceFile`, the unchanged `requiredIds`, and optional exact `candidate`. For each required result, evidence paths and hashes must still match. To bind results to product bytes, configure `requiredInputs` as an object mapping each requirement ID to an array of product paths; each must appear exactly once in that result's `inputs` with its current SHA256. An unchanged report cannot certify changed configured product inputs.
+
+`claimPattern` recognizes configured completion wording in `last_assistant_message`; it is not semantic detection. Incomplete matching claims request only a bounded correction. See [evidence-mode.md](evidence-mode.md). Matching hashes remain claims about evidence relevance, which must be assessed by a reader.
 
 ## Optional upstream reuse
 
@@ -41,4 +47,4 @@ It does not prove comprehension, licensing, semantic equivalence of rewritten co
 
 ## Enforcement boundary
 
-Real Codex CLI Stop continuation and terminal stop were exercised with an isolated deterministic local model fixture. **Desktop activation is still unverified.** Configuration and `.codex/completion-state` are editable project files; this is a workflow guardrail, not protection against a deliberately bypassing agent. Malformed project JSON still inherits the kit's fail-open behavior. No hook can force good engineering or make an inadequate acceptance command meaningful.
+Historical Codex CLI Stop continuation and terminal stop were exercised with an isolated deterministic local fixture. Current-candidate Desktop activation requires separate runtime evidence; see [COMPATIBILITY.md](COMPATIBILITY.md). Configuration and `.codex/completion-state` remain editable project files. Present malformed project JSON and configured invalid regexes now fail visibly. No hook can force good engineering or make an inadequate acceptance command meaningful.

@@ -1,4 +1,9 @@
-# Codex hook-kit port
+# Historical execution notes — original October 16 port
+
+The narrative below describes the original candidate. It is retained as history,
+not a current installation, test-count or activation claim. Current behavior and
+runtime evidence are reconciled in [CURRENT-VERIFICATION.md](CURRENT-VERIFICATION.md)
+and [COMPATIBILITY.md](COMPATIBILITY.md).
 
 Follow-up 2026-10-16 21:15–21:24 UTC: user authorized testing the nine hooks and adding useful bounded completion guards. Baseline 104/104 passed after rerunning outside sandbox write restrictions. Added one opt-in completion-gate, four focused tests and one combined nine-hook protocol check. Final 109/109 passed. Real CLI failure/repair and bounded-stop probes passed; unchanged failure check runs once. Desktop activation and native patch remain unverified. No live install/commit/push. No further testing needed for this slice. One documentation patch context mismatch was corrected; no runtime defect retries were needed. Defaults remained within 60 minutes total, 30 no-progress and two corrections.
 

@@ -65,16 +65,16 @@ test("install: a fresh install creates settings with the kit hooks and copies th
     assert.ok(fs.existsSync(settingsFile), "hooks.json was created");
     const settings = read(settingsFile);
     const cmds = commands(settings.hooks);
-    assert.equal(cmds.length, 11, "eleven entries: inject-rules twice + the nine other hooks");
+    assert.equal(cmds.length, 16, "sixteen event registrations including goal and worker lifecycle");
     for (const c of cmds) assert.ok(c.includes("/codex-hook-kit/hooks/"), "commands point at the installed copy: " + c);
     // The copied files really exist.
-    for (const f of ["hooks/inject-rules.mjs", "hooks/wake.mjs", "lib/config.mjs", "lib/hook-entries.mjs"]) {
+    for (const f of ["hooks/inject-rules.mjs", "hooks/wake.mjs", "lib/config.mjs", "lib/hook-entries.mjs", "doctor.mjs", "rollback.mjs", "uninstall.mjs"]) {
       assert.ok(fs.existsSync(path.join(dir, "codex-hook-kit", f)), "copied " + f);
     }
     // Events, matchers, timeouts and asyncRewake match the shipped snippet shape.
     assert.equal(settings.hooks.SessionStart[0].hooks[0].timeout, 10);
-    assert.equal(settings.hooks.PreToolUse[0].matcher, "^(Bash|PowerShell|exec_command|shell_command|shell)$");
-    const wake = settings.hooks.Stop[0].hooks.find((h) => h.command.includes("wake.mjs"));
+    assert.ok(settings.hooks.PreToolUse.some(g => g.matcher === "^(Bash|PowerShell|exec_command|shell_command|shell)$"));
+    const wake = settings.hooks.Stop[0].hooks.find((h) => h.command.includes("delayed-report.mjs"));
     assert.equal(wake.async, true);
     assert.equal(wake.asyncRewake, undefined);
     assert.equal(wake.timeout, 1800);
@@ -113,7 +113,7 @@ test("install: running twice does not add duplicates", async () => {
     assert.equal(r2.code, 0, r2.stderr);
     const second = commands(read(settingsFile).hooks);
     assert.deepEqual(second, first, "the second install changed nothing");
-    assert.equal(second.length, 11, "still exactly eleven entries");
+    assert.equal(second.length, 16, "still exactly sixteen entries");
   } finally {
     rimraf(dir);
   }
@@ -139,7 +139,8 @@ test("install: replaces the old local clone path without duplicating", async () 
     const settings = read(settingsFile);
     const cmds = commands(settings.hooks);
     assert.equal(cmds.filter((c) => c.includes("no-idle.mjs")).length, 1, "no duplicate no-idle");
-    assert.equal(cmds.filter((c) => c.includes("wake.mjs")).length, 1, "no duplicate wake");
+    assert.equal(cmds.filter((c) => c.includes("wake.mjs")).length, 0, "legacy wake registration removed");
+    assert.equal(cmds.filter((c) => c.includes("delayed-report.mjs")).length, 1, "one canonical delayed report");
     assert.ok(!cmds.some((c) => c.includes("C:/Users/scott/Desktop/Code/codex-hook-kit/hooks/")), "the old path is gone");
     assert.ok(cmds.some((c) => c.includes("notify.ps1")), "the unrelated hook survived");
     assert.ok(cmds.some((c) => c.includes("/codex-hook-kit/hooks/no-idle.mjs")), "the installed path is used");
@@ -231,7 +232,7 @@ test("init-project: writes the config and refuses to overwrite", async () => {
     assert.ok(fs.existsSync(dest), "the config was written");
     const cfg = read(dest);
     assert.equal(cfg.enabled, true);
-    assert.ok(cfg["db-write-guard"], "the minimal example content landed");
+    assert.deepEqual(cfg, read(path.join(REPO, 'examples/minimal.hook-kit.json')), "the current minimal example content landed");
     // Refuses a second write.
     const r2 = await run(INIT, [dir]);
     assert.equal(r2.code, 1, "a second init is refused");
@@ -264,7 +265,7 @@ test("snippet: the committed snippet matches the shared source", async () => {
     const snippet = read(path.join(REPO, "install", "settings-snippet.json"));
     assert.ok(commands(snippet.hooks).every((c) => c.includes("<HOOK_KIT_DIR>")), "the snippet uses the placeholder, not a real path");
     assert.ok(!JSON.stringify(snippet).includes("C:/Users/scott"), "the snippet names no machine-specific path");
-    assert.equal(commands(snippet.hooks).length, 11, "eleven entries in the snippet");
+    assert.equal(commands(snippet.hooks).length, 16, "sixteen event registrations in the snippet");
   } finally {
     rimraf(dir);
   }

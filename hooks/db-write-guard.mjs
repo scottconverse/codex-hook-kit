@@ -10,11 +10,51 @@
 //   ownerName      the owner's name in the block message, e.g. "Scott" (default "the owner")
 import fs from "node:fs";
 import { block, loadFromStdin, resolveIn, rx } from "../lib/config.mjs";
+import { shellSegments } from "../lib/shell-segments.mjs";
 
 const { input, section } = loadFromStdin("db-write-guard");
 if (!section) process.exit(0);
 
 const s = section;
+// Host-aware mode is opt-in. Legacy projects retain their original port-only rules.
+if (Array.isArray(s.hosts)) {
+  const hosts = s.hosts.map(h => String(h).toLowerCase().replace(/^\[|\]$/g, ''));
+  const wanted = (s.databases || []).map(d => String(d).toLowerCase());
+  const client = rx(s.clientPattern, 'i');
+  const write = rx(s.writePattern, 'i') || /\b(insert|update|delete|drop|alter|truncate|create|grant|revoke|vacuum|reindex|cluster|copy)\b/i;
+  const restore = rx(s.restorePattern, 'i');
+  let blocked = false;
+  for (const command of shellSegments(String(input?.tool_input?.command ?? ''), { keepPipelines: true })) {
+    if (!client?.test(command)) continue;
+    const arg = flag => {
+      const options = flag.split('|').map(f => f + (f.startsWith('--') ? '(?:\\s+|=)' : '(?:\\s*|=)')).join('|');
+      return [...command.matchAll(new RegExp('(?:^|\\s)(?:' + options + ')("[^"\\r\\n]*"|\'[^\'\\r\\n]*\'|[^\\s;]+)', 'gi'))].map(m => m[1].replace(/^["']|["']$/g, ''));
+    };
+    const uris = [...command.matchAll(/postgres(?:ql)?:\/\/[^\s"']+/gi)].flatMap(m => {
+      try { return [new URL(m[0])]; } catch { return []; }
+    });
+    const hostArgs = arg('-h|--host');
+    const envHosts = [...command.matchAll(/\bPGHOST\s*=\s*["']?([^\s"';]+)/gi)].map(m => m[1]);
+    const targets = [...hostArgs, ...envHosts, ...uris.map(u => u.hostname)];
+    if (!targets.length) targets.push(String(s.defaultHost || 'localhost'));
+    if (!targets.some(h => hosts.includes(h.toLowerCase().replace(/^\[|\]$/g, '')))) continue;
+    const ports = [...arg('-p|--port'), ...uris.map(u => u.port || String(s.defaultPort ?? 5432)), ...[...command.matchAll(/\bPGPORT\s*=\s*["']?(\d+)/gi)].map(m => m[1])];
+    if (!ports.length) ports.push(String(s.defaultPort ?? 5432));
+    if (!ports.some(p => Number(p) === Number(s.port))) continue;
+    const names = [...arg('-d|--dbname').filter(d => !/^postgres(?:ql)?:\/\//i.test(d)), ...uris.map(u => decodeURIComponent(u.pathname.slice(1))).filter(Boolean)];
+    if (names.length && !names.some(n => wanted.includes(n.toLowerCase()))) continue;
+    const sql = arg('-c|--command').join(' ; ');
+    const piped = /\||<\s*\S/.test(command);
+    const file = /(?:^|\s)(?:-f|--file)(?:\s|=)|<\s*\S+\.sql/i.test(command);
+    if (write.test(sql || (piped ? command : '')) || file || restore?.test(command)) { blocked = true; break; }
+  }
+  if (!blocked) process.exit(0);
+  const ok = resolveIn(section.cfg, s.okFile);
+  let fresh = false;
+  try { fresh = Date.now() - fs.statSync(ok).mtimeMs < Number(s.okMinutes ?? 30) * 60000; } catch {}
+  if (fresh) process.exit(0);
+  block('BLOCKED: this command can WRITE to ' + String(s.label || 'the live database') + ' (' + hosts.join('/') + ':' + s.port + '). ' + String(s.explanation || 'The live database is read-only for me.') + '\nExisting authorized go marker: ' + ok);
+}
 let cmd = String((input.tool_input || {}).command ?? "");
 // Text inside a shell here-document is data being written to a file, not a command: ignore it.
 cmd = cmd.replace(/<<-?\s*['"]?([A-Za-z_][A-Za-z0-9_]*)['"]?[^\n]*\n[\s\S]*?\n\s*\1\b/g, "<<HEREDOC");

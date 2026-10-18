@@ -17,10 +17,14 @@
 //   minEntries      number (default 1): rows needed before any code may be written
 //   minLines        number (default 0): total lines read across all rows
 //   mustMention     list of words; each must appear in some row path (e.g. ["wagalo", "wigolo"])
+//   requireTargetCoverage boolean (default false): existing targets need their own read rows
+//   taskReadingFiles explicit project-relative/absolute prerequisites for creating new code
+//   A row may append sha256:<64 hex characters>; when present it must match current bytes.
 //   label, skillName, nextStep   the project's own words in the block message
 import fs from "node:fs";
 import path from "node:path";
-import { block, loadFromStdin, resolveIn, rx } from "../lib/config.mjs";
+import { createHash } from "node:crypto";
+import { block, cwdFrom, loadFromStdin, resolveIn, rx } from "../lib/config.mjs";
 import { patchChanges } from "../lib/tool-input.mjs";
 
 const { input, section } = loadFromStdin("read-ledger-gate");
@@ -31,7 +35,7 @@ const DEFAULT_CODE = "\\.(c|cc|cpp|cs|css|go|h|html|java|js|jsx|kt|mjs|cjs|php|p
 const DEFAULT_EXEMPT = "(^|[\\\\/])\\.codex[\\\\/]|\\.(md|txt|json|ya?ml|toml|lock|csv)$";
 const DEFAULT_SHELL_WRITE = "<<|>>?\\s*[^&|\\s]|\\bSet-Content\\b|\\bAdd-Content\\b|\\bOut-File\\b|\\btee\\b|\\bcp\\b|\\bmv\\b|\\bCopy-Item\\b|\\bMove-Item\\b|\\bsed\\s+-i|\\bgit\\s+(apply|am|checkout|restore|revert|cherry-pick|merge|rebase|pull)\\b";
 // "- path/to/file.ts — 312 lines", "* path 312", "| path | 312 |", "path, 312"
-const DEFAULT_ROW = "^\\s*(?:[-*]\\s+|\\|\\s*)?`?([^\\s|`]+\\.[A-Za-z0-9]+)`?\\s*(?:\\||,|—|–|-|:|\\s)+\\s*(\\d+)\\b";
+const DEFAULT_ROW = "^\\s*(?:[-*]\\s+|\\|\\s*)?(`[^`]+`|\"[^\"]+\"|'[^']+'|[^|]+?\\.[A-Za-z0-9]+)\\s*(?:\\||,|—|–|-|:|\\s)+\\s*(\\d+)\\b";
 
 const codeRx = rx(s.codePattern || DEFAULT_CODE, "i");
 const exemptRx = rx(s.exemptPattern || DEFAULT_EXEMPT, "i");
@@ -40,6 +44,7 @@ const rowRx = rx(s.rowPattern || DEFAULT_ROW, "");
 if (!codeRx || !rowRx) process.exit(0);
 
 const ti = input.tool_input || {};
+const targetPath = (p) => path.resolve(cwdFrom(input), String(p).split("\\").join("/"));
 const tool = String(input.tool_name || "");
 const ledger = resolveIn(s.cfg, s.ledgerFile || ".codex/READ-LEDGER.md");
 
@@ -53,9 +58,11 @@ if (tool === "apply_patch") {
   const cmd = String(ti.command || "");
   if (!shellRx || !shellRx.test(cmd)) process.exit(0);
   // Every path-looking token in the command that ends in a code extension.
-  targets = cmd.match(/[^\s"'`<>|;&()]+\.[A-Za-z0-9]+/g) || [];
+  targets = (cmd.match(/"[^"\r\n]+"|'[^'\r\n]+'|[^\s"'`<>|;&()]+/g) || [])
+    .map((p) => /^(["']).*\1$/.test(p) ? p.slice(1, -1) : p)
+    .filter((p) => /\.[A-Za-z0-9]+$/.test(p));
 }
-const isLedgerItself = (p) => path.resolve(String(p).split("\\").join("/")) === path.resolve(ledger);
+const isLedgerItself = (p) => targetPath(p) === path.resolve(ledger);
 const codeTargets = targets.filter((p) => p && codeRx.test(p) && !(exemptRx && exemptRx.test(p)) && !isLedgerItself(p));
 if (!codeTargets.length) process.exit(0);
 
@@ -103,17 +110,36 @@ const resolveRow = (p) => {
   }
   return "";
 };
+// Match full resolved identities, never basenames or substring mentions.
+const identity = (file) => {
+  let resolved = path.resolve(file);
+  try { resolved = fs.realpathSync(resolved); } catch {}
+  return process.platform === 'win32' ? resolved.toLowerCase() : resolved;
+};
+
+const freshnessPaths = new Set(codeTargets.map((p) => identity(targetPath(p))));
+if (codeTargets.some((p) => !fs.existsSync(targetPath(p)))) {
+  for (const file of s.taskReadingFiles || []) freshnessPaths.add(identity(resolveIn(s.cfg, file)));
+}
+const needsFreshness = (p, file) => s.requireTargetCoverage !== true ||
+  (file ? freshnessPaths.has(identity(file)) :
+    (path.isAbsolute(p) ? [p] : roots.map((r) => path.resolve(r, p))).some((f) => freshnessPaths.has(identity(f))));
 
 const problems = [];
 const rows = [];
 for (const line of text.split(/\r?\n/)) {
   const m = rowRx.exec(line);
   if (!m) continue;
-  const p = m[1];
+  const p = /^([`"']).*\1$/.test(m[1]) ? m[1].slice(1, -1) : m[1];
   const stated = Number(m[2]);
+  const hashField = /\bsha256\s*[:=]\s*(\S*)/i.exec(line.slice(m.index + m[0].length));
+  const hash = hashField?.[1];
+  if (hashField && !/^[a-f0-9]{64}$/i.test(hash)) problems.push("invalid SHA256 in row: " + p);
   const file = resolveRow(p);
+  const verifyFile = needsFreshness(p, file);
   if (!file) {
-    if (requireExisting) problems.push("row names a file that does not exist under any upstream root: " + p);
+    if (verifyFile && requireExisting) problems.push("row names a file that does not exist under any upstream root: " + p);
+    if (verifyFile && hashField) problems.push("cannot verify SHA256 for missing file: " + p);
     rows.push({ p, stated, actual: null });
     continue;
   }
@@ -122,11 +148,37 @@ for (const line of text.split(/\r?\n/)) {
     actual = fs.statSync(file).isFile() ? countLines(file) : null;
   } catch {}
   if (actual === null) {
-    if (requireExisting) problems.push("row is not a readable file: " + p);
-  } else if (verifyLines && actual !== stated) {
+    if (verifyFile && requireExisting) problems.push("row is not a readable file: " + p);
+    if (verifyFile && hashField) problems.push("cannot verify SHA256 for unreadable file: " + p);
+  } else if (verifyFile && verifyLines && actual !== stated) {
     problems.push("row says " + stated + " lines but " + p + " has " + actual);
   }
-  rows.push({ p, stated, actual });
+  if (verifyFile && actual !== null && hash) {
+    try {
+      const current = createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+      if (current !== hash.toLowerCase()) problems.push("SHA256 is stale for " + p);
+    } catch { problems.push("cannot verify SHA256 for " + p); }
+  }
+  rows.push({ p, stated, actual, file });
+}
+
+if (s.requireTargetCoverage === true) {
+  const recorded = new Set(rows.filter((r) => r.actual !== null && r.file).map((r) => identity(r.file)));
+  const newTargets = [];
+  for (const target of codeTargets) {
+    const file = targetPath(target);
+    if (fs.existsSync(file)) {
+      if (!recorded.has(identity(file))) problems.push("target has no read ledger row: " + target);
+    } else newTargets.push(target);
+  }
+  if (newTargets.length) {
+    const reading = Array.isArray(s.taskReadingFiles) ? s.taskReadingFiles : [];
+    if (!reading.length) problems.push("new code requires explicit taskReadingFiles recorded in the ledger: " + newTargets.join(', '));
+    for (const entry of reading) {
+      const file = typeof entry === 'string' && entry ? resolveIn(s.cfg, entry) : '';
+      if (!file || !recorded.has(identity(file))) problems.push("taskReadingFiles has no existing readable ledger row: " + String(entry));
+    }
+  }
 }
 
 if (rows.length < minEntries) problems.unshift("ledger has " + rows.length + " row(s); at least " + minEntries + " needed (format: `- <path> — <lines> lines`)");

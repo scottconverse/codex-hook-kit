@@ -2,8 +2,8 @@
   "enabled": true,
 
   "inject-rules": {
-    "rulesFile": "C:/Users/scott/.codex/skills/townreporter-release-path/RULES.md",
-    "heading": "SCOTT'S NEVER-FORGET RULES (from skill townreporter-release-path; obey every line, no exceptions):"
+    "rulesFile": ".codex/RULES.md",
+    "heading": "TOWNREPORTER PROJECT DEFAULTS:"
   },
 
   "deploy-gate": {
@@ -12,9 +12,9 @@
       "<<|Set-Content|Add-Content|Out-File|\\becho\\b|\\bprintf\\b|\\bgrep\\b|\\bcat\\b\\s*>|Select-String",
       "-Rollback\\b|\\brollback\\b|-WhatIf\\b"
     ],
-    "repoDir": "C:/Users/scott/Desktop/Code/townreporter-web",
+    "repoDir": ".",
     "shaFrom": "origin/main",
-    "gatesDir": "C:/Users/scott/Desktop/Code/townreporter-deepseek-oversight/gates",
+    "gatesDir": ".codex/gates",
     "requiredKeys": [
       { "key": "devServerRun", "test": "length", "min": 8, "message": "devServerRun: what ran on :3100 and the result" },
       { "key": "ci", "test": "ieq", "expected": "PASS", "message": "ci must be \"PASS\"" },
@@ -26,7 +26,7 @@
     "reportKey": "publishWalkReport",
     "reportMustContain": "^PUBLISH-WALK:\\s*PASS\\s*$",
     "reportMustContainMessage": "walk report must contain the line \"PUBLISH-WALK: PASS\"",
-    "findingsFile": "C:/Users/scott/Desktop/Goals/TownReporter-OPEN-FINDINGS.md",
+    "findingsFile": "docs/OPEN-FINDINGS.md",
     "openPattern": "^\\|\\s*([A-Z][A-Z0-9-]*\\d)\\s*\\|\\s*OPEN\\b[^|]*\\|\\s*([^|]*)\\|",
     "textOnlyKey": "textOnly",
     "textOnly": {
@@ -76,7 +76,7 @@
     "writePattern": "\\b(insert|update|delete|drop|alter|truncate|create|grant|revoke|vacuum|reindex|cluster|copy)\\b",
     "filePattern": "(^|\\s)(-f|--file)[\\s=]",
     "restorePattern": "\\bpg_restore\\b|\\bdropdb\\b|\\bcreatedb\\b",
-    "okFile": "C:/Users/scott/Desktop/Code/townreporter-deepseek-oversight/gates/live-db-write-ok.txt",
+    "okFile": ".codex/gates/live-db-write-ok.txt",
     "okMinutes": 30,
     "ownerName": "Scott",
     "skillName": "Scott's release path (skill townreporter-release-path)",
@@ -85,15 +85,15 @@
   },
 
   "no-idle": {
-    "runsDir": "C:/Users/scott/Desktop/Code/townreporter-deepseek-oversight/runs",
+    "runsDir": ".codex/runs",
     "logNames": ["run.jsonl"],
     "handledFile": "handled.txt",
     "finishedFile": "finished.txt",
     "quietMinutes": 15,
     "lookbackHours": 48,
-    "waiterHeartbeat": "C:/Users/scott/Desktop/Code/townreporter-deepseek-oversight/runs/.waiter-heartbeat",
+    "waiterHeartbeat": ".codex/runs/.waiter-heartbeat",
     "waiterFreshMinutes": 3,
-    "waiterHint": "Arm one in the background: bash C:/Users/scott/Desktop/Code/townreporter-deepseek-oversight/tools/wait-workers.sh <names>",
+    "waiterHint": "Use the project's existing worker supervisor when one is configured.",
     "handledHint": "Act now: read runs\\<name>\\last.txt, START the next step (dev, Test walk, gate, deploy, or a fix worker),\n  then write runs\\<name>\\handled.txt with one line: the time, and the next step you started.",
     "stuckHint": "Diagnose and relaunch, or mark handled.txt if dead on purpose.",
     "hookName": "tr-no-idle.mjs"
@@ -104,9 +104,9 @@
     "label": "TownReporter"
   },
 
-  "wake": {
+  "delayed-report": {
     "minutes": 20,
-    "runsDir": "C:/Users/scott/Desktop/Code/townreporter-deepseek-oversight/runs",
+    "runsDir": ".codex/runs",
     "logNames": ["run.jsonl", "stream.jsonl"],
     "handledFile": "handled.txt",
     "finishedFile": "finished.txt",
@@ -116,7 +116,7 @@
     "timeZoneName": "Mountain",
     "label": "TownReporter",
     "hookName": "tr-wake-20.mjs",
-    "tokenModule": "C:/Users/scott/Desktop/Code/townreporter-deepseek-oversight/tools/worker-tokens.mjs",
+    "tokenModule": "tools/worker-tokens.mjs",
     "footer": "Check every worker and server; start the next step for anything finished; relaunch anything stalled; report to Scott in 3 lines."
   }
 }
