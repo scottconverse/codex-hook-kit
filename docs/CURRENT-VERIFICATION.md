@@ -84,6 +84,12 @@ older results as ADOPTED-HISTORY. This confirms usable fallback monitoring, not
 native hook delivery or process liveness. The remaining acceptance boundary is a
 fresh Desktop session; no app, service or machine was restarted automatically.
 
+The next synchronous no-idle Stop continuation delivered the real worker report
+into this conversation, including the completed routing-diagnosis worker. Its
+result was reviewed, incorporated above and acknowledged by exact completion
+token. This proves synchronous compatibility-worker reporting delivery; it does
+not prove SubagentStart/SubagentStop events or asynchronous report delivery.
+
 Observe native subagent events, goal interception, and delayed report delivery in
 that Desktop session. These are the remaining client-level observations; direct
 tests and CLI receipts must not be relabeled as Desktop passes. A runtime that
