@@ -40,7 +40,7 @@ native worker mode does not use folder markers or quiet-time failure inference.
 |---|---|---|---|---|
 | (top level) | `enabled` | boolean | `true` | `false` turns the kit off for this folder tree. |
 | `inject-rules` | `rulesFile` | path | none | The rules text file. A missing file injects nothing. |
-| `inject-rules` | `heading` | text | `PROJECT RULES (obey every line, no exceptions):` | Line placed before the rules. |
+| `inject-rules` | `heading` | text | `PROJECT DEFAULTS:` | Display label in the JSON-encoded project context; cannot replace the mandatory precedence framing. |
 | `deploy-gate` | `commandPattern` | regex | none | Matches a deploy command. |
 | `deploy-gate` | `skipPatterns` | list of regex | none | A match means the command is not a deploy. |
 | `deploy-gate` | `repoDir` | path | none | Git repo that holds the commit. |

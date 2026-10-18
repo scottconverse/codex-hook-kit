@@ -29,7 +29,7 @@
   },
   {
     "path": "hooks/inject-rules.mjs",
-    "sha256": "1c14be584c4418193281ab4a3cf648f4c7f52cd564870158212f4e9a05309db3"
+    "sha256": "af51cccf362bf9fedb92320d0bb4e1f4f11671cfcfb4e198f4d1a1fb2b413981"
   },
   {
     "path": "hooks/measure-gate.mjs",

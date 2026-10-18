@@ -3,7 +3,7 @@
 
   "inject-rules": {
     "rulesFile": ".codex/RULES.md",
-    "heading": "PROJECT RULES (obey every line, no exceptions):"
+    "heading": "PROJECT DEFAULTS:"
   },
 
   "read-ledger-gate": {

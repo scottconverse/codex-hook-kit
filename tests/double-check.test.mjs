@@ -89,7 +89,8 @@ test("relative paths in a config resolve against the project folder that holds .
       { cwd: p.cwd },
     );
     assert.equal(got.code, 0, got.stderr);
-    assert.match(got.stdout, /"additionalContext":"R:\\nrule one\\n"/);
+    const context = JSON.parse(got.stdout).hookSpecificOutput.additionalContext;
+    assert.deepEqual(JSON.parse(context.split('\nPROJECT CONTEXT JSON:\n')[1]), { heading: 'R:', body: 'rule one\n' });
   } finally {
     rimraf(p.root);
   }

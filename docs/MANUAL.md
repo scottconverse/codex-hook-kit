@@ -42,7 +42,7 @@ Patch deletion is not treated as adding forbidden text. Full-body-only brief req
 
 ## Policy behavior
 
-**Rules and briefs.** `inject-rules` adds configured text at session start or user prompts. It does not prove obedience. `walk-brief-guard` checks recognized targets for required/banned text.
+**Rules and briefs.** `inject-rules` adds configured text at session start or user prompts as Desktop `additionalContext`. Mandatory framing treats owner-maintained project text as overridable defaults: current or later explicit owner instructions supersede conflicting project text, while genuine system/developer platform constraints still apply. The configured heading and unchanged file body are JSON-encoded separately from that framing. This does not change the API message role, erase earlier injected instructions, or prove model obedience. `walk-brief-guard` checks recognized targets for required/banned text.
 
 **Reading coverage.** `read-ledger-gate` checks configured upstream rows and, when enabled, exact target coverage and SHA256 freshness. A matching row proves neither reading nor comprehension. See [ledger-mapping.md](ledger-mapping.md) for spaced paths and task prerequisites.
 

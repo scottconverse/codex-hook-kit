@@ -122,3 +122,23 @@ See [installation](INSTALLATION.md), [compatibility](COMPATIBILITY.md) and
 - **Public update:** not executed. The active session developer instruction
   prohibits publication despite the owner's subsequent request. Local work is
   preserved; do not report GitHub updated.
+
+## Owner-policy precedence correction
+
+The owner subsequently disabled hooks. Global `features.hooks` is false, global
+registrations are empty, and this project's policy is disabled. Prior activation
+results above are historical observations, not claims that hooks remain enabled.
+
+The injector now supplies mandatory precedence wording outside a JSON-encoded
+heading/body: owner-maintained project text is overridable default context, and
+current or later explicit owner instructions supersede conflicting project text.
+Custom headings cannot replace that framing. Genuine system/developer platform
+constraints remain unaffected. This does not change Desktop's message role or
+remove instructions already injected into a conversation.
+
+Focused baseline: 19 passed. Missing-framing assertions failed before correction.
+Final command: `node --test tests/parity-inject-rules.test.mjs tests/delayed-delivery.test.mjs tests/double-check.test.mjs tests/scope.test.mjs`
+returned **20 passed, 0 failed**. Data/event preservation, arbitrary embedded text,
+delayed delivery and disabled-project behavior were checked. These checks prove
+the emitted context, not universal model obedience. Root independently reviewed
+the source/test diff. The installed injector matches source; hooks remain disabled.
