@@ -60,6 +60,12 @@ Patch deletion is not treated as adding forbidden text. Full-body-only brief req
 
 The prompt lifecycle handler recognizes narrow explicit pause/resume forms and answer-only wording. Pause/answer-only state suppresses Stop checks and delayed reporting. A recognized owner prompt starts a new continuation epoch; recorded resume clears pause. This text matcher is not semantic authority proof, and its state is editable.
 
+The current open Desktop session has delivered rules and Stop reports but has not
+invoked the new owner-lifecycle registration. On that route, automatic owner-intent
+tracking is unavailable and the shared budget remains session-bounded. Consult
+doctor's lifecycle summaries before relying on this behavior. The assistant must
+follow the owner's instructions regardless of hook coverage.
+
 Optional goal-tool guarding denies a recognized `update_goal` pause without recorded owner pause. A current isolated native CLI probe exercised denial and explicit-owner-pause admission without an active real goal. Actual Desktop goal-tool routing remains separate. A PostToolUse record is an observation; consult the authoritative goal-tool result for success.
 
 ## Delayed reports and diagnostics

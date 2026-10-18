@@ -52,3 +52,10 @@ read-only API request. Receipt reads are bounded to 256 files of at most 64 KiB 
 
 Async hooks can emit delayed information; they cannot resume an idle chat. An
 emission receipt must never be presented as proof that Desktop displayed the result.
+
+Capability summaries distinguish native worker lifecycle receipts, owner-lifecycle
+prompt receipts, and synchronous Stop invocation. Rule injection at UserPromptSubmit
+does not establish goal-lifecycle execution. Delayed-report emission does not count
+as synchronous Stop delivery. Missing receipts are reported as unverified, not as
+proof that a runtime can never support that feature. These summaries supplement,
+rather than replace, the underlying receipt metadata.

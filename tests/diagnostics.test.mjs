@@ -21,10 +21,38 @@ test('doctor reports runtime, project, trust and receipts separately without wri
     assert.equal(report.trust.status, 'unknown');
     assert.equal(report.prerequisites.files[0].exists, false);
     assert.equal(report.observations.receipts.length, 1);
+    for (const capability of ['workerLifecycle','ownerLifecycle','synchronousStop']) assert.match(report.capabilities[capability], /^unverified/);
     assert.match(report.observations.limitation, /delivery.*not established/i);
     assert.equal(fs.existsSync(path.join(p.root, '.codex/evidence-state')), false);
     assert.deepEqual(fs.readdirSync(settings), []);
   } finally { rimraf(p.root); rimraf(settings); }
+});
+
+test('doctor distinguishes lifecycle and synchronous Stop receipts from unrelated and async invocations', async () => {
+  const p=makeProject({});
+  const args=['--project',p.cwd,'--codex',path.join(p.root,'missing.exe')];
+  const receipt=(name,hook,event)=>writeJson(path.join(p.root,'.codex/hook-observations',name+'.json'),{hook,event,time:'2026-10-18T00:00:00Z'});
+  try {
+    receipt('inject','inject-rules','UserPromptSubmit');
+    receipt('async','delayed-report','Stop');
+    receipt('goal','goal-lifecycle','PostToolUse');
+    receipt('start','worker-lifecycle','SubagentStart');
+    const partial=JSON.parse((await runHook(doctor,'',{args:[...args,'--json']})).stdout);
+    assert.match(partial.capabilities.ownerLifecycle,/^unverified/);
+    assert.match(partial.capabilities.synchronousStop,/^unverified/);
+    assert.match(partial.capabilities.workerLifecycle,/SubagentStart: recorded; SubagentStop: unverified/);
+    receipt('owner','goal-lifecycle','UserPromptSubmit');
+    receipt('stop','completion-gate','Stop');
+    receipt('end','worker-lifecycle','SubagentStop');
+    const complete=JSON.parse((await runHook(doctor,'',{args:[...args,'--json']})).stdout);
+    assert.match(complete.capabilities.workerLifecycle,/SubagentStart: recorded; SubagentStop: recorded/);
+    assert.match(complete.capabilities.ownerLifecycle,/^Recorded goal-lifecycle UserPromptSubmit invocation/);
+    assert.match(complete.capabilities.synchronousStop,/^Recorded synchronous Stop hook invocation: completion-gate/);
+    assert.match(complete.capabilities.synchronousStop,/enforcement is not established/);
+    const plain=await runHook(doctor,'',{args});
+    assert.equal(plain.code,0,plain.stderr);
+    for(const label of ['Worker lifecycle:','Owner lifecycle:','Synchronous Stop:']) assert.ok(plain.stdout.includes(label));
+  } finally {rimraf(p.root);}
 });
 
 test('doctor default ledger prerequisite and malformed receipt are reported', async () => {

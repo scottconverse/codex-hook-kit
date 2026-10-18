@@ -1,7 +1,7 @@
 [
   {
     "path": "doctor.mjs",
-    "sha256": "f28bd24ce61c4480ec7c1ace59d47d069dec012612ab70d0d03fb144040f1c93"
+    "sha256": "f2e765b46cddd0d48c6de803ae9b771571de61b53f705f31ebcfdcda5811ac45"
   },
   {
     "path": "hooks/completion-gate.mjs",
@@ -81,7 +81,7 @@
   },
   {
     "path": "lib/diagnostics.mjs",
-    "sha256": "89f7586a600626c7e5d393ac248f19325b466b6e7a0dd632e99b909788bb36c9"
+    "sha256": "8b83055a3de29c6226e28ccfd02bd4447ad70351920c9efb46c0bb61a59305bc"
   },
   {
     "path": "lib/hook-entries.mjs",

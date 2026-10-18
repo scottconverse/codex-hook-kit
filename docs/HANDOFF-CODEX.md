@@ -40,6 +40,13 @@ runtime incompatibility explicitly rather than claiming full activation or
 inventing a polling/control framework. No restart or publication is authorized
 implicitly by this handoff.
 
+Final local correction adds explicit worker/owner/Stop capability summaries to
+doctor; seven affected diagnostics checks passed. The corrected installed doctor
+was executed and its bytes match source. All 32 candidate file bindings match.
+The eleven-item disposition is in CURRENT-VERIFICATION.md. Missing Desktop
+lifecycle/async observations remain explicitly unresolved; do not describe the
+full Desktop verification as passed or repeat source tests to try to establish it.
+
 An older handoff proposed additional policies and secret-based disarming. Those
 proposals are not silently included here and are not fresh owner authorization.
 Future feature scope, publication and release decisions remain with the owner.

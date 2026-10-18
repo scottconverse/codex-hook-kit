@@ -6,7 +6,7 @@ Project-scoped workflow checks for local Codex sessions, adapted from Scott Conv
 
 ## Install and configure
 
-Use Node **22.13 or newer**; the SQLite compatibility adapter requires `node:sqlite`. Current testing is on **Windows, Node 24.15.0 and runtime 0.160.0**, with an earlier local Desktop baseline and current-candidate native CLI checks. Full current-candidate Desktop activation remains separate. Windows registrations target the default PowerShell executor; customized `cmd` execution and other platforms have not been tested. Runtime hook support and trust are separate from installing files.
+Use Node **22.13 or newer**; the SQLite compatibility adapter requires `node:sqlite`. Current testing is on **Windows, Node 24.15.0 and runtime 0.160.0**, including installed-candidate Desktop rule/review/compatibility-worker delivery and native CLI checks. Desktop lifecycle and asynchronous coverage remain limited as documented below. Windows registrations target the default PowerShell executor; customized `cmd` execution and other platforms have not been tested. Runtime hook support and trust are separate from installing files.
 
 ```powershell
 node install.mjs --dry-run

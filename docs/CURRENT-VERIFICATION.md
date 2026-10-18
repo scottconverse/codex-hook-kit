@@ -1,10 +1,18 @@
 # Portable Desktop candidate 1.1.0 — October 18, 2026
 
-Implementation candidate is installed locally; Desktop acceptance is incomplete.
-It is not a claim that every current hook has already been activated in Desktop.
+Implementation is installed locally. Desktop coverage is partial and explicitly
+defined below; this is not a claim that every hook is activated on every route.
 No publication occurred. Earlier local work was preserved in commit `54baf35`.
 
 ## Checks performed
+
+- Final diagnostic correction: **7 focused diagnostics tests passed, 0 failed**;
+  missing-capability assertions were observed failing before the correction.
+  Worker lifecycle, owner lifecycle and synchronous Stop summaries now distinguish
+  missing invocations from trust and registration. Installed doctor executed
+  successfully with all 16 registrations still trusted. Changed installed bytes
+  match source; all 32 candidate file bindings match. This targeted follow-up
+  supersedes the original doctor bytes, not the rest of the consolidated results.
 
 - One consolidated `npm test`: **156 passed, 0 failed, 0 skipped**, exit 0,
   15,897.3231 ms. Windows, Node 24.15.0.
@@ -18,9 +26,8 @@ No publication occurred. Earlier local work was preserved in commit `54baf35`.
   no host goal was changed. Two deterministic loopback requests per case, no
   provider/model call. [Goal receipt](goal-probe.json).
 - Read-only doctor: runtime identified, SQLite available, `hooks/list` supported,
-  diagnostic child closed. Existing Desktop configuration returned 11 trusted kit
-  registrations, not the candidate's new 16. No invocation receipts existed in
-  the newly mapped kit project at that check.
+  diagnostic child closed. After installation, all 16 candidate registrations
+  report trusted-current. Actual invocation and delivery are listed separately.
 - Local documentation links: 98 checked, zero missing. Whitespace check passed.
   No rendered-browser inspection is claimed.
 
@@ -33,18 +40,32 @@ they do not independently prove that every assertion is a sufficient test.
 | Item | Implemented result | Verification / remaining boundary |
 |---|---|---|
 | 1. Diagnostic | One read-only `doctor.mjs` command reports runtime, project, prerequisites, hook API, trust, and invocation receipts separately. | Direct checks and live `hooks/list`; registration is not activation. |
-| 2. Workers | Native event receipts, compatible read-only SQLite fallback, schema detection, failure states, historical adoption, same-turn terminal corroboration. | Focused checks; current liveness remains explicitly unverified from historical events alone. New candidate's Desktop event delivery awaits acceptance. |
-| 3. Goal lifecycle | Current recognized owner pause/resume/answer-only state, pause guard, separate observed-operation receipt. | Direct tests and actual CLI denial/admission. Desktop routing of these goal tools remains to be observed. |
+| 2. Workers | Native event receipts, compatible read-only SQLite fallback, schema detection, failure states, historical adoption, same-turn terminal corroboration. | Real Desktop compatibility-worker report delivered and acknowledged. Native event delivery is unverified; recorded running state does not prove current process liveness. |
+| 3. Goal lifecycle | Current recognized owner pause/resume/answer-only state, pause guard, separate observed-operation receipt. | Actual CLI denial/admission passed. This open Desktop session has not invoked the new lifecycle registrations, so Desktop goal enforcement is not established and must not be relied on. |
 | 4. Ledger | Exact targets, hash freshness, spaced/quoted paths, explicit new-file prerequisites; unrelated stale rows do not block other targets. | Focused checks. Records claimed reading, not comprehension. |
 | 5. Configuration | Malformed JSON, sections, enabled flags, regexes, known control types/ranges and mappings produce visible errors. | Focused checks. Absent/disabled sections remain off. |
-| 6. Shared Stop | Default two continuations shared across installed Stop hooks; exclusive state writes; pause/answer-only suppression before checks. | Direct tests and focused review; no completion is inferred from exhaustion. |
+| 6. Shared Stop | Default two continuations shared across installed Stop hooks; exclusive state writes; pause/answer-only suppression before checks. | Direct tests and real Stop continuation. Without owner-lifecycle invocation the budget is session-bounded and owner-intent tracking unavailable. Exhaustion never means completion. |
 | 7. Delayed reporting | Canonical delayed-report name, legacy alias, bounded native delay, duplicate suppression and pause handling. | Output generation checked. Actual asynchronous Desktop delivery remains unverified; autonomous idle-chat resumption is unsupported. |
 | 8. Tool coverage | Documented shell/patch coverage, goal CLI proof and explicit uncovered paths. | Prior Desktop observations and current CLI probes are separately identified. No universal write protection claim. |
 | 9. Portable setup | Codex-home discovery, Node minimum, pinned executable, project mapping, portable examples. | Windows PowerShell runtime exercised. Other platforms, minimum Node execution and customized Windows command shells are not verified. |
 | 10. Install lifecycle | Script-plus-registration backup, transactional update/removal, rollback, lock, exact-registration change reporting. | Disposable configuration tests and native launch probe. Trust is not granted automatically. |
 | 11. Documentation | README, manual, configuration, examples, landing page, compatibility, additions and handoff reconciled; old records labeled historical. | Link/whitespace checks and source review; publication remains owner-controlled. |
 
-## Desktop acceptance still to observe
+## Observed Desktop coverage and unavailable guarantees
+
+### Final disposition
+
+All eleven implementation areas are represented in the table above. The kit is
+installed and source work is preserved locally. The demonstrated Desktop subset
+is project-rule delivery, recognized shell/patch guard behavior, synchronous
+review continuation and SQLite compatibility-worker reporting. Native worker
+events, goal enforcement and asynchronous report delivery are not established on
+this open session. These remain client-level verification gaps, not passing items.
+The product now reports them explicitly instead of requiring users to infer them
+from a successful installation. Automatic idle-chat resumption is unsupported.
+
+This record does not certify universal Desktop compatibility or authorize
+publication. No extra framework, broad test round or restart was introduced.
 
 ### Live activation follow-up, October 18
 

@@ -29,6 +29,9 @@ try {
     console.log('Invocation receipts: '+report.observations.receipts.length+'; '+report.observations.limitation);
     console.log(report.runtime.limitation);
     console.log('Goal interception: '+report.capabilities.goalToolInterception);
+    console.log('Worker lifecycle: '+report.capabilities.workerLifecycle);
+    console.log('Owner lifecycle: '+report.capabilities.ownerLifecycle);
+    console.log('Synchronous Stop: '+report.capabilities.synchronousStop);
     console.log('Async delivery: '+report.capabilities.asyncDelivery);
     console.log('Idle resumption: '+report.capabilities.idleResumption);
     console.log('Use --json for current hashes, trust records, warnings and receipt metadata.');
