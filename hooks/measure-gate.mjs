@@ -24,9 +24,15 @@ import path from "node:path";
 import { createHash } from "node:crypto";
 import { transcriptStats } from "../lib/transcript.mjs";
 import { block, loadFromStdin, resolveIn, rx } from "../lib/config.mjs";
+import { evidenceDecision } from '../lib/acceptance-evidence.mjs';
 
 const { input, section } = loadFromStdin("measure-gate");
 if (!section) process.exit(0);
+if (section.mode === 'evidence') {
+  const result=evidenceDecision(section.cfg.dir,section,input,'measure-gate');
+  if(result)process.stdout.write(JSON.stringify(result));
+  process.exit(0);
+}
 
 const s = section;
 const DEFAULT_CODE = "\\.(c|cc|cpp|cs|css|go|h|html|java|js|jsx|kt|mjs|cjs|php|ps1|psm1|py|rb|rs|scss|sh|sql|swift|ts|tsx|vue)$";

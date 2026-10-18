@@ -18,6 +18,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { block, loadFromStdin, resolveIn, rx } from "../lib/config.mjs";
+import { shellSegments } from "../lib/shell-segments.mjs";
 
 const { input, section } = loadFromStdin("deploy-gate");
 if (!section) process.exit(0);
@@ -29,6 +30,32 @@ if (!cmdRx) process.exit(0);
 if (!cmdRx.test(cmd)) process.exit(0);
 // Writing notes, logs or briefs that merely MENTION the script is not running it.
 const skip = (Array.isArray(s.skipPatterns) ? s.skipPatterns : []).map((p) => rx(p, "i")).filter(Boolean);
+// Opt-in scope authorization reuses an existing owner decision instead of requiring
+// the legacy Test-server checklist. A skip on one statement cannot exempt another.
+if (s.authorizationFile) {
+  const publication = shellSegments(cmd).filter(c => cmdRx.test(c) && !skip.some(r => r.test(c)));
+  if (!publication.length) process.exit(0);
+  const file = resolveIn(section.cfg, s.authorizationFile);
+  const deny = reason => block(String(s.label || 'Publication') + ': ' + reason + '\nAuthorization record: ' + file);
+  let record;
+  try { record = JSON.parse(fs.readFileSync(file, 'utf8')); }
+  catch { deny('publication scope record is missing or invalid.'); }
+  if (record?.authorized !== true) deny('publication is outside the recorded owner-authorized scope.');
+  if (!String(record.source || '').trim()) deny('authorization source is missing.');
+  const repo = resolveIn(section.cfg, s.repoDir);
+  let commit;
+  try { commit = execFileSync('git', ['-C', repo, 'rev-parse', String(s.shaFrom || 'HEAD')], { encoding: 'utf8' }).trim(); }
+  catch { deny('cannot resolve the authorized candidate commit.'); }
+  if (record.commit !== commit) deny('authorization does not match candidate commit ' + commit + '.');
+  // Explicit publication targets must agree too; an authorized checkout does not
+  // authorize publishing an unrelated --source-sha/--target argument.
+  for (const c of publication) {
+    for (const target of c.matchAll(/(?:--source-sha|--target)(?:\s+|=)["']?([^\s"';]+)/gi)) {
+      if (target[1] !== commit) deny('publication target does not match the authorized candidate commit.');
+    }
+  }
+  process.exit(0);
+}
 if (skip.some((r) => r.test(cmd))) process.exit(0);
 
 const repo = resolveIn(section.cfg, s.repoDir);

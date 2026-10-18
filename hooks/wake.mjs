@@ -15,8 +15,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { loadFromStdin, resolveIn } from "../lib/config.mjs";
 
-const { section } = loadFromStdin("wake");
+const { section, input } = loadFromStdin("wake");
 if (!section) process.exit(0);
+if (section.backend === "codex-desktop") {
+  const { desktopWake } = await import("../lib/desktop-workers.mjs");
+  await desktopWake(section, input);
+  process.exit(0);
+}
 try {
   fs.readFileSync(0);
 } catch {}

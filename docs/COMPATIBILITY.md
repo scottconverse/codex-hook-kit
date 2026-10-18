@@ -33,7 +33,20 @@ See [native-probe.json](native-probe.json) for recorded deny/allow side effects 
 
 The native apply_patch probe could not expose the tool reliably with the fixture profiles tried. It stopped at the correction limit. Native apply_patch enforcement remains UNVERIFIED. Direct tests cover patch input, multi-file changes, moves, deletion, brief text and explicit denial payloads.
 
-Desktop UI activation is UNVERIFIED. No kit entries were installed into the owner's active Codex home. No running app was restarted.
+The October 16 baseline did not verify Desktop activation. On October 18, the
+updated kit was installed in the owner's active Desktop configuration. Real tool
+calls demonstrated patch denial for an uncovered read target, publication-command
+denial, local database-command denial, guest/test command allowance, and walkthrough
+brief denial. Command probes used harmless local stubs; no release or database
+mutation occurred. Rule injection and Stop double-check continuation were observed
+in chat. This establishes those paths on this installation, not every Desktop tool.
+
+The opt-in native worker adapter reads real parent/child relationships and lifecycle
+records. Its snapshot matched the three setup workers' states. Evidence reporting
+and completion-claim checking were exercised through installed entrypoints; that
+does not establish all asynchronous Desktop delivery behavior. Automatic wake-up
+and automatic resumption remain unsupported. See the focused configuration docs
+linked from README for exact coverage and remaining limits.
 
 Follow-up: the added completion gate's real CLI Stop continuation, correction, and terminal stop were exercised. [completion-probe.json](completion-probe.json) records the result. Its check caching avoids rerunning unchanged inputs. This does not establish Desktop activation or make the older marker-based gates stronger.
 

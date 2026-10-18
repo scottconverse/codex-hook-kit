@@ -9,8 +9,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { block, loadFromStdin, resolveIn } from "../lib/config.mjs";
 
-const { section } = loadFromStdin("no-idle");
+const { section, input } = loadFromStdin("no-idle");
 if (!section) process.exit(0);
+if (section.backend === "codex-desktop") {
+  const { desktopStop } = await import("../lib/desktop-workers.mjs");
+  await desktopStop(section, input, block);
+  process.exit(0);
+}
 
 const runsDir = resolveIn(section.cfg, section.runsDir);
 if (!runsDir) process.exit(0);

@@ -40,6 +40,13 @@ The source baseline is **5371320e12ffc74c99640077ea1400fd8d86f1e8** from the loc
 
 ## Install
 
+Desktop integration additions: [native worker reports](docs/desktop-workers.md),
+[project mapping and exact-file reading coverage](docs/ledger-mapping.md),
+[publication scope and host database selection](docs/release-database.md), and
+[existing-evidence reporting without automatic test loops](docs/evidence-mode.md).
+These adapters require explicit project configuration; native worker tracking uses
+the observed local `state_5.sqlite` schema and reports unsupported evidence as unknown.
+
 Requires Node 18+ and a Codex runtime with command hooks. Tested Node/runtime versions and limitations are in the verification document.
 
 ```powershell
@@ -82,7 +89,10 @@ Native shell denial/allowance and bounded completion Stop continuation are verif
 
 Regex-based shell guards do not parse every language or detect arbitrary hidden writes. Configurable exemptions, shell scripts, write_stdin, MCP writes and other unregistered tools may bypass policy coverage. Config corruption currently disables checks, matching the source kit. The agent can edit ordinary project policy and evidence files. Managed permissions or protected policy are required for stronger enforcement.
 
-No code was installed into the owner's active Codex configuration as part of producing this kit. No Git commit, push or publication was made.
+The original port was not installed into the owner's active configuration. The
+October 18 local Desktop integration is installed and has focused activation
+evidence; see [compatibility](docs/COMPATIBILITY.md). These local changes have not
+been pushed or published.
 
 MIT © 2026 Scott Converse.
 
