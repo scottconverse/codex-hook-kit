@@ -1,4 +1,4 @@
-# Implemented improvements and remaining limits
+# Codex Hook Kit 1.1.0 — implemented improvements and remaining limits
 
 This page replaces the original port's forward-looking suggestions. It records
 current distinctions; it does not authorize extra work or new gates.
@@ -10,7 +10,7 @@ current distinctions; it does not authorize extra work or new gates.
 | Shared bounded Stop policy | Default two continuation requests shared across installed Stop hooks, plus per-hook limits and native snapshot deduplication | No active-time/no-progress meter or global cross-project budget |
 | Visible broken policy | Invalid present configuration, mappings and configured regexes fail explicitly | Policy/authorization/evidence state remains ordinary editable files |
 | Process ownership/recovery | Delayed-report PID locks, bounded diagnostic children and transactional install recovery | Arbitrary product subprocess ownership and dependency-aware cleanup are not supplied |
-| Desktop activation proof | Selected earlier Desktop guard observations and historical isolated CLI fixtures are identified separately | Exact current-candidate activation, async delivery and goal-tool interception require their own runtime evidence |
+| Desktop activation proof | Windows Desktop native worker start/stop, goal-tool routing, unauthorized-pause denial and automatic delayed production with next-owner-prompt delivery were observed; see [current verification](CURRENT-VERIFICATION.md) | Observations apply to the recorded Windows/runtime combination, not all platforms or universal model obedience; no idle-chat wake |
 
 See [COMPLETION.md](COMPLETION.md), [evidence-mode.md](evidence-mode.md),
 [desktop-workers.md](desktop-workers.md), [ledger-mapping.md](ledger-mapping.md),
