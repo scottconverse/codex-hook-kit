@@ -1,4 +1,6 @@
-# Installation and recovery
+# Installation and recovery — Codex Hook Kit 1.1.0
+
+[Release notes](https://github.com/scottconverse/codex-hook-kit/releases/tag/v1.1.0) · [Download source ZIP](https://github.com/scottconverse/codex-hook-kit/archive/refs/tags/v1.1.0.zip). Extract the archive and open a terminal in its directory before running the commands below.
 
 Use Node.js **22.13 or newer**, preferably Node 24. No npm packages are required.
 The scripts use Node's filesystem, process, and SQLite APIs on Windows, macOS, and

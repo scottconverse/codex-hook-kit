@@ -1,4 +1,6 @@
-# codex-hook-kit
+# Codex Hook Kit 1.1.0
+
+Released October 18, 2026. [Release notes](https://github.com/scottconverse/codex-hook-kit/releases/tag/v1.1.0) · [Download source ZIP](https://github.com/scottconverse/codex-hook-kit/archive/refs/tags/v1.1.0.zip) · [Website](https://scottconverse.github.io/codex-hook-kit/). Extract the source archive before running the setup commands below.
 
 Project-scoped workflow checks for local Codex sessions, adapted from Scott Converse's [claude-hook-kit](https://github.com/scottconverse/claude-hook-kit). No npm dependencies. Policy and evidence files are editable workflow records; this kit is not an access-control sandbox.
 
@@ -59,7 +61,7 @@ node uninstall.mjs --dry-run
 node uninstall.mjs
 ```
 
-Version 1.1.0's consolidated Windows/Node 24.15.0 source run passed **156/156 tests, zero failed or skipped**. Current native CLI probes also exercised the installer-pinned Node command and goal-pause denial/admission in isolated homes. Use focused checks for later local changes. [Current verification](docs/CURRENT-VERIFICATION.md) records the requested outcomes; [compatibility](docs/COMPATIBILITY.md) separates source checks, CLI execution, historical observations and subsequent actual Desktop activation.
+The earlier Windows/Node 24.15.0 baseline passed **156/156 tests, zero failed or skipped**, before the final 1.1.0 corrections. Later focused runs cover those corrections; the latest policy-precedence/delivery checks passed **20/20**. These overlapping runs are not a single final-candidate suite total. Current native CLI probes also exercised the installer-pinned Node command and goal-pause denial/admission in isolated homes. Use focused checks for later local changes. [Current verification](docs/CURRENT-VERIFICATION.md) records the requested outcomes; [compatibility](docs/COMPATIBILITY.md) separates source checks, CLI execution, historical observations and subsequent actual Desktop activation.
 
 Uninstall preserves project policy and unrelated registrations. Transaction backups support restoration of prior kit scripts and registrations; a plain `hooks.json` backup restores registration only. See [installation and rollback](docs/INSTALLATION.md). Installation does not publish this source or grant trust.
 

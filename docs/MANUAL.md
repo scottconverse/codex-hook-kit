@@ -1,4 +1,6 @@
-# Codex hook-kit manual
+# Codex Hook Kit 1.1.0 — user manual
+
+Released October 18, 2026. [Release notes](https://github.com/scottconverse/codex-hook-kit/releases/tag/v1.1.0) · [Download source ZIP](https://github.com/scottconverse/codex-hook-kit/archive/refs/tags/v1.1.0.zip). Extract the archive, open a terminal in its directory, then follow the installation steps below.
 
 ## Purpose and requirements
 
@@ -89,4 +91,4 @@ Project policy remains. A plain registration backup restores registrations only;
 | Repeated Stop requests | Shared budget, native snapshot claims and per-hook counters |
 | Receipt exists but report unseen | Emission is not delivery; verify the target Desktop build |
 
-Run focused tests for changed behavior. Current outcomes and the consolidated 156-test pass are in [CURRENT-VERIFICATION.md](CURRENT-VERIFICATION.md). Historical probes/counts are in [VERIFICATION.md](VERIFICATION.md); current runtime limits are in [COMPATIBILITY.md](COMPATIBILITY.md). Complete legacy keys and new option links are in [CONFIG-REFERENCE.md](CONFIG-REFERENCE.md).
+Run focused tests for changed behavior. The earlier 156-test baseline preceded the final corrections; later focused checks include the 20-test policy-precedence/delivery pass. These runs overlap and are not a single final-candidate suite total. Detailed outcomes are in [CURRENT-VERIFICATION.md](CURRENT-VERIFICATION.md). Historical probes/counts are in [VERIFICATION.md](VERIFICATION.md); current runtime limits are in [COMPATIBILITY.md](COMPATIBILITY.md). Complete legacy keys and new option links are in [CONFIG-REFERENCE.md](CONFIG-REFERENCE.md).

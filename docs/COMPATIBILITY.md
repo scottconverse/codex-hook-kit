@@ -1,12 +1,14 @@
 # Compatibility and verification
 
-Current source: 1.1.0, October 18, 2026. Tested environment: Windows, Node 24.15.0, versioned Codex runtime 0.160.0. Node 22.13 or newer is required; other platforms and minimum-version execution are not yet tested.
+Released version: [1.1.0](https://github.com/scottconverse/codex-hook-kit/releases/tag/v1.1.0), October 18, 2026. Tested environment: Windows, Node 24.15.0, versioned Codex runtime 0.160.0. Node 22.13 or newer is required; other platforms and minimum-version execution are not yet tested.
+
+The baseline below preceded the final delivery, worker, reply-parsing and owner-policy corrections. Later focused runs, including the final 20-test precedence/delivery pass, are recorded in [current verification](CURRENT-VERIFICATION.md); overlapping runs are not a single final-candidate suite total. Activation observations are historical: hooks on the publishing machine were subsequently disabled and remain off.
 
 ## Evidence boundaries
 
 | Layer | Evidence and limit |
 |---|---|
-| Current source | Consolidated `npm test`: 156 tests, 156 passed, 0 failed/skipped, exit 0, 15897.3231 ms on Windows/Node 24.15.0. Coverage includes mapping/ledger, publication/database scope, worker adoption/terminal states, lifecycle/shared Stop limits and product-bound evidence. Source tests alone do not prove client routing. |
+| Earlier baseline, before final corrections | Consolidated `npm test`: 156 tests, 156 passed, 0 failed/skipped, exit 0, 15897.3231 ms on Windows/Node 24.15.0. Coverage includes mapping/ledger, publication/database scope, worker adoption/terminal states, lifecycle/shared Stop limits and product-bound evidence. Source tests alone do not prove client routing. |
 | Existing Desktop installation | Selected real tool calls observed rule injection, covered patch denial, command denials/allowances and Stop review continuation. This was an earlier installation, not blanket activation of every current-candidate path. |
 | Current candidate native CLI | A versioned 0.160.0 CLI probe used the installer-pinned Node command: denied scratch write left its marker absent; admitted write created it; subprocess exited zero. This is CLI evidence, not current Desktop activation. |
 | Read-only doctor | Versioned 0.160.0 supports the hook-list API. After candidate installation, all 16 registrations report trusted-current. Node 24.15.0 SQLite capability passed; the diagnostic child closed. Trust does not establish event delivery. |
