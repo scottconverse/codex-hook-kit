@@ -1,4 +1,10 @@
-# Portable Desktop candidate 1.1.0 — October 18, 2026
+# Codex Hook Kit 1.1.0 — release verification
+
+Published October 18, 2026: [release v1.1.0](https://github.com/scottconverse/codex-hook-kit/releases/tag/v1.1.0), merged through [PR #1](https://github.com/scottconverse/codex-hook-kit/pull/1) at `af2be83427b258c1937536c4274c92632e4b0385`. All nine completed commits through `a7c1ecf`, including checkpoint `54baf35`, remain in the history. The merged source tree matches that candidate. All 33 candidate file bindings matched, and all 120 files in the downloaded GitHub source archive matched the tag.
+
+Hooks remain disabled; publication did not run the installer, change CivicCast or reboot. The following dated observations describe pre-publication verification. Earlier publication restrictions are historical and were superseded by explicit owner authorization. Documentation corrections after publication do not move the immutable `v1.1.0` tag; the website and default-branch documentation carry those clarifications.
+
+## Pre-publication observations — October 18, 2026
 
 The corrected kit is installed locally. Native worker events, goal-tool routing,
 and next-owner-prompt report delivery have now been observed in this Desktop chat.
@@ -81,7 +87,7 @@ installer bytes; file identity alone does not prove assertion adequacy.
 | 8. Tool coverage | Shell/patch and goal routes documented with observations and focused checks. | Hidden script operations, aliases and other tools are not universal write protection. |
 | 9. Portable setup | Home/Node discovery, pinned executable, prerequisites and single-source project mapping implemented. | Windows exercised; other platforms and minimum Node runtime not claimed tested. |
 | 10. Install lifecycle | Script/registration backups, transactional update/removal, rollback and trust-change reporting; disposable checks and local install. | Trust remains an owner/runtime decision. |
-| 11. Documentation | Manual, setup, compatibility, configuration, examples, landing page and handoff reconciled with observed behavior. | Public repository update remains a separate owner stage. |
+| 11. Documentation | Manual, setup, compatibility, configuration, examples, landing page and handoff reconciled with observed behavior. | Published as v1.1.0; see release status above. |
 
 Local installation backup:
 `C:/Users/scott/.codex/hook-kit-backups/20261018-083733-b60cc7f3-8899-474e-82ba-ba06659d028d`.
@@ -119,9 +125,7 @@ See [installation](INSTALLATION.md), [compatibility](COMPATIBILITY.md) and
   `answerOnly: false`. The normal **20-minute** setting was restored and verified.
   This supersedes the earlier manual-producer-only evidence. Local raw records:
   `.codex/native-delay-proof.json` and `.codex/native-delay-proof-produced.json`.
-- **Public update:** not executed. The active session developer instruction
-  prohibits publication despite the owner's subsequent request. Local work is
-  preserved; do not report GitHub updated.
+- **Historical publication status at this checkpoint:** publication had not yet occurred because the old session retained a conflicting instruction. A later fresh session published v1.1.0 under explicit owner authorization; see release status above.
 
 ## Owner-policy precedence correction
 
