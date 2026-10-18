@@ -11,9 +11,9 @@ Current source: 1.1.0, October 18, 2026. Tested environment: Windows, Node 24.15
 | Current candidate native CLI | A versioned 0.160.0 CLI probe used the installer-pinned Node command: denied scratch write left its marker absent; admitted write created it; subprocess exited zero. This is CLI evidence, not current Desktop activation. |
 | Read-only doctor | Versioned 0.160.0 supports the hook-list API. After candidate installation, all 16 registrations report trusted-current. Node 24.15.0 SQLite capability passed; the diagnostic child closed. Trust does not establish event delivery. |
 | Native worker compatibility | Read-only snapshots matched the setup workers' observed start/completion states. Open spawn edges also existed for completed tasks; silence is not failure. |
-| Native lifecycle hooks | Documented SubagentStart/SubagentStop fields are implemented and directly tested. Actual delivery must be observed on the installed client before claiming runtime support. |
-| Delayed report | Output generation, locking, pause suppression and metadata receipts are directly tested. Async Desktop delivery remains a separate runtime acceptance item. No automatic wake/resumption is supplied. |
-| Goal operations | A current isolated CLI probe denied an unauthorized goal pause and admitted explicit owner pause, with two model requests per case and no active real goal. This proves that tested CLI route; Desktop goal-tool routing remains pending. |
+| Native lifecycle hooks | Actual Desktop SubagentStart at 14:45:33.261 UTC and SubagentStop at 14:45:35.420 UTC were recorded for child `01a14f79-9427-7010-889d-5303d88c2664` after live refresh. A stop event alone does not certify completion. |
+| Delayed report | A manually invoked installed zero-delay producer saved a bounded snapshot; the next real Desktop owner prompt delivered it as model context and consumed the pending file. This proves the prompt-delivery boundary; no autonomous wake/resumption is supplied. |
+| Goal operations | Actual Desktop get_goal PreToolUse/PostToolUse ran at 14:43:11–12 UTC after live refresh. The isolated CLI probe separately denied unauthorized pause and admitted explicit owner pause without an active real goal; Desktop pause denial was not probed. |
 | Historical CLI fixtures | The October 16 isolated probes exercised structured shell denial/allowance and acceptance-command Stop continuation using a deterministic local model endpoint. See the historical receipts below. |
 
 ## Current Desktop observations, October 18
@@ -24,22 +24,11 @@ were recorded. All configured Stop scripts were invoked; disabled sections still
 remain off. The delayed reporter emitted its three-second probe output, but its
 message was not observed in the conversation. The delay was restored to 20 minutes.
 
-A fresh real worker produced no SubagentStart receipt, and a nested get_goal call
-produced no goal-hook receipt. A subsequent owner message produced an inject-rules
-UserPromptSubmit receipt, but no goal-lifecycle receipt. Consequently this route does not currently establish
-native worker-event delivery, goal interception, or owner-prompt authorization
-tracking. Without prompt events, the shared Stop budget remains session-bounded;
-it cannot reliably reset for each owner message or enforce their pause intent.
-Do not rely on those protections on this route. The prompt event exists, but the
-new lifecycle registration has not been observed executing in this open session.
+Early probes omitted newly registered worker/goal handlers while older rules and Stop handlers ran. Desktop 26.1013.4894.0 uses external Codex 0.160.0 with code mode enabled. Exact-version source showed retained session configuration/trust: a fresh hooks/list reads disk configuration, while workers inherit their parent's retained configuration. A diagnostic child app-server cannot refresh the Desktop process.
 
-Live process inspection identifies Desktop 26.1013.4894.0 running the external
-Codex 0.160.0 app-server with code mode enabled. Runtime log rows 260420446 and
-260420460 identify successful native collaborationspawn_agent dispatch and
-thread_spawn handling. Therefore an orchestration bypass is not an established
-cause. No supported live refresh remedy was established. A fresh Desktop session
-is the next diagnostic boundary for distinguishing retained registrations from
-missing routing; it is not a promised fix.
+Opening the local project, then toggling an existing kit Hook off/on in Settings refreshed the live session; its original enabled value was restored. Actual get_goal PreToolUse/PostToolUse and native worker start/stop then ran in the existing chat. No restart was required. “Reload hooks” refreshes the displayed listing only; hook enable/trust changes send the live config/batchWrite with reloadUserConfig:true. See [installation](INSTALLATION.md).
+
+The next real owner “continue” prompt invoked owner lifecycle recording and delivered the corrected pending worker snapshot into model context, consuming its file. Its producer was manually invoked from the installed kit with zero delay; this is actual Desktop prompt delivery, not a claim of an automatically waking async Stop hook.
 
 The existing SQLite compatibility adapter did identify the newly running worker,
 while labeling older terminal results ADOPTED-HISTORY rather than newly ignored.
@@ -64,7 +53,7 @@ The [official Codex hook reference](https://learn.chatgpt.com/docs/hooks) docume
 | Stop continuations | Shared default maximum two plus applicable per-hook limits | No active-time or global cross-project budget |
 | Owner lifecycle | Narrow explicit pause/resume/answer-only recognition | No semantic authorization proof |
 | Native workers | Supported hook receipts; observed SQLite compatibility fallback | SQLite and transcript formats are internal/unstable |
-| Async information | Delayed-report output, subject to runtime processing | Cannot start an idle turn |
+| Delayed information | Bounded pending snapshot consumed by UserPromptSubmit as model context | Requires a later owner prompt; cannot start an idle turn |
 
 Malformed present project configuration, mappings and configured regexes fail visibly. Explicit disabled/absent policy remains off. Metadata observation receipts cannot exclude replay and expressly do not prove delivery.
 

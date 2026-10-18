@@ -21,31 +21,19 @@ For any next authorized change:
    and actual delivery. An editable receipt is not independent authority.
 5. Update affected documentation with the observed result and remaining limitations.
 
-Current runtime acceptance needs explicit evidence for the exact installed candidate.
-In particular, native subagent-event delivery, asynchronous report delivery and
-goal-tool interception must not be promoted from direct fixtures to Desktop passes.
+Current runtime acceptance needs explicit evidence for the exact installed candidate. Do not promote direct fixtures or emission receipts into Desktop delivery claims.
 [INSTALLATION.md](INSTALLATION.md), [DIAGNOSTICS.md](DIAGNOSTICS.md) and
 [lifecycle.md](lifecycle.md) describe these boundaries.
 
-October 18 local activation: candidate installed, all 16 registrations trusted,
-shell/SessionStart/Stop delivery observed, SQLite fallback monitoring working.
-The open Desktop session has not invoked the newly added worker/goal lifecycle
-registrations. Rule injection does receive UserPromptSubmit. The delayed report
-emitted, but delivery was not observed. Read CURRENT-VERIFICATION.md before acting.
-The next bounded step is a fresh Desktop session, then one real worker event and
-one harmless get_goal observation, plus the next Stop report delivery boundary.
-Do not repeat the 156 passing source checks. Do not mutate the existing CivicCast
-goal as a probe. If the fresh session still omits those events, preserve that
-runtime incompatibility explicitly rather than claiming full activation or
-inventing a polling/control framework. No restart or publication is authorized
-implicitly by this handoff.
+October 18 activation now includes actual Desktop get_goal PreToolUse/PostToolUse at 14:43:11–12 UTC and native child `01a14f79-9427-7010-889d-5303d88c2664` SubagentStart at 14:45:33.261 UTC and SubagentStop at 14:45:35.420 UTC. Earlier missing events came from retained session configuration/trust. Opening the local project and toggling a kit Hook off/on in Settings, restoring its original value, refreshed the live session without restarting. “Reload hooks” refreshes the listing only. See [INSTALLATION.md](INSTALLATION.md).
 
-Final local correction adds explicit worker/owner/Stop capability summaries to
-doctor; seven affected diagnostics checks passed. The corrected installed doctor
-was executed and its bytes match source. All 32 candidate file bindings match.
-The eleven-item disposition is in CURRENT-VERIFICATION.md. Missing Desktop
-lifecycle/async observations remain explicitly unresolved; do not describe the
-full Desktop verification as passed or repeat source tests to try to establish it.
+The delayed reporter now saves a bounded pending snapshot for model context on the next owner UserPromptSubmit. Actual delivery was observed: a manually invoked installed zero-delay producer saved the snapshot, and the next real owner “continue” prompt delivered it and consumed the pending file. That prompt also invoked owner lifecycle recording. No automatic idle-chat wake exists. Do not repeat the 156 passing source checks or mutate the existing CivicCast goal as a probe. Publication remains owner-controlled.
+
+An earlier diagnostic correction added explicit worker/owner/Stop capability
+summaries; seven affected checks passed and the installed doctor was executed.
+Its then-current 32 file bindings matched; subsequent corrections are bound
+separately in CURRENT-VERIFICATION.md.
+The eleven-item disposition and subsequent focused corrections are in CURRENT-VERIFICATION.md. Native worker/goal invocation and next-owner-prompt report delivery are now observed. Preserve the exact evidence boundaries above.
 
 An older handoff proposed additional policies and secret-based disarming. Those
 proposals are not silently included here and are not fresh owner authorization.

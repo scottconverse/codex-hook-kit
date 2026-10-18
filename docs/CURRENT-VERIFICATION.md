@@ -1,119 +1,87 @@
 # Portable Desktop candidate 1.1.0 — October 18, 2026
 
-Implementation is installed locally. Desktop coverage is partial and explicitly
-defined below; this is not a claim that every hook is activated on every route.
-No publication occurred. Earlier local work was preserved in commit `54baf35`.
+The corrected kit is installed locally. Native worker events, goal-tool routing,
+and next-owner-prompt report delivery have now been observed in this Desktop chat.
+This supersedes earlier activation-gap reports. No publication, reboot or
+CivicCast runtime change occurred. Checkpoint `54baf35` remains preserved.
+
+## Activation and delivery corrections
+
+Desktop 26.1013.4894.0 uses Codex 0.160.0 here. Running sessions retained an older
+hook configuration. A fresh diagnostic subprocess saw current registrations but
+could not refresh those sessions. Settings → Hooks → User config, toggling an
+existing kit hook off and back on, refreshed the live server. The hook was restored
+enabled. Reloading the hooks listing alone does not refresh those sessions.
+This distinction was checked against exact 0.160.0 source.
+
+Async Stop `systemMessage` output is a UI warning, not model context. The correction
+keeps that warning and saves one bounded report per project/session. The existing
+UserPromptSubmit hook consumes it and supplies supported `additionalContext`.
+This is delayed reporting, not independent resumption of an idle chat.
+
+## Actual Desktop evidence
+
+- Read-only `get_goal` produced goal-lifecycle PreToolUse and PostToolUse receipts
+  at **14:43:11 and 14:43:12 UTC**, without changing the existing goal.
+- Real child `01a14f79-9427-7010-889d-5303d88c2664` produced SubagentStart at
+  **14:45:33.261 UTC** and SubagentStop at **14:45:35.420 UTC**.
+  Worker-lifecycle now correctly identifies its own diagnostic receipts.
+- The installed delayed-report producer was manually invoked with zero delay;
+  the normal 20-minute configuration remained unchanged. The owner's real
+  **“continue”** reply delivered `DELAYED WORKER REPORT` into model context,
+  and the pending report was consumed. UserPromptSubmit was recorded at
+  **14:47:55 UTC**. This demonstrates installed production plus actual Desktop
+  prompt delivery, not a newly observed full 20-minute native Stop run.
+- Existing Desktop shell/patch guards, synchronous Stop continuation and
+  compatibility-worker reports remain separate evidence of those routes.
+- Final installed doctor reports **16 trusted-current registrations**, native
+  worker and owner invocations, goal-tool invocations and synchronous Stop.
+  Its automatic async verdict remains conservative: receipts alone cannot prove
+  model delivery. The actual received message above supplies that evidence.
+
+Local receipts reside in this project's ignored `.codex` observation, worker-state
+and lifecycle files. They are local session metadata, not public fixtures.
 
 ## Checks performed
 
-- Final diagnostic correction: **7 focused diagnostics tests passed, 0 failed**;
-  missing-capability assertions were observed failing before the correction.
-  Worker lifecycle, owner lifecycle and synchronous Stop summaries now distinguish
-  missing invocations from trust and registration. Installed doctor executed
-  successfully with all 16 registrations still trusted. Changed installed bytes
-  match source; all 32 candidate file bindings match. This targeted follow-up
-  supersedes the original doctor bytes, not the rest of the consolidated results.
+- Baseline consolidated suite: **156 passed, 0 failed, 0 skipped**, 15,897 ms,
+  Windows / Node 24.15.0. This preceded the final small delivery corrections.
+- Installer-focused checks: **16 passed**, including update/removal, prior-script
+  restoration, exclusive access and preservation of unrelated hooks.
+- Diagnostic correction: **7 passed**, failing assertions observed first.
+- Worker receipt correction: **13 passed**, missing identity assertion failed first.
+- Delivery/parity: **15 passed**; subsequent empty-rules compatibility: **7 passed**;
+  final atomic-claim/crash correction: **4 passed**. These overlap; do not add them
+  into a suite total. The stale-lock failure was observed before correction.
+- Actual CLI denied/admitted scratch writes: [receipt](native-portable-probe.json).
+- Final installed-byte comparison: **30 deployed files matched**, zero mismatches;
+  **33** source/installer file bindings recorded. Changed documentation: **74 local
+  links checked**, zero missing; whitespace check passed.
+- Actual CLI goal guard denied unauthorized pause and admitted explicit owner
+  pause: [receipt](goal-probe.json). Desktop routing is demonstrated above.
+  No state-changing Desktop pause-denial trial was performed.
 
-- One consolidated `npm test`: **156 passed, 0 failed, 0 skipped**, exit 0,
-  15,897.3231 ms. Windows, Node 24.15.0.
-- Installer-focused checks: 16 passed, including update, removal, prior-script
-  restoration, exclusive access, and preservation of unrelated registrations.
-- Actual Codex CLI 0.160.0: generated pinned-Node command blocks a denied scratch
-  write and permits its allowed counterpart. Both child processes exited.
-  [Native receipt](native-portable-probe.json).
-- Actual Codex CLI goal interception: ordinary prompt plus `update_goal` pause was
-  denied; explicit owner pause admitted it. Isolated threads had no active goal;
-  no host goal was changed. Two deterministic loopback requests per case, no
-  provider/model call. [Goal receipt](goal-probe.json).
-- Read-only doctor: runtime identified, SQLite available, `hooks/list` supported,
-  diagnostic child closed. After installation, all 16 candidate registrations
-  report trusted-current. Actual invocation and delivery are listed separately.
-- Local documentation links: 98 checked, zero missing. Whitespace check passed.
-  No rendered-browser inspection is claimed.
-
-The [candidate file bindings](portable-candidate-files.json) identify the runtime
-source and installer bytes checked. These hashes bind the record to those files;
-they do not independently prove that every assertion is a sufficient test.
+[Candidate bindings](portable-candidate-files.json) identify current runtime and
+installer bytes; file identity alone does not prove assertion adequacy.
 
 ## Eleven-item disposition
 
-| Item | Implemented result | Verification / remaining boundary |
+| Item | Completed implementation and evidence | Boundary |
 |---|---|---|
-| 1. Diagnostic | One read-only `doctor.mjs` command reports runtime, project, prerequisites, hook API, trust, and invocation receipts separately. | Direct checks and live `hooks/list`; registration is not activation. |
-| 2. Workers | Native event receipts, compatible read-only SQLite fallback, schema detection, failure states, historical adoption, same-turn terminal corroboration. | Real Desktop compatibility-worker report delivered and acknowledged. Native event delivery is unverified; recorded running state does not prove current process liveness. |
-| 3. Goal lifecycle | Current recognized owner pause/resume/answer-only state, pause guard, separate observed-operation receipt. | Actual CLI denial/admission passed. This open Desktop session has not invoked the new lifecycle registrations, so Desktop goal enforcement is not established and must not be relied on. |
-| 4. Ledger | Exact targets, hash freshness, spaced/quoted paths, explicit new-file prerequisites; unrelated stale rows do not block other targets. | Focused checks. Records claimed reading, not comprehension. |
-| 5. Configuration | Malformed JSON, sections, enabled flags, regexes, known control types/ranges and mappings produce visible errors. | Focused checks. Absent/disabled sections remain off. |
-| 6. Shared Stop | Default two continuations shared across installed Stop hooks; exclusive state writes; pause/answer-only suppression before checks. | Direct tests and real Stop continuation. Without owner-lifecycle invocation the budget is session-bounded and owner-intent tracking unavailable. Exhaustion never means completion. |
-| 7. Delayed reporting | Canonical delayed-report name, legacy alias, bounded native delay, duplicate suppression and pause handling. | Output generation checked. Actual asynchronous Desktop delivery remains unverified; autonomous idle-chat resumption is unsupported. |
-| 8. Tool coverage | Documented shell/patch coverage, goal CLI proof and explicit uncovered paths. | Prior Desktop observations and current CLI probes are separately identified. No universal write protection claim. |
-| 9. Portable setup | Codex-home discovery, Node minimum, pinned executable, project mapping, portable examples. | Windows PowerShell runtime exercised. Other platforms, minimum Node execution and customized Windows command shells are not verified. |
-| 10. Install lifecycle | Script-plus-registration backup, transactional update/removal, rollback, lock, exact-registration change reporting. | Disposable configuration tests and native launch probe. Trust is not granted automatically. |
-| 11. Documentation | README, manual, configuration, examples, landing page, compatibility, additions and handoff reconciled; old records labeled historical. | Link/whitespace checks and source review; publication remains owner-controlled. |
+| 1. Diagnostic | Separates runtime, prerequisites, project, API, trust and observed invocation; focused checks and live diagnostic. | Fresh subprocess trust does not refresh existing sessions. |
+| 2. Workers | Native start/stop demonstrated; schema-aware SQLite fallback, failures, history adoption and acknowledgements implemented. | Internal fallback is version-sensitive; recorded activity is not process liveness. |
+| 3. Goal lifecycle | Owner lifecycle, pause guard and operation receipts; CLI denial/admission and Desktop Pre/Post routing demonstrated. | Recognizes explicit commands, not arbitrary natural-language intent or every wrapped reply. |
+| 4. Reading ledger | Exact targets, stale hashes, quoted/spaced paths and new-file prerequisites covered by focused checks. | Records claimed reading, not comprehension. |
+| 5. Configuration | Invalid enabled configuration, regexes, ranges and mappings report errors; focused checks. | Absent/disabled optional sections remain off. |
+| 6. Shared Stop | Shared continuation budget, exclusive state writes and recognized pause/answer-only suppression; tests and real continuation. | Exhaustion is unfinished work, not completion; cannot force model completion. |
+| 7. Delayed reporting | Bounded queue and actual next-owner-prompt delivery demonstrated. | No idle wake; crash after claim but before delivery can lose the informational snapshot. |
+| 8. Tool coverage | Shell/patch and goal routes documented with observations and focused checks. | Hidden script operations, aliases and other tools are not universal write protection. |
+| 9. Portable setup | Home/Node discovery, pinned executable, prerequisites and single-source project mapping implemented. | Windows exercised; other platforms and minimum Node runtime not claimed tested. |
+| 10. Install lifecycle | Script/registration backups, transactional update/removal, rollback and trust-change reporting; disposable checks and local install. | Trust remains an owner/runtime decision. |
+| 11. Documentation | Manual, setup, compatibility, configuration, examples, landing page and handoff reconciled with observed behavior. | Public repository update remains a separate owner stage. |
 
-## Observed Desktop coverage and unavailable guarantees
+Local installation backup:
+`C:/Users/scott/.codex/hook-kit-backups/20261018-083733-b60cc7f3-8899-474e-82ba-ba06659d028d`.
 
-### Final disposition
-
-All eleven implementation areas are represented in the table above. The kit is
-installed and source work is preserved locally. The demonstrated Desktop subset
-is project-rule delivery, recognized shell/patch guard behavior, synchronous
-review continuation and SQLite compatibility-worker reporting. Native worker
-events, goal enforcement and asynchronous report delivery are not established on
-this open session. These remain client-level verification gaps, not passing items.
-The product now reports them explicitly instead of requiring users to infer them
-from a successful installation. Automatic idle-chat resumption is unsupported.
-
-This record does not certify universal Desktop compatibility or authorize
-publication. No extra framework, broad test round or restart was introduced.
-
-### Live activation follow-up, October 18
-
-Installed the candidate into the owner's Codex home, preserving scripts and
-registrations in `hook-kit-backups/20261018-080601-d956fae2-efb5-40ba-b2ac-c66af4a3a1b1`.
-Under the owner's existing authorization, renewed trust for the exact 16 current
-registration hashes through `config/batchWrite`. A fresh doctor invocation reports
-`trusted-current`, 16 registrations, and the correct single-source project mapping.
-The existing Desktop session has produced shell PreToolUse invocation receipts;
-the injected project instructions also reached this conversation.
-
-A genuinely new Desktop worker was spawned for a read-only activation check.
-It produced no SubagentStart receipt. A harmless get_goal call likewise did not
-produce a goal-lifecycle receipt. These observations do not establish whether the
-open Desktop session cached earlier registrations or lacks the event routing.
-The default app-server daemon control socket could not be reached (Windows
-socket error 10050); no Desktop/server restart was performed.
-
-Actual Desktop worker-event routing, goal interception and asynchronous report
-delivery remain unverified. The latter requires observing the Stop delivery
-boundary; generating a report alone is insufficient. No additional broad suite
-was run, no CivicCast state was changed, and nothing was published.
-
-The subsequent real Stop boundary delivered the double-check reminder into this
-chat. Receipts also show no-idle, measure-gate, completion-gate and delayed-report
-invocation. The temporary three-second delayed-report probe emitted output at
-14:10:02 UTC; its message has not been observed in the conversation. Restored the
-normal 20-minute setting after that probe. Invocation of disabled sections does
-not establish enforcement. Worker-event and goal-tool routing remain unverified.
-
-The follow-up read-only runtime diagnosis identified Desktop 26.1013.4894.0,
-external Codex 0.160.0 and enabled code mode. Logs show real worker creation enters
-native thread_spawn handling. A new owner prompt invoked inject-rules, but not
-goal-lifecycle. No safe supported live refresh was established. The compatibility
-adapter identified the current worker as RUNNING from its recorded lifecycle and
-older results as ADOPTED-HISTORY. This confirms usable fallback monitoring, not
-native hook delivery or process liveness. The remaining acceptance boundary is a
-fresh Desktop session; no app, service or machine was restarted automatically.
-
-The next synchronous no-idle Stop continuation delivered the real worker report
-into this conversation, including the completed routing-diagnosis worker. Its
-result was reviewed, incorporated above and acknowledged by exact completion
-token. This proves synchronous compatibility-worker reporting delivery; it does
-not prove SubagentStart/SubagentStop events or asynchronous report delivery.
-
-Observe native subagent events, goal interception, and delayed report delivery in
-that Desktop session. These are the remaining client-level observations; direct
-tests and CLI receipts must not be relabeled as Desktop passes. A runtime that
-does not expose an interface must be reported unsupported rather than given a
-simulated success. See [compatibility](COMPATIBILITY.md), [installation](INSTALLATION.md)
-and [diagnostics](DIAGNOSTICS.md).
+See [installation](INSTALLATION.md), [compatibility](COMPATIBILITY.md) and
+[diagnostics](DIAGNOSTICS.md). No universal Desktop/platform certification is claimed.

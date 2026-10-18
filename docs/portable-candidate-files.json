@@ -29,7 +29,7 @@
   },
   {
     "path": "hooks/inject-rules.mjs",
-    "sha256": "acb5a3c3db67307c287d107ad9f71505ac1da997a0d2504713ff5772180b8bce"
+    "sha256": "1c14be584c4418193281ab4a3cf648f4c7f52cd564870158212f4e9a05309db3"
   },
   {
     "path": "hooks/measure-gate.mjs",
@@ -45,7 +45,7 @@
   },
   {
     "path": "hooks/wake.mjs",
-    "sha256": "5f34ccb52d9f1d968df0f415817d1c000b5a4fb97514a618f048027fc327986a"
+    "sha256": "340fe37afbaa55aa095ce4cd34ed0ab3462568c33627fc4f6be2737a2ed97164"
   },
   {
     "path": "hooks/walk-brief-guard.mjs",
@@ -53,7 +53,7 @@
   },
   {
     "path": "hooks/worker-lifecycle.mjs",
-    "sha256": "747bb3578ead28e235d6c533d991f886fae22f56088ca6d0320a46c24a1de002"
+    "sha256": "6c982032d858505f2ff6faf0dcc9d38c10cb74d31a89e803caea626ec8679232"
   },
   {
     "path": "init-project.mjs",
@@ -76,8 +76,12 @@
     "sha256": "8302032b3dd15c7eb18522bf06aa50f914b17407b4d18eb194b0100c58fc49fc"
   },
   {
+    "path": "lib/delayed-delivery.mjs",
+    "sha256": "7da278e77a8fc4fef6d5222845cbcdde5bd267434f28f211d28f293c4143c8fc"
+  },
+  {
     "path": "lib/desktop-workers.mjs",
-    "sha256": "859711ad520ca5dd4fca87c7fc1b4b6dc8f7edb9fdd6d2ea914a8a88657a07ea"
+    "sha256": "edbbf540dc72bde7e495b1b07b3d24bd1c29e1831275f1ece3a2f91ffa317163"
   },
   {
     "path": "lib/diagnostics.mjs",

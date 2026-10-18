@@ -1,9 +1,9 @@
 // Supported SubagentStart/SubagentStop inputs; store only lifecycle metadata.
 import { load, loadFromStdin } from '../lib/config.mjs';
 import { recordWorkerLifecycle } from '../lib/desktop-workers.mjs';
-const current=loadFromStdin('no-idle');
+const current=loadFromStdin('worker-lifecycle');
 const {input}=current;
-let section=current.section;
+let section=load('no-idle',input).section;
 if(section?.backend!=='codex-desktop') {
  const canonical=load('delayed-report',input);
  section=canonical.cfg && Object.hasOwn(canonical.cfg.config,'delayed-report') ? canonical.section : load('wake',input).section;

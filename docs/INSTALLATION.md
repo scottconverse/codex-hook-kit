@@ -37,11 +37,24 @@ The delayed report cannot start or resume an idle chat.
 
 Installation reports whether the kit's registration changed. Review and trust the
 exact new registrations through Codex's supported hook review interface (`/hooks`
-where available), then start a new local session. The installer does not grant
+where available), then refresh the intended live session as described below or start a new local session. The installer does not grant
 trust, modify `config.toml`, or infer that a running Desktop session loaded the new
 hooks. An unchanged registration is not proof of current hook trust or invocation.
 Use `doctor.mjs` to distinguish registered hooks, runtime support, and observed
 invocations; see the doctor documentation for available checks.
+
+## Refresh an existing Desktop session
+
+Desktop 26.1013.4894.0 with external Codex 0.160.0 retained older session configuration/trust after installation. A fresh doctor hooks/list can report current disk registrations while the open chat uses earlier handlers. Workers inherit their parent's configuration, so a new worker alone does not resolve this.
+
+The verified procedure requires no restart:
+
+1. Open the local project folder (File → Open Folder, or Ctrl+O on Windows).
+2. Open Settings → Hooks and select the project/source containing the kit.
+3. Review/trust changed definitions as needed. Toggle one existing kit hook off and back on, restoring its original enabled state.
+4. Observe a harmless get_goal invocation and worker start/stop in the target chat.
+
+The enable/trust action sends a live config/batchWrite with reloadUserConfig:true, rebuilding loaded hook runtimes. “Reload hooks” refreshes only the listing. Ordinary configuration value writes and a separately spawned app-server do not refresh the live Desktop session. The October 18 procedure produced actual goal-tool PreToolUse/PostToolUse and native SubagentStart/SubagentStop observations; see [current verification](CURRENT-VERIFICATION.md).
 
 ## Backups and rollback
 

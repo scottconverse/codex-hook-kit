@@ -1,5 +1,5 @@
 // Codex Stop hook with async:true. Waits, then returns a JSON worker report.
-// It cannot wake an idle chat; output is delivered at the next safe point/user turn.
+// It cannot wake an idle chat. Model context is queued for the next owner prompt.
 // Policy/reporting port of reference/tr-wake-20.mjs; lifecycle intentionally differs.
 // Only one sleeper at a time: a lock file holds the live sleeper's pid and start time.
 // Canonical config section "delayed-report"; "wake" remains a legacy alias:
@@ -16,6 +16,7 @@ import path from "node:path";
 import { load, loadFromStdin, resolveIn } from "../lib/config.mjs";
 import { readLifecycle } from '../lib/stop-policy.mjs';
 import { recordObservation } from '../lib/observations.mjs';
+import {queueDelayedReport} from '../lib/delayed-delivery.mjs';
 
 const canonical = loadFromStdin("delayed-report");
 const { input } = canonical;
@@ -125,8 +126,8 @@ const report = (
     (lines.length ? lines.join("\n") : "No unhandled workers.") +
     "\n" + String(s.footer || "Review completed workers and investigate quiet workers before deciding the next step. Quiet time alone does not prove failure.")
 );
-// Codex does not implement Claude asyncRewake. Informational output is delivered
-// at the next safe point/next user turn; it never starts a new turn itself.
+// systemMessage is a UI warning; only the next UserPromptSubmit can inject context.
+const queued=queueDelayedReport(section.cfg.dir,input,report);
 if(section.cfg.config?.diagnostics?.enabled === true) recordObservation(section.cfg.dir,'delayed-report-emitted',input);
-process.stdout.write(JSON.stringify({ systemMessage: report + "\nCodex delayed report only: this hook cannot wake an idle chat." }));
+process.stdout.write(JSON.stringify({ systemMessage: report + "\nCodex delayed report only: this hook cannot wake an idle chat." +(queued?'':'\nModel delivery unavailable: pending report could not be saved.') }));
 process.exit(0);

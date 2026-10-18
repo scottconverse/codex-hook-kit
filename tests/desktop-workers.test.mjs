@@ -127,8 +127,11 @@ test('canonical delayed-report entry accepts canonical config', async () => {
 
 test('native lifecycle evidence preferred without retaining assistant content', async () => {
  const p=fixture(); try {
+ const config=JSON.parse(fs.readFileSync(p.configFile,'utf8'));config.diagnostics={enabled:true};writeJson(p.configFile,config);
  const base={cwd:p.cwd,session_id:'parent',agent_id:'child',agent_type:'worker',turn_id:'native-turn',last_assistant_message:'PRIVATE-CONTENT'};
  assert.equal((await runHook(path.join(HOOKS,'worker-lifecycle.mjs'),{...base,hook_event_name:'SubagentStart'})).code,0);
+ const observations=fs.readdirSync(path.join(p.root,'.codex','hook-observations')).map(file=>JSON.parse(fs.readFileSync(path.join(p.root,'.codex','hook-observations',file),'utf8')));
+ assert.ok(observations.some(receipt=>receipt.hook==='worker-lifecycle' && receipt.event==='SubagentStart'));
  const {section}=load('no-idle',{cwd:p.cwd});assert.equal((await desktopSnapshot(section,{session_id:'parent'})).workers[0].source,'native-hooks');
  await runHook(path.join(HOOKS,'worker-lifecycle.mjs'),{...base,hook_event_name:'SubagentStop'});
  const next=await desktopSnapshot(section,{session_id:'parent'});assert.equal(next.workers[0].state,'STOP-OBSERVED');assert.doesNotMatch(JSON.stringify(next),/PRIVATE-CONTENT/);

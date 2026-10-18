@@ -16,7 +16,7 @@ node init-project.mjs C:/dev/my-project --example agent-build
 
 The selected home is `--config-dir`, `CODEX_HOME`, or the user's `.codex`, in that order. Runtime files go into its `codex-hook-kit` directory and registrations into `hooks.json`. Installation pins the executing Node binary, preserves unrelated registrations and creates transaction backups covering prior scripts and kit registrations. It does not grant trust. See [INSTALLATION.md](INSTALLATION.md) for transaction and rollback details.
 
-Review the actual definitions in Codex; `/hooks` is the documented CLI interface. Start or refresh the intended session as required by that client. Verify a denied scratch operation and an allowed operation before relying on a guard. A direct child-process test is not Desktop activation proof.
+Review the actual definitions in Codex; `/hooks` is the documented CLI interface. A running Desktop session can retain earlier registrations/trust. The verified live refresh is to open the local project, then toggle an existing kit Hook off/on in Settings and restore its original value. “Reload hooks” refreshes the listing only. See [INSTALLATION.md](INSTALLATION.md). Verify a denied scratch operation and an allowed operation before relying on a guard. A direct child-process test is not Desktop activation proof.
 
 The initializer refuses to overwrite project policy without `--force`; forced replacement creates a backup. Available examples are `minimal`, `townreporter`, `agent-build`, `completion` and `desktop`; adjust paths to the project. The completion example is disabled until configured.
 
@@ -60,19 +60,15 @@ Patch deletion is not treated as adding forbidden text. Full-body-only brief req
 
 The prompt lifecycle handler recognizes narrow explicit pause/resume forms and answer-only wording. Pause/answer-only state suppresses Stop checks and delayed reporting. A recognized owner prompt starts a new continuation epoch; recorded resume clears pause. This text matcher is not semantic authority proof, and its state is editable.
 
-The current open Desktop session has delivered rules and Stop reports but has not
-invoked the new owner-lifecycle registration. On that route, automatic owner-intent
-tracking is unavailable and the shared budget remains session-bounded. Consult
-doctor's lifecycle summaries before relying on this behavior. The assistant must
-follow the owner's instructions regardless of hook coverage.
+Actual Desktop worker start/stop and get_goal tool hooks ran after live configuration refresh. A subsequent real owner prompt invoked owner-lifecycle recording. Consult doctor's summaries and [current verification](CURRENT-VERIFICATION.md). The assistant must follow the owner's instructions regardless of hook coverage.
 
-Optional goal-tool guarding denies a recognized `update_goal` pause without recorded owner pause. A current isolated native CLI probe exercised denial and explicit-owner-pause admission without an active real goal. Actual Desktop goal-tool routing remains separate. A PostToolUse record is an observation; consult the authoritative goal-tool result for success.
+Optional goal-tool guarding denies a recognized `update_goal` pause without recorded owner pause. A current isolated native CLI probe exercised denial and explicit-owner-pause admission without an active real goal. Actual Desktop get_goal PreToolUse/PostToolUse were also observed; a Desktop pause was not used as a probe. A PostToolUse record is an observation; consult the authoritative goal-tool result for success.
 
 ## Delayed reports and diagnostics
 
 `delayed-report` is canonical; `wake` remains an alias. If both sections exist, canonical configuration wins, including an explicit disable. Native delays are 0–25 minutes and are checked for pause before and after waiting. Filesystem mode keeps its configured delay override and lock format. Quiet workers require investigation, not automatic relaunch.
 
-Reports emit JSON information; they cannot wake an idle chat or start work. Runtime delivery is separate from generating output. With `diagnostics.enabled:true`, metadata receipts identify hook invocation/report emission and explicitly leave delivery unestablished. They retain no prompt or assistant body. See [DIAGNOSTICS.md](DIAGNOSTICS.md) for doctor and runtime probes, and [lifecycle.md](lifecycle.md) for owner-state semantics.
+The delayed reporter saves a bounded pending worker snapshot. The next owner UserPromptSubmit consumes it as model context; it cannot wake an idle chat or start work. Actual Desktop delivery was observed after a manually invoked installed zero-delay producer saved a snapshot: the next real owner prompt received the report and consumed its pending file. Async Stop systemMessage output alone is a client warning, not model context. With diagnostics.enabled:true, metadata receipts identify invocation/emission; receipts alone do not prove delivery. See [DIAGNOSTICS.md](DIAGNOSTICS.md), [desktop-workers.md](desktop-workers.md) and [lifecycle.md](lifecycle.md).
 
 ## Removal and troubleshooting
 
