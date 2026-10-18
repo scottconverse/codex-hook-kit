@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "diagnostics": {"enabled": true},
+  "goal-lifecycle": {},
+  "stop-policy": {"maxContinuations": 2},
+  "no-idle": {"backend": "codex-desktop", "source": "auto"},
+  "delayed-report": {"backend": "codex-desktop", "source": "auto", "minutes": 20},
+  "read-ledger-gate": {"requireTargetCoverage": true, "taskReadingFiles": []},
+  "double-check": {"minToolCalls": 1, "checklist": ["Review current requested work and existing focused evidence; do not invent scope or repeat passing checks."]}
+}

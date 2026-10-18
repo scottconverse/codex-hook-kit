@@ -14,6 +14,14 @@ must name that exact candidate. Paths resolve against the authoritative project.
 An agent-written status and matching hash are still claims: a person or agent must
 read the artifact and determine whether it actually proves the requirement.
 
+Bind product bytes explicitly with `requiredInputs`, mapping requirement IDs to
+arrays of product paths. Each passed result must include each configured path
+exactly once in its `inputs` array, with the current `sha256`. For example,
+`"requiredInputs":{"install":["dist/installer.exe"]}` requires an `install`
+result with an `inputs` binding for that installer. Changing the installer makes
+the result incomplete even when the report file remains unchanged. Without
+configured product inputs, report hashes alone do not establish that binding.
+
 Measurement reports changed evidence status once per session. Completion also
 accepts `claimPattern`, matched against the event's `last_assistant_message`.
 Use a narrowly anchored affirmative completion phrase. A matching claim with
@@ -23,5 +31,5 @@ possible completion claim. Missing final-message input cannot enforce that check
 Status-only reports do not start correction cycles. Unwritable notice state emits
 an explicit warning and suppresses continuation rather than creating a loop.
 
-Legacy timestamp and acceptance-command modes are unchanged. Evidence mode is for
+Installed continuation requests also use the shared Stop budget. Evidence mode is for
 multi-stage work whose real acceptance cannot safely run inside a short Stop hook.

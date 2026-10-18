@@ -1,0 +1,130 @@
+[
+  {
+    "path": "doctor.mjs",
+    "sha256": "f28bd24ce61c4480ec7c1ace59d47d069dec012612ab70d0d03fb144040f1c93"
+  },
+  {
+    "path": "hooks/completion-gate.mjs",
+    "sha256": "53650ae0157111950ab10cea0da495d7da948ef273c17867919a65ac5f3eba97"
+  },
+  {
+    "path": "hooks/db-write-guard.mjs",
+    "sha256": "d51d0d091dadc4cd33629345b8a553e4e5bdebbf08a8bf09b96e1aa307bbe122"
+  },
+  {
+    "path": "hooks/delayed-report.mjs",
+    "sha256": "1cd67bb423f277a4b289cfccaee0700730b30ba3019cea2734ac5690fc89738c"
+  },
+  {
+    "path": "hooks/deploy-gate.mjs",
+    "sha256": "d92c03a2790b3155103f0c763c9d2ef195e08c01ee0c8f9f447bbf14f8ef90d4"
+  },
+  {
+    "path": "hooks/double-check.mjs",
+    "sha256": "cbadd368b3f571776b9c6591853293c48a85a656109c17d2bf4de5ef428a4569"
+  },
+  {
+    "path": "hooks/goal-lifecycle.mjs",
+    "sha256": "9a9d1616e417bd9e740084eccf1f9c3ceba78d5e733cc5c18e91598d0104b7a9"
+  },
+  {
+    "path": "hooks/inject-rules.mjs",
+    "sha256": "acb5a3c3db67307c287d107ad9f71505ac1da997a0d2504713ff5772180b8bce"
+  },
+  {
+    "path": "hooks/measure-gate.mjs",
+    "sha256": "5ad79d7a405d8d0a9e939e1f125dfdb7f2b298ff9cf5801b5ba419332476c18c"
+  },
+  {
+    "path": "hooks/no-idle.mjs",
+    "sha256": "1e0e3a8e12f95b43a87b2f319694a7352d51452b5a80dabab279a5fa43d1d1a4"
+  },
+  {
+    "path": "hooks/read-ledger-gate.mjs",
+    "sha256": "2192450f70ad24aaecf13abb73b9570546aa8e6d2559e0e19eab317ba5c8115e"
+  },
+  {
+    "path": "hooks/wake.mjs",
+    "sha256": "5f34ccb52d9f1d968df0f415817d1c000b5a4fb97514a618f048027fc327986a"
+  },
+  {
+    "path": "hooks/walk-brief-guard.mjs",
+    "sha256": "4087c35873d58bebc39b3b3f0461ca0a57ab223d6e12a83e3c7e816d10dbb287"
+  },
+  {
+    "path": "hooks/worker-lifecycle.mjs",
+    "sha256": "747bb3578ead28e235d6c533d991f886fae22f56088ca6d0320a46c24a1de002"
+  },
+  {
+    "path": "init-project.mjs",
+    "sha256": "551f8366fba03b64790815658d4355e0236e0c639a0bbfa2056d95ad54da5195"
+  },
+  {
+    "path": "install.mjs",
+    "sha256": "58097909fc701af581b93fd828b1ec99e9da7ebecf49563cf770f59ea9fbe770"
+  },
+  {
+    "path": "lib/acceptance-evidence.mjs",
+    "sha256": "9ecd2ab247f8be18e71a246443f7c149d725fd6c4e40d363e54fe4257fc11104"
+  },
+  {
+    "path": "lib/completion.mjs",
+    "sha256": "c5e6e9c0961a95a2b9bd9f2b6b99db78a84e78c9ee8f8e8bdb4341661f1801b5"
+  },
+  {
+    "path": "lib/config.mjs",
+    "sha256": "8302032b3dd15c7eb18522bf06aa50f914b17407b4d18eb194b0100c58fc49fc"
+  },
+  {
+    "path": "lib/desktop-workers.mjs",
+    "sha256": "859711ad520ca5dd4fca87c7fc1b4b6dc8f7edb9fdd6d2ea914a8a88657a07ea"
+  },
+  {
+    "path": "lib/diagnostics.mjs",
+    "sha256": "89f7586a600626c7e5d393ac248f19325b466b6e7a0dd632e99b909788bb36c9"
+  },
+  {
+    "path": "lib/hook-entries.mjs",
+    "sha256": "4934221b8dec5bb52465e35406d903eb6668111705ed7a679804e4328eede62d"
+  },
+  {
+    "path": "lib/installation.mjs",
+    "sha256": "f63b862d3cfdcb358a3ae333a57d20430d47b0374d957fd9098cad7d538ca1bf"
+  },
+  {
+    "path": "lib/observations.mjs",
+    "sha256": "757ff2bf39a66f269b382eee728ccef2fcd233e4ae1f3d81aa9758f78ab580a5"
+  },
+  {
+    "path": "lib/settings.mjs",
+    "sha256": "f03fc6e9d2cbeb330e93a76d33b5edaaf246c68e5438821b1bd76e528242a260"
+  },
+  {
+    "path": "lib/shell-segments.mjs",
+    "sha256": "c032e6bfd069ea1c57d93766100ec75692837ff0a0dd7eaea131d7e6741cdbe9"
+  },
+  {
+    "path": "lib/stop-policy.mjs",
+    "sha256": "306b2eb17d78b05998c2c8eeecdbe27c855b3da384be07132aca65089d04b689"
+  },
+  {
+    "path": "lib/tool-input.mjs",
+    "sha256": "6525b4aa458717955a46a8c9cecaed92ad8efc5c96aab794b3b85a0daee6798e"
+  },
+  {
+    "path": "lib/transcript.mjs",
+    "sha256": "41f7489c2a0dae5cb71f58f351df652ce1faa7b7ed10acdcb594fecbf76f92be"
+  },
+  {
+    "path": "package.json",
+    "sha256": "87742e0099a92465f6d8d48caf93185077137b3710b43023b6b55e9c86fc6c3d"
+  },
+  {
+    "path": "rollback.mjs",
+    "sha256": "730172fa5056c9027e25bc936ef83883211544f3a98ba4c85cae44e4d706373d"
+  },
+  {
+    "path": "uninstall.mjs",
+    "sha256": "cab46cbd97e2882202d6a956bb626f38d1cfde2dbf659e6619b0955f6aab5d59"
+  }
+]

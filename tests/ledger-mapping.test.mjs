@@ -103,3 +103,39 @@ test('recorded SHA256 cannot silently pass missing files or malformed digests', 
     }
   } finally { rimraf(p.root); }
 });
+
+test('ledger accepts quoted, backtick and unquoted spaced paths for targets and task prerequisites', async () => {
+  const p = makeProject({ 'read-ledger-gate': { requireTargetCoverage: true, taskReadingFiles: ['upstream source/reference file.ts'] } });
+  try {
+    writeText(path.join(p.root, 'upstream source/reference file.ts'), 'ref\n');
+    const target = path.join(p.cwd, 'source folder/app file.ts');
+    writeText(target, 'app\n');
+    for (const quote of ['', '`', '"', "'"]) {
+      writeText(path.join(p.root, '.codex/READ-LEDGER.md'),
+        `- ${quote}work/source folder/app file.ts${quote} — 1 lines\n| ${quote}upstream source/reference file.ts${quote} | 1 |\n`);
+      for (const file of [target, 'new code.ts']) {
+        const result = await runHook(hook, event(p.cwd, file));
+        assert.equal(result.code, 0, result.stderr);
+      }
+    }
+  } finally { rimraf(p.root); }
+});
+
+test('target coverage ignores unrelated stale rows but rejects stale target and task prerequisites', async () => {
+  const p = makeProject({ 'read-ledger-gate': { requireTargetCoverage: true, taskReadingFiles: ['reference.ts'] } });
+  try {
+    const target = path.join(p.cwd, 'app.ts');
+    writeText(target, 'app\n');
+    writeText(path.join(p.root, 'reference.ts'), 'ref\n');
+    writeText(path.join(p.root, 'unrelated.ts'), 'now changed\nagain\n');
+    const ledger = path.join(p.root, '.codex/READ-LEDGER.md');
+    writeText(ledger, `- work/app.ts — 1 lines\n- reference.ts — 1 lines\n- unrelated.ts — 1 lines sha256:${'a'.repeat(64)}\n`);
+    for (const file of [target, 'new.ts']) {
+      const result = await runHook(hook, event(p.cwd, file));
+      assert.equal(result.code, 0, result.stderr);
+    }
+    writeText(ledger, `- work/app.ts — 1 lines sha256:${'a'.repeat(64)}\n- reference.ts — 9 lines\n`);
+    assert.equal((await runHook(hook, event(p.cwd, target))).code, 2);
+    assert.equal((await runHook(hook, event(p.cwd, 'new.ts'))).code, 2);
+  } finally { rimraf(p.root); }
+});

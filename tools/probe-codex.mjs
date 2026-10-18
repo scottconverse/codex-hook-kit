@@ -22,12 +22,13 @@ fs.writeFileSync(wrapper, `import fs from 'node:fs'; import {spawnSync} from 'no
 const registered = JSON.parse(fs.readFileSync(path.join(home, 'hooks.json'), 'utf8'));
 if (process.argv.includes('--completion')) registered.hooks.Stop = [{ hooks: [{ type: 'command', command: 'node "' + path.join(home, 'codex-hook-kit', 'hooks', 'completion-gate.mjs').replaceAll('\\', '/') + '" --codex', timeout: 65 }] }];
 for (const group of registered.hooks.PreToolUse) for (const hook of group.hooks) {
-  if (hook.command.includes('read-ledger-gate.mjs')) hook.command = 'node "' + wrapper.replaceAll('\\', '/') + '"';
+  if (hook.command.includes('read-ledger-gate.mjs')) hook.command = hook.command.replace(path.join(home, 'codex-hook-kit', 'hooks', 'read-ledger-gate.mjs').replaceAll('\\', '/'), wrapper.replaceAll('\\', '/'));
 }
 fs.writeFileSync(path.join(home, 'hooks.json'), JSON.stringify(registered));
 const version = execFileSync(codex, ['--version'], { encoding: 'utf8', windowsHide: true }).trim();
 const results = [];
 const completion = process.argv.includes('--completion');
+const goal = process.argv.includes('--goal');
 let active;
 const server = http.createServer(async (req, res) => {
   try {
@@ -35,15 +36,16 @@ const server = http.createServer(async (req, res) => {
     for await (const chunk of req) chunks.push(chunk);
     if (!req.url.includes('/responses')) { res.writeHead(404); res.end(); return; }
     const body = JSON.parse(Buffer.concat(chunks).toString('utf8'));
+    active.goalTools = ['get_goal', 'update_goal', 'create_goal'].map(name => ({ name, advertised: (body.tools || []).some(t => t.name === name) }));
     active.requests++;
     active.inputs.push(body.input);
     let output;
     if ((!completion && active.requests === 1) || (completion && active.requests === 2 && active.admitted)) {
-      const name = 'exec_command';
+      const name = goal ? 'update_goal' : 'exec_command';
       const tool = body.tools?.find(t => t.name === name);
       active.toolDefinition = tool;
       if (!tool) throw new Error('Expected tool ' + name + '; got ' + JSON.stringify(body.tools));
-      output = { type: 'function_call', id: 'tool_1', call_id: 'call_1', name, arguments: JSON.stringify({ cmd: completion ? 'echo working > product.txt' : 'echo marker > marker.ts', workdir: active.project, max_output_tokens: 200 }), status: 'completed' };
+      output = { type: 'function_call', id: 'tool_1', call_id: 'call_1', name, arguments: JSON.stringify(goal ? { status: 'paused' } : { cmd: completion ? 'echo working > product.txt' : 'echo marker > marker.ts', workdir: active.project, max_output_tokens: 200 }), status: 'completed' };
     } else {
       output = { type: 'message', id: 'msg_1', role: 'assistant', status: 'completed', content: [{ type: 'output_text', text: 'Fixture complete.', annotations: [] }] };
     }
@@ -80,7 +82,7 @@ try {
       fs.mkdirSync(path.join(project, '.codex'), { recursive: true });
       fs.writeFileSync(path.join(project, '.codex', 'hook-kit.json'), JSON.stringify(completion ? {
         'completion-gate': { taskId: 'native-probe', inputs: ['product.txt', 'accept.mjs'], check: { command: process.execPath, args: ['accept.mjs'] } }
-      } : { 'read-ledger-gate': { upstreamRoots: ['.'] } }));
+      } : goal ? { 'goal-lifecycle': {} } : { 'read-ledger-gate': { upstreamRoots: ['.'] } }));
       if (completion) {
         fs.writeFileSync(path.join(project, 'product.txt'), 'broken');
         fs.writeFileSync(path.join(project, 'accept.mjs'), `import fs from 'node:fs'; fs.appendFileSync('checks.txt','check\\n'); process.exit(fs.readFileSync('product.txt','utf8').trim()==='working'?0:1);`);
@@ -92,8 +94,17 @@ try {
         '-c', 'model_provider="fixture"', '-c', 'model_providers.fixture.name="Local deterministic hook test"',
         '-c', 'model_providers.fixture.base_url="http://127.0.0.1:' + server.address().port + '/v1"',
         '-c', 'model_providers.fixture.wire_api="responses"', '-c', 'model_providers.fixture.requires_openai_auth=false',
-        '-c', 'features.code_mode=false', '-c', 'features.code_mode_only=false', 'Run the single fixture tool call.'];
+        '-c', 'features.code_mode=false', '-c', 'features.code_mode_only=false', goal && admitted ? 'pause' : 'Run the single fixture tool call.'];
       const result = await run(args, project);
+      if (goal) {
+        const denialObserved = JSON.stringify(active.inputs).includes('Goal pause denied');
+        assert.equal(result.code, 0, result.stderr);
+        assert.equal(active.serverError, undefined);
+        assert.equal(denialObserved, !admitted, 'Actual goal tool denial must follow the current owner prompt');
+        results.push({kind:'goal', ownerPause:admitted, denialObserved, tool:'update_goal', requestedStatus:'paused', isolatedWithoutGoal:true, modelRequests:active.requests, processExited:true});
+        console.log(JSON.stringify(results.at(-1)));
+        continue;
+      }
       if (completion) {
         const continued = JSON.stringify(active.inputs).includes('completion-gate');
         const repaired = fs.readFileSync(path.join(project, 'product.txt'), 'utf8').trim() === 'working';
@@ -120,7 +131,7 @@ try {
       console.log(JSON.stringify(results.at(-1)));
     }
   }
-  const receipt = { checkedAt: new Date().toISOString(), runtime: version, model: 'deterministic loopback fixture; no provider call', desktopUIVerified: false, nativePatchVerified: false, hookOutput: completion ? 'Stop JSON block continues; continue:false ends at the shared task limit' : 'JSON deny with exit 0; exit 2 alone did not block in this build', results };
+  const receipt = { checkedAt: new Date().toISOString(), runtime: version, nodeExecutable: process.execPath, pinnedNodeHookCommandVerified: !completion, goalTools: active.goalTools, model: 'deterministic loopback fixture; no provider call', desktopUIVerified: false, nativePatchVerified: false, hookOutput: goal ? 'PreToolUse denies update_goal paused without owner pause; explicit owner pause admits the tool in an isolated thread with no active goal' : completion ? 'Stop JSON block continues; continue:false ends at the shared task limit' : 'JSON deny with exit 0; exit 2 alone did not block in this build', results };
   const arg = process.argv.indexOf('--receipt');
   if (arg >= 0 && process.argv[arg + 1]) fs.writeFileSync(path.resolve(process.argv[arg + 1]), JSON.stringify(receipt, null, 2) + '\n');
 } finally {

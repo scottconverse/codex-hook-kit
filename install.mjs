@@ -9,11 +9,11 @@
 //
 // Settings folder, in order: --config-dir, $CODEX_HOME, <home>/.codex.
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { buildHookEntries } from "./lib/hook-entries.mjs";
-import { backupSettings, mergeHookEntries, readSettings, writeSettings, countKitCommands } from "./lib/settings.mjs";
+import { backupSettings, kitHookEntries, mergeHookEntries, readSettings, writeSettings, countKitCommands } from "./lib/settings.mjs";
+import { assertNodeVersion, copyKit, installationTransaction, settingsDir } from './lib/installation.mjs';
 
 const REPO = path.dirname(fileURLToPath(import.meta.url));
 
@@ -39,37 +39,15 @@ function fail(message) {
   process.exit(1);
 }
 
-function settingsDir(configDir) {
-  if (configDir) return path.resolve(configDir);
-  if (process.env.CODEX_HOME) return path.resolve(process.env.CODEX_HOME);
-  return path.join(os.homedir(), ".codex");
-}
-
-// Copy hooks/ and lib/ into <dest>/hook-kit/, overwriting older copies.
-// Returns the list of files written.
-function copyKit(dest) {
-  const written = [];
-  for (const sub of ["hooks", "lib"]) {
-    const src = path.join(REPO, sub);
-    if (!fs.existsSync(src)) fail("missing " + src + " (run install.mjs from the repo root)");
-    const to = path.join(dest, sub);
-    fs.mkdirSync(to, { recursive: true });
-    for (const name of fs.readdirSync(src)) {
-      const from = path.join(src, name);
-      if (!fs.statSync(from).isFile()) continue;
-      fs.copyFileSync(from, path.join(to, name));
-      written.push(path.join(sub, name).split(path.sep).join("/"));
-    }
-  }
-  return written;
-}
-
 function main() {
   const args = parseArgs(process.argv.slice(2));
+  assertNodeVersion();
   const dir = settingsDir(args.configDir);
   const kitDir = path.join(dir, "codex-hook-kit");
   const settingsFile = path.join(dir, "hooks.json");
-  const entries = buildHookEntries(kitDir);
+  const entries = buildHookEntries(kitDir, process.execPath);
+  for (const sub of ['hooks', 'lib']) if (!fs.statSync(path.join(REPO, sub)).isDirectory()) throw new Error('missing source ' + sub);
+  for (const name of ['doctor.mjs', 'rollback.mjs', 'uninstall.mjs']) if (!fs.statSync(path.join(REPO, name)).isFile()) throw new Error('missing helper ' + name);
 
   const { settings } = readSettings(settingsFile);
   const before = countKitCommands(settings.hooks || {});
@@ -92,9 +70,16 @@ function main() {
     return;
   }
 
-  const copied = copyKit(kitDir);
-  const bak = backupSettings(settingsFile);
-  writeSettings(settingsFile, next);
+  const { backup, result: { copied, bak, registrationChanged } } = installationTransaction(dir, 'install', () => {
+    const latest = readSettings(settingsFile).settings;
+    const prior = JSON.stringify(kitHookEntries(latest));
+    Object.assign(merged, mergeHookEntries(latest, entries));
+    const registrationChanged = prior !== JSON.stringify(kitHookEntries(latest));
+    const copied = copyKit(REPO, kitDir);
+    const bak = backupSettings(settingsFile);
+    writeSettings(settingsFile, latest);
+    return { copied, bak, registrationChanged };
+  });
 
   const fwd = (p) => p.split(path.sep).join("/");
   console.log("install: ok");
@@ -102,9 +87,12 @@ function main() {
   console.log("  settings: " + fwd(settingsFile));
   console.log("  hooks: removed " + merged.removed + " old kit hook(s), added " + merged.added + " (was " + before + ")");
   console.log("  backup: " + (bak ? fwd(bak) : "(no hooks.json existed, nothing to back up)"));
+  console.log('  transaction backup: ' + fwd(backup));
+  console.log('  Node: ' + fwd(process.execPath) + ' (' + process.versions.node + ')');
+  console.log('  registration ' + (registrationChanged ? 'changed: review and trust the new exact registrations in Codex.' : 'unchanged: existing trust remains subject to Codex verification.'));
   console.log("  next: put a .codex/hook-kit.json in a project with `node init-project.mjs <dir>`");
   console.log("  activation pending: review and trust the exact hooks in Codex (/hooks in the CLI), then start a new local session. This installer does not grant hook trust or modify config.toml.");
-  console.log("  wake is a delayed report only. Codex async hooks do not wake idle chats.");
+  console.log("  delayed-report is informational only. Codex async hooks do not wake idle chats.");
 }
 
-main();
+try { main(); } catch (error) { fail(error.message); }

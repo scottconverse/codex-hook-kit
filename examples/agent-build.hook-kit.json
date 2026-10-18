@@ -8,10 +8,9 @@
 
   "read-ledger-gate": {
     "ledgerFile": ".codex/READ-LEDGER.md",
-    "upstreamRoots": ["C:/Users/me/upstream/project-a", "C:/Users/me/upstream/project-b"],
-    "mustMention": ["project-a", "project-b"],
-    "minEntries": 10,
-    "minLines": 2000,
+    "upstreamRoots": ["."],
+    "requireTargetCoverage": true,
+    "taskReadingFiles": [],
     "label": "my project",
     "nextStep": "Read the upstream code first. Write one ledger row per file you read: `- <path> — <lines> lines`. Then write code."
   },

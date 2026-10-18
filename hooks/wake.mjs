@@ -2,7 +2,7 @@
 // It cannot wake an idle chat; output is delivered at the next safe point/user turn.
 // Policy/reporting port of reference/tr-wake-20.mjs; lifecycle intentionally differs.
 // Only one sleeper at a time: a lock file holds the live sleeper's pid and start time.
-// Config section "wake":
+// Canonical config section "delayed-report"; "wake" remains a legacy alias:
 //   minutes            wait before the wake-up (20 today); a `<minutesFile>` in runsDir overrides it
 //   runsDir            folder of worker folders
 //   logNames           ["run.jsonl", "stream.jsonl"]
@@ -13,10 +13,17 @@
 //   timeZone / label   used in the message
 import fs from "node:fs";
 import path from "node:path";
-import { loadFromStdin, resolveIn } from "../lib/config.mjs";
+import { load, loadFromStdin, resolveIn } from "../lib/config.mjs";
+import { readLifecycle } from '../lib/stop-policy.mjs';
+import { recordObservation } from '../lib/observations.mjs';
 
-const { section, input } = loadFromStdin("wake");
+const canonical = loadFromStdin("delayed-report");
+const { input } = canonical;
+const section = canonical.cfg && Object.hasOwn(canonical.cfg.config, "delayed-report")
+  ? canonical.section : load("wake", input).section;
 if (!section) process.exit(0);
+const reportSuppressed=()=>{const state=readLifecycle(section.cfg.dir,input);return state.paused || state.answerOnly;};
+if(reportSuppressed()) process.exit(0);
 if (section.backend === "codex-desktop") {
   const { desktopWake } = await import("../lib/desktop-workers.mjs");
   await desktopWake(section, input);
@@ -47,7 +54,7 @@ const handledFile = String(s.handledFile || "handled.txt");
 const finishedFile = String(s.finishedFile || "finished.txt");
 const quietMinutes = Number(s.quietMinutes ?? 15);
 const label = String(s.label || path.basename(section.cfg.dir));
-const hookName = String(s.hookName || "wake");
+const hookName = String(s.hookName || "delayed-report");
 
 const alive = (pid) => {
   try {
@@ -68,6 +75,10 @@ try {
 }
 
 await new Promise((r) => setTimeout(r, DELAY_MS));
+if(reportSuppressed()) {
+  try {fs.unlinkSync(LOCK);} catch {}
+  process.exit(0);
+}
 
 // Status of every recent worker (same rules as the no-idle hook).
 const now = Date.now();
@@ -110,11 +121,12 @@ try {
 const t = new Date().toLocaleTimeString("en-US", { timeZone: String(s.timeZone || "America/Denver"), hour: "numeric", minute: "2-digit" });
 const zoneName = String(s.timeZoneName || "Mountain");
 const report = (
-  minutes + "-MINUTE WAKE-UP (" + t + " " + zoneName + ", hook " + hookName + ", project " + label + "). Check now.\n" +
+  minutes + "-MINUTE DELAYED REPORT (" + t + " " + zoneName + ", hook " + hookName + ", project " + label + "). Check now.\n" +
     (lines.length ? lines.join("\n") : "No unhandled workers.") +
-    "\n" + String(s.footer || "Check every worker and server; start the next step for anything finished; relaunch anything stalled.")
+    "\n" + String(s.footer || "Review completed workers and investigate quiet workers before deciding the next step. Quiet time alone does not prove failure.")
 );
 // Codex does not implement Claude asyncRewake. Informational output is delivered
 // at the next safe point/next user turn; it never starts a new turn itself.
+if(section.cfg.config?.diagnostics?.enabled === true) recordObservation(section.cfg.dir,'delayed-report-emitted',input);
 process.stdout.write(JSON.stringify({ systemMessage: report + "\nCodex delayed report only: this hook cannot wake an idle chat." }));
 process.exit(0);

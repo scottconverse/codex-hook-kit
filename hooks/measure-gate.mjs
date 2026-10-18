@@ -30,7 +30,8 @@ const { input, section } = loadFromStdin("measure-gate");
 if (!section) process.exit(0);
 if (section.mode === 'evidence') {
   const result=evidenceDecision(section.cfg.dir,section,input,'measure-gate');
-  if(result)process.stdout.write(JSON.stringify(result));
+  if(result?.decision==='block') block(result.reason);
+  else if(result)process.stdout.write(JSON.stringify(result));
   process.exit(0);
 }
 

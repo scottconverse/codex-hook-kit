@@ -8,6 +8,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertNodeVersion } from './lib/installation.mjs';
+import { backupSettings, writeSettings } from './lib/settings.mjs';
 
 const REPO = path.dirname(fileURLToPath(import.meta.url));
 const EXAMPLES = path.join(REPO, "examples");
@@ -38,8 +40,10 @@ function parseArgs(argv) {
 
 function main() {
   const args = parseArgs(process.argv.slice(2));
+  assertNodeVersion();
   if (!args.projectDir) fail("usage: node init-project.mjs <projectDir> [--example minimal|townreporter] [--force]");
 
+  if (!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(args.example)) fail('invalid example name');
   const src = path.join(EXAMPLES, args.example + ".hook-kit.json");
   if (!fs.existsSync(src)) {
     const have = fs.existsSync(EXAMPLES)
@@ -56,12 +60,15 @@ function main() {
     fail(fwd(dest) + " already exists; pass --force to overwrite it");
   }
 
-  fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.copyFileSync(src, dest);
+  const config = JSON.parse(fs.readFileSync(src, 'utf8'));
+  if (!config || typeof config !== 'object' || Array.isArray(config)) fail('example must contain a JSON object');
+  const backup = backupSettings(dest);
+  writeSettings(dest, config);
   console.log("init-project: wrote " + fwd(dest) + " from examples/" + args.example + ".hook-kit.json");
+  if (backup) console.log('  previous project configuration: ' + fwd(backup));
   if (args.example === "townreporter") {
-    console.log("  note: the townreporter example names Scott's own paths; edit them for another machine.");
+    console.log("  note: the townreporter example uses project-relative paths; review its endpoints and policy for this project.");
   }
 }
 
-main();
+try { main(); } catch (error) { fail(error.message); }

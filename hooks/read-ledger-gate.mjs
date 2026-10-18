@@ -35,7 +35,7 @@ const DEFAULT_CODE = "\\.(c|cc|cpp|cs|css|go|h|html|java|js|jsx|kt|mjs|cjs|php|p
 const DEFAULT_EXEMPT = "(^|[\\\\/])\\.codex[\\\\/]|\\.(md|txt|json|ya?ml|toml|lock|csv)$";
 const DEFAULT_SHELL_WRITE = "<<|>>?\\s*[^&|\\s]|\\bSet-Content\\b|\\bAdd-Content\\b|\\bOut-File\\b|\\btee\\b|\\bcp\\b|\\bmv\\b|\\bCopy-Item\\b|\\bMove-Item\\b|\\bsed\\s+-i|\\bgit\\s+(apply|am|checkout|restore|revert|cherry-pick|merge|rebase|pull)\\b";
 // "- path/to/file.ts — 312 lines", "* path 312", "| path | 312 |", "path, 312"
-const DEFAULT_ROW = "^\\s*(?:[-*]\\s+|\\|\\s*)?`?([^\\s|`]+\\.[A-Za-z0-9]+)`?\\s*(?:\\||,|—|–|-|:|\\s)+\\s*(\\d+)\\b";
+const DEFAULT_ROW = "^\\s*(?:[-*]\\s+|\\|\\s*)?(`[^`]+`|\"[^\"]+\"|'[^']+'|[^|]+?\\.[A-Za-z0-9]+)\\s*(?:\\||,|—|–|-|:|\\s)+\\s*(\\d+)\\b";
 
 const codeRx = rx(s.codePattern || DEFAULT_CODE, "i");
 const exemptRx = rx(s.exemptPattern || DEFAULT_EXEMPT, "i");
@@ -58,7 +58,9 @@ if (tool === "apply_patch") {
   const cmd = String(ti.command || "");
   if (!shellRx || !shellRx.test(cmd)) process.exit(0);
   // Every path-looking token in the command that ends in a code extension.
-  targets = cmd.match(/[^\s"'`<>|;&()]+\.[A-Za-z0-9]+/g) || [];
+  targets = (cmd.match(/"[^"\r\n]+"|'[^'\r\n]+'|[^\s"'`<>|;&()]+/g) || [])
+    .map((p) => /^(["']).*\1$/.test(p) ? p.slice(1, -1) : p)
+    .filter((p) => /\.[A-Za-z0-9]+$/.test(p));
 }
 const isLedgerItself = (p) => targetPath(p) === path.resolve(ledger);
 const codeTargets = targets.filter((p) => p && codeRx.test(p) && !(exemptRx && exemptRx.test(p)) && !isLedgerItself(p));
@@ -115,20 +117,29 @@ const identity = (file) => {
   return process.platform === 'win32' ? resolved.toLowerCase() : resolved;
 };
 
+const freshnessPaths = new Set(codeTargets.map((p) => identity(targetPath(p))));
+if (codeTargets.some((p) => !fs.existsSync(targetPath(p)))) {
+  for (const file of s.taskReadingFiles || []) freshnessPaths.add(identity(resolveIn(s.cfg, file)));
+}
+const needsFreshness = (p, file) => s.requireTargetCoverage !== true ||
+  (file ? freshnessPaths.has(identity(file)) :
+    (path.isAbsolute(p) ? [p] : roots.map((r) => path.resolve(r, p))).some((f) => freshnessPaths.has(identity(f))));
+
 const problems = [];
 const rows = [];
 for (const line of text.split(/\r?\n/)) {
   const m = rowRx.exec(line);
   if (!m) continue;
-  const p = m[1];
+  const p = /^([`"']).*\1$/.test(m[1]) ? m[1].slice(1, -1) : m[1];
   const stated = Number(m[2]);
   const hashField = /\bsha256\s*[:=]\s*(\S*)/i.exec(line.slice(m.index + m[0].length));
   const hash = hashField?.[1];
   if (hashField && !/^[a-f0-9]{64}$/i.test(hash)) problems.push("invalid SHA256 in row: " + p);
   const file = resolveRow(p);
+  const verifyFile = needsFreshness(p, file);
   if (!file) {
-    if (requireExisting) problems.push("row names a file that does not exist under any upstream root: " + p);
-    if (hashField) problems.push("cannot verify SHA256 for missing file: " + p);
+    if (verifyFile && requireExisting) problems.push("row names a file that does not exist under any upstream root: " + p);
+    if (verifyFile && hashField) problems.push("cannot verify SHA256 for missing file: " + p);
     rows.push({ p, stated, actual: null });
     continue;
   }
@@ -137,12 +148,12 @@ for (const line of text.split(/\r?\n/)) {
     actual = fs.statSync(file).isFile() ? countLines(file) : null;
   } catch {}
   if (actual === null) {
-    if (requireExisting) problems.push("row is not a readable file: " + p);
-    if (hashField) problems.push("cannot verify SHA256 for unreadable file: " + p);
-  } else if (verifyLines && actual !== stated) {
+    if (verifyFile && requireExisting) problems.push("row is not a readable file: " + p);
+    if (verifyFile && hashField) problems.push("cannot verify SHA256 for unreadable file: " + p);
+  } else if (verifyFile && verifyLines && actual !== stated) {
     problems.push("row says " + stated + " lines but " + p + " has " + actual);
   }
-  if (actual !== null && hash) {
+  if (verifyFile && actual !== null && hash) {
     try {
       const current = createHash('sha256').update(fs.readFileSync(file)).digest('hex');
       if (current !== hash.toLowerCase()) problems.push("SHA256 is stale for " + p);

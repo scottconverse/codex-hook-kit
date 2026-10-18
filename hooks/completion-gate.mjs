@@ -7,7 +7,8 @@ const { input, section } = loadFromStdin('completion-gate');
 if (!section) process.exit(0);
 if(section.mode==='evidence') {
   const result=evidenceDecision(section.cfg.dir,section,input,'completion-gate');
-  if(result)process.stdout.write(JSON.stringify(result));
+  if(result?.decision==='block') block(result.reason);
+  else if(result)process.stdout.write(JSON.stringify(result));
   process.exit(0);
 }
 let result;

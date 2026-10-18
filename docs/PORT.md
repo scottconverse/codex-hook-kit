@@ -26,5 +26,10 @@ The original hooks and libraries are preserved byte-for-byte in reference/claude
 | lib/tool-input.mjs, lib/transcript.mjs | new glue only | native payload and transcript compatibility |
 | tools/probe-codex.mjs | new verification tool | deterministic local fixture exercising actual CLI enforcement |
 
-The original project policy semantics are deliberately preserved. Improvements to ledger authenticity, receipt binding and tamper resistance are recommendations in ADDITIONS.md, not secretly substituted policy.
+The table describes original reuse boundaries. Version 1.1.0 also adds explicit
+project mappings, exact ledger coverage, native lifecycle/adoption adapters,
+publication/database scope, product-bound evidence, shared Stop limits and visible
+configuration errors. These changes are opt-in where configured and are described
+in the current manual and focused guides. The preserved reference snapshot remains
+the provenance baseline; it is not a claim that every current behavior is unchanged.
 

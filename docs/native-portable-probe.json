@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-10-18T13:57:20.225Z",
+  "runtime": "codex-cli 0.160.0",
+  "nodeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+  "pinnedNodeHookCommandVerified": true,
+  "goalTools": [
+    {
+      "name": "get_goal",
+      "advertised": true
+    },
+    {
+      "name": "update_goal",
+      "advertised": true
+    },
+    {
+      "name": "create_goal",
+      "advertised": true
+    }
+  ],
+  "model": "deterministic loopback fixture; no provider call",
+  "desktopUIVerified": false,
+  "nativePatchVerified": false,
+  "hookOutput": "JSON deny with exit 0; exit 2 alone did not block in this build",
+  "results": [
+    {
+      "kind": "shell",
+      "ledgerValid": false,
+      "markerExists": false,
+      "blockObserved": true,
+      "exitCode": 0,
+      "pid": 37424,
+      "processExited": true
+    },
+    {
+      "kind": "shell",
+      "ledgerValid": true,
+      "markerExists": true,
+      "blockObserved": false,
+      "exitCode": 0,
+      "pid": 36596,
+      "processExited": true
+    }
+  ]
+}

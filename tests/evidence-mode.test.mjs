@@ -3,7 +3,18 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
+import {inspectEvidence} from '../lib/acceptance-evidence.mjs';
 import { makeProject, writeJson, writeText, runHook, HOOKS, rimraf } from './helpers.mjs';
+
+test('report binding checks configured product inputs',t=>{
+ const p=makeProject({});t.after(()=>rimraf(p.root));
+ writeText(path.join(p.root,'product.txt'),'version one');writeText(path.join(p.root,'receipt.txt'),'passed');
+ const bind=file=>({path:file,sha256:createHash('sha256').update(fs.readFileSync(path.join(p.root,file))).digest('hex')});
+ writeJson(path.join(p.root,'evidence.json'),{requirements:[{id:'one',status:'passed',evidence:[bind('receipt.txt')],inputs:[bind('product.txt')]}]});
+ const section={evidenceFile:'evidence.json',requiredIds:['one'],requiredInputs:{one:['product.txt']}};
+ assert.equal(inspectEvidence(p.root,section).passed,1);
+ writeText(path.join(p.root,'product.txt'),'version two');assert.equal(inspectEvidence(p.root,section).passed,0);
+});
 
 test('evidence mode reports incomplete work without running acceptance or causing a stop loop', async t => {
   const p = makeProject({'completion-gate': {mode:'evidence', evidenceFile:'evidence.json', requiredIds:['1','2'], claimPattern:'all goal requirements are complete'}});

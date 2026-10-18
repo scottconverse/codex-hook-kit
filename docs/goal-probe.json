@@ -1,0 +1,46 @@
+{
+  "checkedAt": "2026-10-18T13:58:55.843Z",
+  "runtime": "codex-cli 0.160.0",
+  "nodeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+  "pinnedNodeHookCommandVerified": true,
+  "goalTools": [
+    {
+      "name": "get_goal",
+      "advertised": true
+    },
+    {
+      "name": "update_goal",
+      "advertised": true
+    },
+    {
+      "name": "create_goal",
+      "advertised": true
+    }
+  ],
+  "model": "deterministic loopback fixture; no provider call",
+  "desktopUIVerified": false,
+  "nativePatchVerified": false,
+  "hookOutput": "PreToolUse denies update_goal paused without owner pause; explicit owner pause admits the tool in an isolated thread with no active goal",
+  "results": [
+    {
+      "kind": "goal",
+      "ownerPause": false,
+      "denialObserved": true,
+      "tool": "update_goal",
+      "requestedStatus": "paused",
+      "isolatedWithoutGoal": true,
+      "modelRequests": 2,
+      "processExited": true
+    },
+    {
+      "kind": "goal",
+      "ownerPause": true,
+      "denialObserved": false,
+      "tool": "update_goal",
+      "requestedStatus": "paused",
+      "isolatedWithoutGoal": true,
+      "modelRequests": 2,
+      "processExited": true
+    }
+  ]
+}

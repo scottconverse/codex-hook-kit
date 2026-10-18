@@ -6,27 +6,11 @@
     "heading": "PROJECT RULES (obey every line, no exceptions):"
   },
 
-  "db-write-guard": {
-    "port": 5432,
-    "databases": ["myapp"],
-    "clientPattern": "\\bpsql(\\.exe)?\\b|\\bpg_restore\\b|\\bdropdb\\b|\\bcreatedb\\b",
-    "restorePattern": "\\bpg_restore\\b|\\bdropdb\\b|\\bcreatedb\\b",
-    "okFile": ".codex/live-db-write-ok.txt",
-    "okMinutes": 30,
-    "ownerName": "the owner",
-    "label": "the live database",
-    "explanation": "The live database is read-only for me; go through the tested path."
-  },
+  "stop-policy": {"maxContinuations": 2},
 
   "double-check": {
-    "quote": "Owner: \"Check everything twice, read everything, do not skim, check the code.\"",
-    "label": "my project"
-  },
-
-  "wake": {
-    "minutes": 20,
-    "runsDir": ".codex/runs",
-    "logNames": ["run.jsonl"],
+    "minToolCalls": 1,
+    "checklist": ["Compare the work with the current owner request.", "Review affected files and existing focused results; do not repeat passing checks without a concrete reason.", "Report completed work and unresolved requirements accurately."],
     "label": "my project"
   }
 }

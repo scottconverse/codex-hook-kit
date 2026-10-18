@@ -18,11 +18,26 @@
             "type": "command",
             "command": "node \"<HOOK_KIT_DIR>/hooks/inject-rules.mjs\" --codex",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "node \"<HOOK_KIT_DIR>/hooks/goal-lifecycle.mjs\" --codex",
+            "timeout": 10
           }
         ]
       }
     ],
     "PreToolUse": [
+      {
+        "matcher": "^(update_goal|get_goal|create_goal)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<HOOK_KIT_DIR>/hooks/goal-lifecycle.mjs\" --codex",
+            "timeout": 10
+          }
+        ]
+      },
       {
         "matcher": "^(Bash|PowerShell|exec_command|shell_command|shell)$",
         "hooks": [
@@ -54,6 +69,40 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "^(update_goal|get_goal|create_goal)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<HOOK_KIT_DIR>/hooks/goal-lifecycle.mjs\" --codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<HOOK_KIT_DIR>/hooks/worker-lifecycle.mjs\" --codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"<HOOK_KIT_DIR>/hooks/worker-lifecycle.mjs\" --codex",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
@@ -79,7 +128,7 @@
           },
           {
             "type": "command",
-            "command": "node \"<HOOK_KIT_DIR>/hooks/wake.mjs\" --codex",
+            "command": "node \"<HOOK_KIT_DIR>/hooks/delayed-report.mjs\" --codex",
             "timeout": 1800,
             "async": true
           }

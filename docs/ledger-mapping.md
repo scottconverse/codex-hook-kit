@@ -11,7 +11,16 @@ nearest `.codex/hook-kit.json`:
 sections beside the mapping are not merged. Mapping chains are supported, and cycles,
 missing/unreadable targets, malformed JSON and non-object mapped configs explicitly
 block with a configuration error. In Codex mode this uses the native denial response.
-Without a mapping, existing discovery and disabled-section behavior is unchanged.
+An absent config leaves hooks off. A present config must contain a JSON object;
+invalid JSON or an unreadable config produces an explicit error. Use `enabled: false`
+at the root or in a section to disable it. Configured sections must be objects and
+`enabled` must be a boolean. Invalid regex strings (including nested rule patterns)
+produce configuration errors rather than silently turning checks off. Disabled
+sections are not validated. Unknown fields remain available for extensions.
+Known numeric controls must be finite JSON numbers in their supported ranges;
+counts must be integers. Boolean controls require JSON `true`/`false`, and configured
+string lists must be arrays of strings. Shared `diagnostics` and `stop-policy`
+sections are validated before any hook uses them; `maxContinuations` is 0 through 10.
 
 The final config file owns relative paths. For a config inside `.codex/`, its parent
 project directory is the root. For a config elsewhere, the directory containing the
@@ -37,17 +46,29 @@ different file with the same basename does not cover it. For new code targets, d
 the existing files relevant to that task in `taskReadingFiles`; all declared files must
 have actual readable ledger rows. These entries are relative to the authoritative
 project root, or absolute. A nonexistent row never satisfies task coverage even with
-`requireExisting: false`. Existing line-count and minimum-entry rules still apply.
+`requireExisting: false`. In target coverage mode, file existence, line counts and
+recorded hashes are checked for this call's targets and, when creating code, its
+declared prerequisites. An unrelated worker's stale row does not block this edit.
+Malformed hashes remain structural errors, and minimum-entry rules still apply.
+Without target coverage, all rows retain the original file/freshness checks.
 Target coverage is off by default, preserving the earlier upstream-ledger behavior.
 
 After actually reading a file, record its path and line count in the ledger:
 
 ```text
 - src/existing-component.ts — 42 lines
+- `src/source folder/component file.ts` — 42 lines
+- "src/source folder/another file.ts" — 12 lines
+- src/source folder/unquoted file.ts — 9 lines
 ```
 
+Single quotes are also accepted. Quotes delimit the whole path and are removed when
+resolving it; paths containing spaces work in both ledger rows and `taskReadingFiles`.
+Use plain strings without added quote characters in the JSON path arrays. A custom
+`rowPattern` still supplies path and count as its first two capture groups.
+
 Optionally append `sha256:<64 hex characters>` (or `sha256=<64 hex characters>`) to a
-row. When recorded, the digest must match the file's current bytes even when
+row. For a row whose freshness is checked, the digest must match current bytes even when
 `verifyLines: false`; a change with the same line count is rejected. Empty or malformed
 digests are rejected. Hashes are optional, so older rows remain valid. Use the digest
 of the exact bytes read, then read and update the row again when those bytes change.

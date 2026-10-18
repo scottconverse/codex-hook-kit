@@ -1,37 +1,50 @@
-# Native Desktop worker reports
+# Native worker monitoring and delayed reports
 
-The `codex-desktop` backend is opt-in. Existing filesystem worker reports remain the default. This adapter reads Codex's `state_5.sqlite` in read-only mode and follows only `thread_spawn_edges` belonging to the selected parent. It never changes Codex home or resumes a chat.
+The opt-in `codex-desktop` backend prefers native subagent events and supplements missing workers with a read-only SQLite compatibility adapter. Existing filesystem monitoring remains the default.
 
 ```json
 {
-  "no-idle": {
-    "backend": "codex-desktop",
-    "codexHome": "C:/Users/scott/.codex",
-    "parentThreadId": "your-parent-thread-id"
-  },
-  "wake": {
-    "backend": "codex-desktop",
-    "codexHome": "C:/Users/scott/.codex",
-    "parentThreadId": "your-parent-thread-id",
-    "minutes": 20
-  }
+  "no-idle": { "backend": "codex-desktop", "source": "auto", "lookbackHours": 48 },
+  "delayed-report": { "backend": "codex-desktop", "source": "auto", "minutes": 20 }
 }
 ```
 
-Omit `parentThreadId` to use the hook event's `session_id`. Omit `codexHome` to use `CODEX_HOME`, then the current user's `.codex`. Relative configured paths resolve against the project containing `.codex/hook-kit.json`. This requires Node with `node:sqlite` (tested with Node 24.15.0). Codex's internal schema is not a public compatibility guarantee; unsupported schema or evidence produces `UNKNOWN`.
+`delayed-report` is the canonical section and script; `wake` remains an alias. If both sections exist, the canonical section wins, including when disabled. `parentThreadId` overrides the event's `session_id`. Relative paths resolve against the project containing `.codex/hook-kit.json`.
 
-The latest supported `event_msg` lifecycle in each plain `.jsonl` rollout tail determines status: `task_started` is `RUNNING`, `task_complete` is `FINISHED-NOT-HANDLED`, and `task_aborted` is `INTERRUPTED`. A closed relationship with only `task_started` is `UNKNOWN`. Silence never proves failure. An `open` spawn edge is relationship evidence, not proof of a currently running task: this machine had open edges for completed workers. Missing, compressed (`.zst`), malformed, unreadable rollouts, or tails without a supported lifecycle are explicitly `UNKNOWN`.
+## Native lifecycle evidence
 
-Reports include a `completion=<token>` for each completed task. After reviewing its result and deciding the next step, record that exact token in `.codex/desktop-worker-handled.json`:
+The lifecycle handler records only parent/child/turn identifiers, agent type and observed timestamp in `.codex/desktop-worker-state/events`. It retains no prompts, assistant messages or transcript paths. See the [official hook fields and semantics](https://learn.chatgpt.com/docs/hooks).
+
+`SubagentStart` means `RUNNING`: last observed running, current liveness unverified. `SubagentStop` means `STOP-OBSERVED`: it runs before the final stop decision, and another hook may continue the worker. It does not prove completion. Missing receipts do not prove event support or delivery. `source: "native-hooks"` requires native evidence and reports `UNKNOWN` without receipts.
+
+## Compatibility and capability checks
+
+`source: "auto"` prefers native evidence per child and supplements other children from `state_5.sqlite`; `source: "sqlite"` selects only this fallback. A native stop can be corroborated by same-turn SQLite terminal evidence dated at or after the stop; the report preserves both sources. An older SQLite completion cannot override a newer native start. `codexHome` overrides `CODEX_HOME`, then the user's `.codex`. The adapter checks `node:sqlite` availability and required native table columns, opening the database read-only. Unsupported state is explicit. SQLite requires Node 22.13 or newer; tested runtime: Node 24.15.0 on Windows. Other platforms have not been tested. This is an observed internal schema, not a public compatibility promise.
+
+Only matching parent/child spawn edges are followed. Work is bounded to 256 children, the final 2 MiB per plain JSONL rollout, a one-second SQLite lock wait and 1024 native receipts per parent. `lookbackHours` defaults to 48 and uses `threads.updated_at`; excluded historical children are counted, never acknowledged. Missing/compressed rollouts, malformed tails, absent lifecycle evidence and exceeded limits are `UNKNOWN`.
+
+The latest lifecycle determines state: start is `RUNNING`, successful completion `FINISHED-NOT-HANDLED`, abort `INTERRUPTED`, explicit failure or terminal completion error `FAILED`. Supported spellings include task/turn started, complete, aborted and failed. Error events follow the [upstream replay semantics](https://github.com/openai/codex/blob/main/codex-rs/protocol/src/protocol.rs): `thread_rollback_failed` and `active_turn_not_steerable` do not change task state. Error text is omitted. Later lifecycle evidence supersedes earlier errors. Silence and an open spawn edge never prove liveness or failure.
+
+## Adoption and acknowledgement
+
+First monitoring contact persists a timestamp for that parent under `.codex/desktop-worker-state/adoption`. Lifecycle recording and delayed-report arming establish it before waiting. Earlier terminal observations become `ADOPTED-HISTORY`, retaining their original state: they are neither newly unhandled nor acknowledged. Running tasks remain visible even if started earlier; later completions become newly unhandled.
+
+Set `adoptFrom` to an ISO timestamp before the first scan to include historical work deliberately. The persisted timestamp stays authoritative; later configuration changes do not silently reset it. Inspect or deliberately remove that parent's adoption record to adopt again. `stateDir` changes the state location. Invalid or unwritable adoption state is `UNKNOWN`.
+
+After reviewing a terminal/stop observation, record its `completion=<token>` in `.codex/desktop-worker-handled.json`:
 
 ```json
-{ "child-thread-id": "completion-token-from-the-report" }
+{ "child-thread-id": "token-from-the-report" }
 ```
 
-The record acknowledges that completion only. A later completion has a new token and becomes unhandled. The optional `handledFile` changes this JSON file's location; the legacy `handled.txt` format is not used by this backend.
+Only that observation becomes `HANDLED`; later completions remain visible. `handledFile` changes this JSON path. Legacy handled text files are not used.
 
-Stop requests at most one continuation for each unchanged parent/worker snapshot. Atomic claim files in `.codex/desktop-worker-notices` enforce that bound across hook processes. A subsequent unchanged Stop can finish even while workers remain running or unknown. The event's `stop_hook_active: true` also suppresses another continuation. If claims cannot be persisted, the hook emits an informational `UNKNOWN` report and suppresses blocking. The optional `noticeDir` changes this project-local storage. Keep these files to retain deduplication; deleting them permits another notice for old evidence.
+## Bounded continuations and delayed delivery
 
-The scan is bounded to the first 256 child edges sorted by id and the last 2 MiB per rollout, with a one-second SQLite busy timeout. Exceeding the worker limit is explicitly reported. The `lookbackHours` default is 48; `threads.updated_at` filters older children and reports their excluded count without acknowledging them. Bounded tail truncation can produce `UNKNOWN`; the adapter does not read entire logs or decompress archives. Native reports do not apply legacy `runsDir`, quiet-time failure rules, waiter commands, or token plugins.
+Stop requests at most one continuation per unchanged actionable snapshot using atomic files in `.codex/desktop-worker-notices`. `HANDLED` and `ADOPTED-HISTORY` do not request continuation. Repeated unchanged Stops may finish while workers remain running or unknown. `stop_hook_active` and configured shared Stop limits also apply. Notice persistence failure produces an informational `UNKNOWN`, without blocking. `noticeDir` changes this storage; deleting claims permits notices to repeat.
 
-`wake` waits `minutes` (0 through 25) and emits a delayed informational snapshot. One exclusive lock per parent/project prevents concurrent sleepers; dead sleeper PIDs are reclaimed under a short exclusive claim. An unreadable lock, uncertain PID, or interrupted claim is reported as unavailable; remove that lock or `.claim` directory from `noticeDir` only after confirming its owner is no longer running. Delivery occurs at Codex's next safe point or user turn. It cannot wake an idle chat or automatically resume work. No native backend has been installed or enabled by creating this source.
+Delayed reports wait `minutes` (0–25) and emit an informational snapshot. An exclusive parent/project lock prevents duplicate sleepers. Dead PIDs are reclaimed under a short claim. Unreadable locks, uncertain PIDs or interrupted claim directories are reported as unavailable; remove them only after confirming their owners are no longer running.
+
+When `diagnostics.enabled` is true, `delayed-report-emitted` records emission metadata. It explicitly does not establish Desktop delivery. Owner lifecycle state suppresses reporting both before arming and after the delay when paused or answer-only.
+
+Report generation and actual Desktop delivery are separate evidence. Source tests prove generation; a runtime delivery probe is required for a specific Desktop build. Async output may arrive at a later safe point or user turn. The hook cannot wake an idle chat or resume work. Legacy quiet-time rules, waiter commands and token plugins do not apply to the native backend.

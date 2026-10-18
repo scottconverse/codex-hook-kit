@@ -7,9 +7,9 @@
 // leaves every other hook and setting alone. A backup is written first. The copied
 // <settings folder>/codex-hook-kit/ files stay unless --remove-files is passed.
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
 import { backupSettings, readSettings, removeHookEntries, writeSettings, countKitCommands } from "./lib/settings.mjs";
+import { assertNodeVersion, installationTransaction, settingsDir } from './lib/installation.mjs';
 
 function parseArgs(argv) {
   const out = { dryRun: false, removeFiles: false, configDir: "" };
@@ -34,25 +34,16 @@ function fail(message) {
   process.exit(1);
 }
 
-function settingsDir(configDir) {
-  if (configDir) return path.resolve(configDir);
-  if (process.env.CODEX_HOME) return path.resolve(process.env.CODEX_HOME);
-  return path.join(os.homedir(), ".codex");
-}
-
 function main() {
   const args = parseArgs(process.argv.slice(2));
+  assertNodeVersion();
   const dir = settingsDir(args.configDir);
   const kitDir = path.join(dir, "codex-hook-kit");
   const settingsFile = path.join(dir, "hooks.json");
   const fwd = (p) => p.split(path.sep).join("/");
 
-  if (!fs.existsSync(settingsFile)) {
+  if (!fs.existsSync(settingsFile) && !(args.removeFiles && fs.existsSync(kitDir))) {
     console.log("uninstall: no hooks.json at " + fwd(settingsFile) + ", nothing to remove");
-    if (args.removeFiles && !args.dryRun && fs.existsSync(kitDir)) {
-      fs.rmSync(kitDir, { recursive: true, force: true });
-      console.log("  removed " + fwd(kitDir));
-    }
     return;
   }
 
@@ -71,19 +62,23 @@ function main() {
     return;
   }
 
-  const bak = backupSettings(settingsFile);
-  writeSettings(settingsFile, next);
+  const { backup, result: bak } = installationTransaction(dir, 'uninstall', () => {
+    const latest = readSettings(settingsFile).settings;
+    removeHookEntries(latest);
+    const bak = backupSettings(settingsFile);
+    if (fs.existsSync(settingsFile)) writeSettings(settingsFile, latest);
+    if (args.removeFiles && fs.existsSync(kitDir)) fs.rmSync(kitDir, { recursive: true, force: true });
+    return bak;
+  });
   console.log("uninstall: ok");
   console.log("  removed " + removed + " kit hook(s) from " + fwd(settingsFile));
   console.log("  backup: " + (bak ? fwd(bak) : "(none)"));
+  console.log('  transaction backup: ' + fwd(backup));
   if (args.removeFiles) {
-    if (fs.existsSync(kitDir)) {
-      fs.rmSync(kitDir, { recursive: true, force: true });
-      console.log("  removed " + fwd(kitDir));
-    }
+    console.log("  removed " + fwd(kitDir));
   } else {
     console.log("  kept the copied files at " + fwd(kitDir) + " (pass --remove-files to delete them)");
   }
 }
 
-main();
+try { main(); } catch (error) { fail(error.message); }
