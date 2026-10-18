@@ -62,6 +62,13 @@ its receipt. If an item cannot be done, write that in `docs/VERIFICATION.md` wit
   backed up.
 - Commit per step. Do not push without the owner's go.
 
+## Verification ledger
+
+Added Oct 17, 2026 when the owner's citation gate flagged this document for having no ledger. The claims above were written from the kit's own files in the same session; only the row below was re-read at the time of adding this section.
+
+VERIFIED: native apply_patch execution and Codex Desktop UI activation are unverified | C:\Users\scott\Desktop\Code\codex-hook-kit\docs\VERIFICATION.md:54
+UNVERIFIED: every other claim in this document about what the kit does today - written from the kit's source and docs on Oct 17, not re-read when this ledger was added
+
 ## Owner's known constraints
 
 - Windows 11, Node 24, PowerShell 7. Codex Desktop and Codex CLI both installed.
