@@ -12,7 +12,7 @@ Current source: 1.1.0, October 18, 2026. Tested environment: Windows, Node 24.15
 | Read-only doctor | Versioned 0.160.0 supports the hook-list API. After candidate installation, all 16 registrations report trusted-current. Node 24.15.0 SQLite capability passed; the diagnostic child closed. Trust does not establish event delivery. |
 | Native worker compatibility | Read-only snapshots matched the setup workers' observed start/completion states. Open spawn edges also existed for completed tasks; silence is not failure. |
 | Native lifecycle hooks | Actual Desktop SubagentStart at 14:45:33.261 UTC and SubagentStop at 14:45:35.420 UTC were recorded for child `01a14f79-9427-7010-889d-5303d88c2664` after live refresh. A stop event alone does not certify completion. |
-| Delayed report | A manually invoked installed zero-delay producer saved a bounded snapshot; the next real Desktop owner prompt delivered it as model context and consumed the pending file. This proves the prompt-delivery boundary; no autonomous wake/resumption is supplied. |
+| Delayed report | Native Desktop Stop launched the installed reporter with a three-second probe delay; the next real owner prompt delivered and consumed its report. Wrapped continue was recorded as owner-resume; normal 20-minute delay restored. No autonomous wake/resumption. |
 | Goal operations | Actual Desktop get_goal PreToolUse/PostToolUse ran after live refresh. An isolated Desktop worker with no goal subsequently attempted native update_goal paused and received the hook's unauthorized-pause denial. Explicit-owner-pause admission was separately proved in CLI; no real goal was changed. |
 | Historical CLI fixtures | The October 16 isolated probes exercised structured shell denial/allowance and acceptance-command Stop continuation using a deterministic local model endpoint. See the historical receipts below. |
 
@@ -28,7 +28,7 @@ Early probes omitted newly registered worker/goal handlers while older rules and
 
 Opening the local project, then toggling an existing kit Hook off/on in Settings refreshed the live session; its original enabled value was restored. Actual get_goal PreToolUse/PostToolUse and native worker start/stop then ran in the existing chat. No restart was required. “Reload hooks” refreshes the displayed listing only; hook enable/trust changes send the live config/batchWrite with reloadUserConfig:true. See [installation](INSTALLATION.md).
 
-The next real owner “continue” prompt invoked owner lifecycle recording and delivered the corrected pending worker snapshot into model context, consuming its file. Its producer was manually invoked from the installed kit with zero delay; this is actual Desktop prompt delivery, not a claim of an automatically waking async Stop hook.
+The next real owner “continue” prompt invoked owner lifecycle recording and delivered the corrected pending worker snapshot into model context, consuming its file. A subsequent native Stop probe also produced the report automatically and delivered it on the next wrapped owner reply, which correctly recorded owner-resume. The three-second probe delay was restored to 20 minutes.
 
 The existing SQLite compatibility adapter did identify the newly running worker,
 while labeling older terminal results ADOPTED-HISTORY rather than newly ignored.

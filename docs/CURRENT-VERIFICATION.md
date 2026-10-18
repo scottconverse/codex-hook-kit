@@ -111,8 +111,14 @@ See [installation](INSTALLATION.md), [compatibility](COMPATIBILITY.md) and
   regression assertions failed before correction. No broad suite was repeated.
 - Installed using the existing installer; 30 files copied, 16 registrations unchanged.
   Backup: `C:/Users/scott/.codex/hook-kit-backups/20261018-090401-f5a5da7a-a1a2-4728-a2df-be590952f9c4`.
-- **Native automatic delayed producer → next owner prompt:** final short live
-  check remains pending; do not substitute the earlier manual-producer proof.
+- **Native automatic delayed producer → next owner prompt:** completed. Desktop's
+  actual Stop launched the installed reporter with a temporary three-second delay.
+  Its pending report was written at **15:05:39.0236991 UTC**. The next real wrapped
+  owner reply delivered that report into model context and consumed the pending file.
+  Lifecycle read-back was `authorization: owner-resume`, `paused: false`,
+  `answerOnly: false`. The normal **20-minute** setting was restored and verified.
+  This supersedes the earlier manual-producer-only evidence. Local raw records:
+  `.codex/native-delay-proof.json` and `.codex/native-delay-proof-produced.json`.
 - **Public update:** not executed. The active session developer instruction
   prohibits publication despite the owner's subsequent request. Local work is
   preserved; do not report GitHub updated.
