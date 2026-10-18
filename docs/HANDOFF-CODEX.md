@@ -27,6 +27,19 @@ goal-tool interception must not be promoted from direct fixtures to Desktop pass
 [INSTALLATION.md](INSTALLATION.md), [DIAGNOSTICS.md](DIAGNOSTICS.md) and
 [lifecycle.md](lifecycle.md) describe these boundaries.
 
+October 18 local activation: candidate installed, all 16 registrations trusted,
+shell/SessionStart/Stop delivery observed, SQLite fallback monitoring working.
+The open Desktop session has not invoked the newly added worker/goal lifecycle
+registrations. Rule injection does receive UserPromptSubmit. The delayed report
+emitted, but delivery was not observed. Read CURRENT-VERIFICATION.md before acting.
+The next bounded step is a fresh Desktop session, then one real worker event and
+one harmless get_goal observation, plus the next Stop report delivery boundary.
+Do not repeat the 156 passing source checks. Do not mutate the existing CivicCast
+goal as a probe. If the fresh session still omits those events, preserve that
+runtime incompatibility explicitly rather than claiming full activation or
+inventing a polling/control framework. No restart or publication is authorized
+implicitly by this handoff.
+
 An older handoff proposed additional policies and secret-based disarming. Those
 proposals are not silently included here and are not fresh owner authorization.
 Future feature scope, publication and release decisions remain with the owner.

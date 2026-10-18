@@ -17,6 +17,11 @@ Hook-generated continuation prompts do not replenish the budget. Without prompt
 events, the fallback budget is finite for the session rather than replenished on
 every Stop event. Pauses suppress Stop checks before acceptance commands run.
 
+The October 18 Desktop observation received UserPromptSubmit for rule injection,
+but did not invoke the newly registered goal-lifecycle hook. On that observed route, automatic pause/resume recording and
+per-prompt budget renewal are unavailable; the assistant must still follow the
+owner directly. This is a runtime coverage gap, not successful enforcement.
+
 Opt in to `"goal-lifecycle": {}` to deny a `PreToolUse` event for
 `update_goal(status="paused")` unless the latest recorded authorization is a
 pause. PostToolUse records the observed operation, not an invented authoritative

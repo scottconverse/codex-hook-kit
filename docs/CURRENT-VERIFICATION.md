@@ -1,6 +1,6 @@
 # Portable Desktop candidate 1.1.0 — October 18, 2026
 
-Implementation candidate is ready for the owner's Desktop acceptance stage.
+Implementation candidate is installed locally; Desktop acceptance is incomplete.
 It is not a claim that every current hook has already been activated in Desktop.
 No publication occurred. Earlier local work was preserved in commit `54baf35`.
 
@@ -46,8 +46,45 @@ they do not independently prove that every assertion is a sufficient test.
 
 ## Desktop acceptance still to observe
 
-Install this candidate, review its changed registrations in the target client, and
-observe native subagent events, goal interception, and delayed report delivery in
+### Live activation follow-up, October 18
+
+Installed the candidate into the owner's Codex home, preserving scripts and
+registrations in `hook-kit-backups/20261018-080601-d956fae2-efb5-40ba-b2ac-c66af4a3a1b1`.
+Under the owner's existing authorization, renewed trust for the exact 16 current
+registration hashes through `config/batchWrite`. A fresh doctor invocation reports
+`trusted-current`, 16 registrations, and the correct single-source project mapping.
+The existing Desktop session has produced shell PreToolUse invocation receipts;
+the injected project instructions also reached this conversation.
+
+A genuinely new Desktop worker was spawned for a read-only activation check.
+It produced no SubagentStart receipt. A harmless get_goal call likewise did not
+produce a goal-lifecycle receipt. These observations do not establish whether the
+open Desktop session cached earlier registrations or lacks the event routing.
+The default app-server daemon control socket could not be reached (Windows
+socket error 10050); no Desktop/server restart was performed.
+
+Actual Desktop worker-event routing, goal interception and asynchronous report
+delivery remain unverified. The latter requires observing the Stop delivery
+boundary; generating a report alone is insufficient. No additional broad suite
+was run, no CivicCast state was changed, and nothing was published.
+
+The subsequent real Stop boundary delivered the double-check reminder into this
+chat. Receipts also show no-idle, measure-gate, completion-gate and delayed-report
+invocation. The temporary three-second delayed-report probe emitted output at
+14:10:02 UTC; its message has not been observed in the conversation. Restored the
+normal 20-minute setting after that probe. Invocation of disabled sections does
+not establish enforcement. Worker-event and goal-tool routing remain unverified.
+
+The follow-up read-only runtime diagnosis identified Desktop 26.1013.4894.0,
+external Codex 0.160.0 and enabled code mode. Logs show real worker creation enters
+native thread_spawn handling. A new owner prompt invoked inject-rules, but not
+goal-lifecycle. No safe supported live refresh was established. The compatibility
+adapter identified the current worker as RUNNING from its recorded lifecycle and
+older results as ADOPTED-HISTORY. This confirms usable fallback monitoring, not
+native hook delivery or process liveness. The remaining acceptance boundary is a
+fresh Desktop session; no app, service or machine was restarted automatically.
+
+Observe native subagent events, goal interception, and delayed report delivery in
 that Desktop session. These are the remaining client-level observations; direct
 tests and CLI receipts must not be relabeled as Desktop passes. A runtime that
 does not expose an interface must be reported unsupported rather than given a

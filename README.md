@@ -35,7 +35,7 @@ Examples are `minimal`, `townreporter`, `agent-build`, `completion` and `desktop
 | worker-lifecycle | SubagentStart, SubagentStop | Records supported native lifecycle metadata. |
 | goal-lifecycle | UserPromptSubmit; optional goal-tool events | Records narrow explicit pause/resume/answer-only intent and observed goal operations. |
 
-Stop continuations share a configurable budget, default **two**, across the Stop hooks. Explicit pause/answer-only lifecycle state suppresses checks and delayed reporting. The prompt matcher is deliberately narrow; it is not proof of semantic authorization. Goal-tool interception and async delivery need separate runtime evidence.
+Stop continuations share a configurable budget, default **two**, across the Stop hooks. Explicit pause/answer-only lifecycle state suppresses checks and delayed reporting when the runtime invokes the owner-prompt lifecycle hook. The current open Desktop session has not invoked that new registration; on that route the budget is session-bounded and automatic owner-intent tracking is unavailable. The prompt matcher is deliberately narrow; it is not proof of semantic authorization. Goal-tool interception and async delivery need separate runtime evidence.
 
 ## Coverage and limits
 
