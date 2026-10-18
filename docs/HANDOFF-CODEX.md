@@ -1,4 +1,6 @@
-# Continuing work on the portable kit
+# Codex Hook Kit 1.1.0 — maintenance handoff
+
+Published October 18, 2026: [v1.1.0](https://github.com/scottconverse/codex-hook-kit/releases/tag/v1.1.0), source commit `af2be83427b258c1937536c4274c92632e4b0385`. Later documentation clarifications are on main and the website; the tag remains unchanged. Hooks on the publishing machine remain disabled. No installation or re-enablement is authorized by this handoff.
 
 Start with [README](../README.md), [MANUAL](MANUAL.md) and the current
 [compatibility/evidence boundaries](COMPATIBILITY.md). The original October 16
